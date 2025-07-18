@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     backButton.addEventListener('click', () => {
-        window.location.href = 'mapping.html';
+        window.location.href = 'select-sheet-source.html';
     });
 
     continueButton.addEventListener('click', () => {
