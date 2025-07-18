@@ -122,27 +122,43 @@
                 updateButtonState();
             });
 
-            startButton.addEventListener('click', function() {
+            startButton.addEventListener('click', function () {
                 if (!startButton.disabled) {
                     // Visual feedback
                     startButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
                     startButton.disabled = true;
 
-                    const file = sourceInput.files[0];
-                    const reader = new FileReader();
+                    const sourceFile = sourceInput.files[0];
+                    const targetFile = targetInput.files[0];
 
-                    reader.onload = function (e) {
-                        const arrayBuffer = e.target.result;
-                        const byteArray = Array.from(new Uint8Array(arrayBuffer));
+                    let sourceBuffer, targetBuffer;
+                    let filesProcessed = 0;
 
-                        // Send buffer to main process using Electron preload API
-                        window.electronAPI.sendExcelFile(byteArray);
+                    const sourceReader = new FileReader();
+                    const targetReader = new FileReader();
 
-                        // Navigate to the next page
-                        window.location.href = 'mapping.html';
+                    sourceReader.onload = function (e) {
+                        sourceBuffer = Array.from(new Uint8Array(e.target.result));
+                        filesProcessed++;
+                        if (filesProcessed === 2) {
+                            // Send both buffers to main process
+                            window.electronAPI.sendExcelFiles(sourceBuffer, targetBuffer);
+                            window.location.href = 'mapping.html';
+                        }
                     };
 
-                    reader.readAsArrayBuffer(file);
+                    targetReader.onload = function (e) {
+                        targetBuffer = Array.from(new Uint8Array(e.target.result));
+                        filesProcessed++;
+                        if (filesProcessed === 2) {
+                            // Send both buffers to main process
+                            window.electronAPI.sendExcelFiles(sourceBuffer, targetBuffer);
+                            window.location.href = 'select-sheet-source.html';
+                        }
+                    };
+
+                    sourceReader.readAsArrayBuffer(sourceFile);
+                    targetReader.readAsArrayBuffer(targetFile);
                 }
             });
 

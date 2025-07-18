@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             /* Get file from Electron main process */
-            const byteArray = await window.electronAPI.getExcelFile();
+            const { source: byteArray } = await window.electronAPI.getBothExcelFiles();
             if (!byteArray || byteArray.length === 0) {
                 statusText.textContent = 'No source file found. Please go back and select a file.';
                 return;
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     continueButton.addEventListener('click', () => {
         if (currentSheetData && currentSheetData.length > 0) {
-            window.location.href = 'mapping.html';
+            window.location.href = 'select-sheet-target.html';
         } else {
             statusText.textContent = 'No data available to map. Please select a different sheet.';
         }

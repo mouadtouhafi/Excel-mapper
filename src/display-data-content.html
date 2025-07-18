@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Excel Viewer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    #range-info {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    table {
+      border-collapse: collapse;
+      user-select: none;
+    }
+    td {
+      border: 1px solid #ccc;
+      padding: 5px;
+      min-width: 60px;
+      height: 30px;
+      text-align: center;
+    }
+    .selected {
+      background-color: #add8e6;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="range-info">Selected range: None</div>
+  <div id="excel-container"></div>
+
+  <script>
+    (async () => {
+      const excelContainer = document.getElementById('excel-container');
+      const rangeInfo = document.getElementById('range-info');
+
+      try {
+        const files = await window.electronAPI.getBothExcelFiles();
+        
+        if (!files || (!files.target && !files.target)) {
+          excelContainer.innerHTML = '<div class="error">No Excel files loaded. Please go back and select files.</div>';
+          return;
+        }
+
+        // Use source file if available, otherwise use target file
+        let buffer;
+        if (files.target) {
+          buffer = files.target;
+        } else if (files.target) {
+          buffer = files.target;
+        }
+
+        // Convert array to Uint8Array if needed
+        const uint8Array = Array.isArray(buffer) ? new Uint8Array(buffer) : buffer;
+        
+        // Read the workbook
+        const workbook = XLSX.read(uint8Array, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        function getColumnLabel(index) {
+          let label = '';
+          while (index >= 0) {
+            label = String.fromCharCode((index % 26) + 65) + label;
+            index = Math.floor(index / 26) - 1;
+          }
+          return label;
+        }
+
+        function getCellCoords(cellAddress) {
+          const match = cellAddress.match(/^([A-Z]+)(\d+)$/);
+          return {
+            col: match[1],
+            row: parseInt(match[2], 10),
+          };
+        }
+
+        // Build the table
+        let table = '<table>';
+        json.forEach((row, rowIndex) => {
+          table += '<tr>';
+          row.forEach((cell, colIndex) => {
+            const colLabel = getColumnLabel(colIndex);
+            const cellAddress = `${colLabel}${rowIndex + 1}`;
+            table += `<td data-cell="${cellAddress}" data-row="${rowIndex + 1}" data-col-index="${colIndex}">${cell || ''}</td>`;
+          });
+          table += '</tr>';
+        });
+        table += '</table>';
+        excelContainer.innerHTML = table;
+
+        // Selection functionality
+        let startCell = null, endCell = null;
+
+        function highlightSelection(start, end) {
+          const cells = document.querySelectorAll('td');
+          cells.forEach(cell => cell.classList.remove('selected'));
+
+          if (!start || !end) return;
+
+          const startCoords = getCellCoords(start.dataset.cell);
+          const endCoords = getCellCoords(end.dataset.cell);
+
+          const minRow = Math.min(startCoords.row, endCoords.row);
+          const maxRow = Math.max(startCoords.row, endCoords.row);
+
+          const minCol = Math.min(+start.dataset.colIndex, +end.dataset.colIndex);
+          const maxCol = Math.max(+start.dataset.colIndex, +end.dataset.colIndex);
+
+          cells.forEach(cell => {
+            const row = parseInt(cell.dataset.row, 10);
+            const col = parseInt(cell.dataset.colIndex, 10);
+            if (row >= minRow && row <= maxRow && col >= minCol && col <= maxCol) {
+              cell.classList.add('selected');
+            }
+          });
+
+          const colStart = getColumnLabel(minCol);
+          const colEnd = getColumnLabel(maxCol);
+          rangeInfo.textContent = `Selected range: ${colStart}${minRow}:${colEnd}${maxRow}`;
+        }
+
+        // Add event listeners to table cells
+        const tds = document.querySelectorAll('td');
+        tds.forEach(td => {
+          td.addEventListener('mousedown', () => {
+            startCell = td;
+            endCell = null;
+            highlightSelection(startCell, startCell);
+          });
+
+          td.addEventListener('mouseenter', (e) => {
+            if (startCell && e.buttons === 1) {
+              endCell = td;
+              highlightSelection(startCell, endCell);
+            }
+          });
+
+          td.addEventListener('mouseup', () => {
+            if (startCell && endCell) {
+              highlightSelection(startCell, endCell);
+            }
+          });
+        });
+
+      } catch (error) {
+        console.error('Error loading Excel file:', error);
+        excelContainer.innerHTML = '<div class="error">Error loading Excel file. Please try again.</div>';
+      }
+    })();
+  </script>
+</body>
+</html>
