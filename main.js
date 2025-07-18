@@ -23,7 +23,6 @@ function createWindow() {
   });
 
   mainwWindow.loadFile('./src/main-page.html');
-//mainwWindow.loadFile('./src/mapping.html');
   helloWindow.loadFile('./src/hello-page.html');
   mainwWindow.once("ready-to-show", mainwWindow.show)
 
@@ -46,11 +45,19 @@ app.on('before-quit', () => {
 
 })
 
-// IPC to store/retrieve Excel buffer
-ipcMain.on('save-excel-buffer', (event, buffer) => {
-  excelBuffer = buffer;
+
+let excelBuffers = { source: null, target: null };
+
+ipcMain.on('save-excel-files', (event, payload) => {
+  // payload: { source: Buffer, target: Buffer }
+  excelBuffers.source = payload.source;
+  excelBuffers.target = payload.target;
+  console.log('Excel files saved:', {
+    sourceSize: payload.source ? payload.source.length : 0,
+    targetSize: payload.target ? payload.target.length : 0
+  });
 });
 
-ipcMain.handle('get-excel-buffer', () => {
-  return excelBuffer;
+ipcMain.handle('get-excel-files', () => {
+  return excelBuffers;
 });
