@@ -8,6 +8,7 @@
   <meta name="description" content="Excel Viewer - Select and view Excel cell ranges directly in the browser.">
   <meta name="author" content="Your Name">
   <title>Excel Viewer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
@@ -40,6 +41,8 @@
       padding: 10px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
+
+
 
     table {
       width: 100%;
@@ -79,81 +82,151 @@
       border-radius: 4px;
     }
 
-    button {
-      display: inline-block;
-      padding: 6px 20px;
-      border: 1px solid #4f4f4f;
-      border-radius: 4px;
-      transition: all 0.2s ease-in;
+
+
+    .header-container{
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
       position: relative;
-      overflow: hidden;
-      font-size: 12px;
-      cursor: pointer;
-      color: black;
-      z-index: 1;
+      margin-bottom: 10px;
     }
 
-    button:before {
-      content: "";
+    h1 {
+      position: relative;
+      padding: 0;
+      margin: 0;
+      font-family: "Raleway", sans-serif;
+      font-weight: 300;
+      font-size: 27px;
+      color: #080808;
+    }
+
+    h1 span {
+      display: block;
+      font-size: 0.5em;
+      line-height: 1.3;
+    }
+
+    h1 em {
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .header-container h1 {
+      text-transform: capitalize;
+    }
+
+    .header-container h1:before {
       position: absolute;
       left: 50%;
-      transform: translateX(-50%) scaleY(1) scaleX(1.25);
-      top: 100%;
-      width: 140%;
-      height: 180%;
-      background-color: rgba(0, 0, 0, 0.05);
-      border-radius: 50%;
-      display: block;
-      transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
-      z-index: -1;
-    }
-
-    button:after {
+      bottom: 0;
+      width: 200px;
+      height: 2px;
       content: "";
-      position: absolute;
-      left: 55%;
-      transform: translateX(-50%) scaleY(1) scaleX(1.45);
-      top: 180%;
-      width: 160%;
-      height: 190%;
-      background-color: #1c5c91;
-      border-radius: 50%;
-      display: block;
-      transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
-      z-index: -1;
+      background-color: #c50000;
+      transform: translateX(-50%);
     }
 
-    button:hover {
-      color: #ffffff;
-      border: 1px solid #1c5c91;
+    .header-container h1 span {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      line-height: 3em;
+      padding-left: 0.25em;
+      color: rgba(0, 0, 0, 0.4);
+      padding-bottom: 1px;
     }
 
-    button:hover:before {
-      top: -35%;
-      background-color: #1c5c91;
-      transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+    .buttons-container{
+      display: flex;
+      flex-direction: row;
     }
+    
 
-    button:hover:after {
-      top: -45%;
-      background-color: #1c5c91;
-      transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
-    }
+
+        button {
+   background-color: #367540;
+  border-radius: 4px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+  font-size: 13px;
+  font-weight: 200;
+  line-height: 1.5;
+  margin: 0;
+  outline: none;
+  overflow: hidden;
+  padding: 8px 12px;
+  position: relative;
+  text-align: center;
+}
+
+button:hover, button:focus{
+  opacity: .75;
+}
+
+
+.popup {
+  display: none; /* hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* dim background */
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 25px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
   </style>
 </head>
 
 <body>
+  <div class="header-container">
+    <h1>Excel Data Mapper
+      <span>Data Selection From Target File</span>
+    </h1>
+  </div>
   <div class="buttons-container">
     <button id="backButton" class="back-button">
-      <i class="fas fa-arrow-left"></i> Back
+      <i class="fas fa-arrow-left"></i>  Back
+    </button>
+
+    <button id="notesButton" class="notes-button">
+      <i class="fas fa-pencil-alt"></i>  Notes
+    </button>
+    <button id="optionsButton" class="options-button">
+      <i class="fas fa-sliders-h"></i>  Options
+    </button>
+    <button id="validateButton" class="validate-button">
+      <i class="fas fa-check"></i>  Validate selection
     </button>
 
     <button id="continueButton" class="continue-button">
-      <i class="fas fa-arrow-right"></i> Continue to Mapping
+      <i class="fas fa-arrow-right"></i>  Continue
     </button>
   </div>
   <div id="range-info">Selected range: None</div>
   <div id="excel-container"></div>
+  <div class="popup">
+    <div class="popup-content">
+      <span class="close">&times;</span>
+    </div>
+  </div>
 
   <script>
     (async () => {
@@ -275,6 +348,12 @@
         excelContainer.innerHTML = '<div class="error">Error loading Excel file. Please try again.</div>';
       }
     })();
+
+    const notesButton = document.querySelector('.notes-button');
+    notesButton.addEventListener('click', () => {
+      document.querySelector('.popup').style.display = "flex";
+
+    });
   </script>
 </body>
 
