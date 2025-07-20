@@ -1,39 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Excel Viewer - Select and view Excel cell ranges directly in the browser.">
+  <meta name="author" content="Your Name">
   <title>Excel Viewer</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f6f8;
+      color: #333;
     }
+
     #range-info {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background-color: #e8f0fe;
+      border-left: 5px solid #4285f4;
       font-weight: bold;
+      border-radius: 4px;
     }
+
+    #excel-container {
+      overflow-x: auto;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
     table {
+      width: 100%;
       border-collapse: collapse;
+      table-layout: fixed;
       user-select: none;
     }
+
     td {
       border: 1px solid #ccc;
       padding: 5px;
       min-width: 60px;
       height: 30px;
       text-align: center;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      transition: background-color 0.2s ease;
+      cursor: pointer;
     }
+
+    td:hover {
+      background-color: #f0f8ff;
+    }
+
     .selected {
-      background-color: #add8e6;
+      background-color: #add8e6 !important;
     }
+
     .error {
-      color: red;
+      color: #d32f2f;
       font-weight: bold;
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #f44336;
+      background-color: #ffe5e5;
+      border-radius: 4px;
+    }
+
+    button {
+      display: inline-block;
+      padding: 6px 20px;
+      border: 1px solid #4f4f4f;
+      border-radius: 4px;
+      transition: all 0.2s ease-in;
+      position: relative;
+      overflow: hidden;
+      font-size: 12px;
+      cursor: pointer;
+      color: black;
+      z-index: 1;
+    }
+
+    button:before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) scaleY(1) scaleX(1.25);
+      top: 100%;
+      width: 140%;
+      height: 180%;
+      background-color: rgba(0, 0, 0, 0.05);
+      border-radius: 50%;
+      display: block;
+      transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+      z-index: -1;
+    }
+
+    button:after {
+      content: "";
+      position: absolute;
+      left: 55%;
+      transform: translateX(-50%) scaleY(1) scaleX(1.45);
+      top: 180%;
+      width: 160%;
+      height: 190%;
+      background-color: #1c5c91;
+      border-radius: 50%;
+      display: block;
+      transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+      z-index: -1;
+    }
+
+    button:hover {
+      color: #ffffff;
+      border: 1px solid #1c5c91;
+    }
+
+    button:hover:before {
+      top: -35%;
+      background-color: #1c5c91;
+      transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+    }
+
+    button:hover:after {
+      top: -45%;
+      background-color: #1c5c91;
+      transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
     }
   </style>
 </head>
+
 <body>
+  <div class="buttons-container">
+    <button id="backButton" class="back-button">
+      <i class="fas fa-arrow-left"></i> Back
+    </button>
+
+    <button id="continueButton" class="continue-button">
+      <i class="fas fa-arrow-right"></i> Continue to Mapping
+    </button>
+  </div>
   <div id="range-info">Selected range: None</div>
   <div id="excel-container"></div>
 
@@ -44,7 +162,7 @@
 
       try {
         const files = await window.electronAPI.getBothExcelFiles();
-        
+
         if (!files || (!files.target && !files.target)) {
           excelContainer.innerHTML = '<div class="error">No Excel files loaded. Please go back and select files.</div>';
           return;
@@ -60,7 +178,7 @@
 
         // Convert array to Uint8Array if needed
         const uint8Array = Array.isArray(buffer) ? new Uint8Array(buffer) : buffer;
-        
+
         // Read the workbook
         const workbook = XLSX.read(uint8Array, { type: 'array' });
         const sheetName = workbook.SheetNames[0];
@@ -159,4 +277,5 @@
     })();
   </script>
 </body>
+
 </html>
