@@ -175,11 +175,21 @@ button:hover, button:focus{
   display: none; /* hidden by default */
   position: fixed;
   z-index: 1000;
-  left: 0;
-  top: 0;
+  left: 10%;
+  top: 10%;
+  width: 40%;
+  height: 55%;
+  background-color: #367540; /* dim background */
+  border-radius: 10px;
+}
+
+.popup-content{
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* dim background */
+  margin: 0px;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .close {
@@ -353,6 +363,10 @@ button:hover, button:focus{
     notesButton.addEventListener('click', () => {
       document.querySelector('.popup').style.display = "flex";
 
+    });
+
+    document.querySelector('.close').addEventListener("click", () => {
+        document.querySelector('.popup').style.display = "none";
     });
   </script>
 </body>
