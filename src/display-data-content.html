@@ -389,6 +389,7 @@ button:hover, button:focus{
     const notesButton = document.querySelector('.notes-button');
     const popupDevContent = document.querySelector('.popup-content')
     notesButton.addEventListener('click', () => {
+      popupDevContent.innerHTML = '';
       document.querySelector('.popup').style.display = "flex";
       const title = document.createElement('h2');
       title.className = 'popup-title';
@@ -431,6 +432,7 @@ button:hover, button:focus{
     const optionsButton = document.querySelector('.options-button');
     const radioText = ["Option 1 : Full selected table", "Option 2 : Specific rows from selected table"];
     optionsButton.addEventListener('click', ()=>{
+      popupDevContent.innerHTML = '';
       for(let j=0; j<radioText.length; j++){
       const radioDiv = document.createElement('div');
       radioDiv.className = 'radio';
