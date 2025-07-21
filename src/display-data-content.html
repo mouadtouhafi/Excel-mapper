@@ -425,9 +425,52 @@ button:hover, button:focus{
       messageDiv.appendChild(text_p5);
     });
 
+
+
+
+    const optionsButton = document.querySelector('.options-button');
+    const radioText = ["Option 1 : Full selected table", "Option 2 : Specific rows from selected table"];
+    optionsButton.addEventListener('click', ()=>{
+      for(let j=0; j<radioText.length; j++){
+      const radioDiv = document.createElement('div');
+      radioDiv.className = 'radio';
+      popupDevContent.appendChild(radioDiv);
+
+      const input = document.createElement('input');
+      input.type = 'radio'
+      input.name = 'radio';
+      input.className = 'radio-'+j;
+
+      if(j == 0){
+        input.checked = true;
+      }else{
+        input.checked = false;
+      }
+      
+      const label = document.createElement('label');
+      label.setAttribute("for", "radio-"+j);
+      label.className = 'radio-label';
+      label.textContent = radioText[j];
+
+
+      radioDiv.appendChild(input);
+      radioDiv.appendChild(label);
+    }
+    })
+    
+
+    
+
+
+    
+
+
+
     document.querySelector('.close').addEventListener("click", () => {
         document.querySelector('.popup').style.display = "none";
     });
+
+
   </script>
 </body>
 
