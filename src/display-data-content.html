@@ -229,6 +229,27 @@ button:hover, button:focus{
   cursor: pointer;
 }
 
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.radio input[type="radio"] {
+  accent-color: #367540; /* modern browsers support this */
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.radio-label {
+  font-size: 14px;
+  color: #444;
+  cursor: pointer;
+}
+
+
+
   </style>
 </head>
 
@@ -433,31 +454,38 @@ button:hover, button:focus{
     const radioText = ["Option 1 : Full selected table", "Option 2 : Specific rows from selected table"];
     optionsButton.addEventListener('click', ()=>{
       popupDevContent.innerHTML = '';
+      document.querySelector('.popup').style.display = "flex";
+
+      const title = document.createElement('h2');
+      title.className = 'popup-title';
+      title.textContent = "Data Integration options";
+      popupDevContent.appendChild(title);
+
       for(let j=0; j<radioText.length; j++){
-      const radioDiv = document.createElement('div');
-      radioDiv.className = 'radio';
-      popupDevContent.appendChild(radioDiv);
+        const radioDiv = document.createElement('div');
+        radioDiv.className = 'radio';
+        popupDevContent.appendChild(radioDiv);
 
-      const input = document.createElement('input');
-      input.type = 'radio'
-      input.name = 'radio';
-      input.className = 'radio-'+j;
+        const input = document.createElement('input');
+        input.type = 'radio'
+        input.name = 'radio';
+        input.className = 'radio-'+j;
 
-      if(j == 0){
-        input.checked = true;
-      }else{
-        input.checked = false;
+        if(j == 0){
+          input.checked = true;
+        }else{
+          input.checked = false;
+        }
+        
+        const label = document.createElement('label');
+        label.setAttribute("for", "radio-"+j);
+        label.className = 'radio-label';
+        label.textContent = radioText[j];
+
+
+        radioDiv.appendChild(input);
+        radioDiv.appendChild(label);
       }
-      
-      const label = document.createElement('label');
-      label.setAttribute("for", "radio-"+j);
-      label.className = 'radio-label';
-      label.textContent = radioText[j];
-
-
-      radioDiv.appendChild(input);
-      radioDiv.appendChild(label);
-    }
     })
     
 
