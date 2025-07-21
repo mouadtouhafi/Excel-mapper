@@ -175,10 +175,10 @@ button:hover, button:focus{
   display: none; /* hidden by default */
   position: fixed;
   z-index: 1000;
-  left: 10%;
-  top: 10%;
-  width: 40%;
-  height: 55%;
+  left: 33%;
+  top: 25%;
+  width: 34%;
+  height: 50%;
   background-color: #367540; /* dim background */
   border-radius: 10px;
 }
@@ -190,6 +190,33 @@ button:hover, button:focus{
   border-radius: 10px;
   position: relative;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+.popup-title{
+  position: relative;
+  padding: 0;
+  margin: 15px 0px 50px 0px;
+  font-family: "Raleway", sans-serif;
+  font-weight: 300;
+  font-size: 25px;
+  color: #080808;
+}
+
+.message-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.message-content p{
+  font-family: "Raleway", sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: #e3dede;
+  text-align: left;
+  margin: 8px;
 }
 
 .close {
@@ -360,8 +387,38 @@ button:hover, button:focus{
     })();
 
     const notesButton = document.querySelector('.notes-button');
+    const popupDevContent = document.querySelector('.popup-content')
     notesButton.addEventListener('click', () => {
       document.querySelector('.popup').style.display = "flex";
+      const title = document.createElement('h2');
+      title.className = 'popup-title';
+      title.textContent = "Instructions";
+      popupDevContent.appendChild(title);
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = "message-content";
+      popupDevContent.appendChild(messageDiv);
+
+      const text_p1 = document.createElement('p');
+      text_p1.className = 'p-tag';
+      text_p1.textContent = "1- Select your table which contains data and make sure the first row of it is the table header."
+      messageDiv.appendChild(text_p1);
+
+      const text_p2 = document.createElement('p');
+      text_p2.className = 'p-tag';
+      text_p2.textContent = "2- Select which option of table data integration you want to perform:"
+      messageDiv.appendChild(text_p2);
+
+      const text_p3 = document.createElement('p');
+      text_p3.className = 'p-tag';
+      text_p3.textContent = "• Integration of the full table selected."
+      messageDiv.appendChild(text_p3);
+
+      const text_p4 = document.createElement('p');
+      text_p4.className = 'p-tag';
+      text_p4.textContent = "• Integration of a specific table rows."
+      messageDiv.appendChild(text_p4);
+
 
     });
 
