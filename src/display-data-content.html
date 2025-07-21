@@ -418,8 +418,11 @@ button:hover, button:focus{
       text_p4.className = 'p-tag';
       text_p4.textContent = "• Integration of a specific table rows."
       messageDiv.appendChild(text_p4);
-
-
+      
+      const text_p5 = document.createElement('p');
+      text_p5.className = 'p-tag';
+      text_p5.textContent = "3- Press 'Validate' button to confirm your selection."
+      messageDiv.appendChild(text_p5);
     });
 
     document.querySelector('.close').addEventListener("click", () => {
