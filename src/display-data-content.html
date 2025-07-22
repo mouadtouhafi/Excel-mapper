@@ -41,9 +41,7 @@
   <div id="range-info">Selected range: None</div>
   <div id="excel-container"></div>
   <div class="popup">
-    <div class="popup-content">
-      <span class="close">&times;</span>
-    </div>
+    <div class="popup-content"></div>
   </div>
 
   <script>
@@ -205,12 +203,18 @@
       text_p5.className = 'p-tag';
       text_p5.textContent = "3- Press 'Validate' button to confirm your selection."
       messageDiv.appendChild(text_p5);
+
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'closeBtn';
+      closeBtn.textContent = 'Close';
+      closeBtn.style.marginTop = "5%";
+      popupDevContent.appendChild(closeBtn);
+      closeBtn.addEventListener('click', ()=>{
+        document.querySelector('.popup').style.display = "none";
+      })
     });
 
-
-
-
-    const optionsButton = document.querySelector('.options-button');
+const optionsButton = document.querySelector('.options-button');
     const radioText = ["Option 1 : Full selected table", "Option 2 : Specific rows from selected table"];
     optionsButton.addEventListener('click', ()=>{
       popupDevContent.innerHTML = '';
@@ -219,6 +223,7 @@
       const title = document.createElement('h2');
       title.className = 'popup-title';
       title.textContent = "Data Integration options";
+      title.style.marginBottom = '40px';
       popupDevContent.appendChild(title);
 
       for(let j=0; j<radioText.length; j++){
@@ -247,23 +252,20 @@
         radioDiv.appendChild(label);
       }
 
-      const btn = document.createElement('button');
-      btn.className = 'options-validation-button';
-      btn.textContent = 'Validate';
-      popupDevContent.appendChild(btn);
-    })
-    
-
-    
-
-
-    
-
-
-
-    document.querySelector('.close').addEventListener("click", () => {
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'closeBtn';
+      closeBtn.textContent = 'Close';
+      closeBtn.style.marginTop = "20%";
+      popupDevContent.appendChild(closeBtn);
+      closeBtn.addEventListener('click', ()=>{
         document.querySelector('.popup').style.display = "none";
-    });
+      })
+    })
+
+
+    
+
+    
 
 
   </script>
