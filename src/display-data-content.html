@@ -170,6 +170,7 @@
     notesButton.addEventListener('click', () => {
       popupDevContent.innerHTML = '';
       document.querySelector('.popup').style.display = "flex";
+      document.body.classList.add('modal-open');
       const title = document.createElement('h2');
       title.className = 'popup-title';
       title.textContent = "Instructions";
@@ -211,6 +212,7 @@
       popupDevContent.appendChild(closeBtn);
       closeBtn.addEventListener('click', ()=>{
         document.querySelector('.popup').style.display = "none";
+        document.body.classList.remove('modal-open');
       })
     });
 
@@ -219,7 +221,7 @@ const optionsButton = document.querySelector('.options-button');
     optionsButton.addEventListener('click', ()=>{
       popupDevContent.innerHTML = '';
       document.querySelector('.popup').style.display = "flex";
-
+      document.body.classList.add('modal-open');
       const title = document.createElement('h2');
       title.className = 'popup-title';
       title.textContent = "Data Integration options";
@@ -259,6 +261,7 @@ const optionsButton = document.querySelector('.options-button');
       popupDevContent.appendChild(closeBtn);
       closeBtn.addEventListener('click', ()=>{
         document.querySelector('.popup').style.display = "none";
+        document.body.classList.remove('modal-open');
       })
     })
 
