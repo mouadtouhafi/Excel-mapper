@@ -21,21 +21,21 @@
   </div>
   <div class="buttons-container">
     <button id="backButton" class="back-button">
-      <i class="fas fa-arrow-left"></i>  Back
+      <i class="fas fa-arrow-left"></i> Back
     </button>
 
     <button id="notesButton" class="notes-button">
-      <i class="fas fa-pencil-alt"></i>  Notes
+      <i class="fas fa-pencil-alt"></i> Notes
     </button>
     <button id="optionsButton" class="options-button">
-      <i class="fas fa-sliders-h"></i>  Options
+      <i class="fas fa-sliders-h"></i> Options
     </button>
     <button id="validateButton" class="validate-button">
-      <i class="fas fa-check"></i>  Validate selection
+      <i class="fas fa-check"></i> Validate selection
     </button>
 
     <button id="continueButton" class="continue-button">
-      <i class="fas fa-arrow-right"></i>  Continue
+      <i class="fas fa-arrow-right"></i> Continue
     </button>
   </div>
   <div id="range-info">Selected range: None</div>
@@ -45,6 +45,9 @@
   </div>
 
   <script>
+    // Selection functionality
+        let startCell = null, endCell = null;
+        let json = [];
     (async () => {
       const excelContainer = document.getElementById('excel-container');
       const rangeInfo = document.getElementById('range-info');
@@ -72,7 +75,7 @@
         const workbook = XLSX.read(uint8Array, { type: 'array' });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
-        const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
         function getColumnLabel(index) {
           let label = '';
@@ -105,8 +108,7 @@
         table += '</table>';
         excelContainer.innerHTML = table;
 
-        // Selection functionality
-        let startCell = null, endCell = null;
+        
 
         function highlightSelection(start, end) {
           const cells = document.querySelectorAll('td');
@@ -159,6 +161,50 @@
           });
         });
 
+
+        const validateButton = document.querySelector('.validate-button');
+    validateButton.addEventListener('click', () => {
+      if (!startCell || !endCell) {
+        alert("Please select at least two cells.");
+        return;
+      }
+
+      const startCoords = getCellCoords(startCell.dataset.cell);
+      const endCoords = getCellCoords(endCell.dataset.cell);
+
+      const minRow = Math.min(startCoords.row, endCoords.row);
+      const maxRow = Math.max(startCoords.row, endCoords.row);
+      const minCol = Math.min(+startCell.dataset.colIndex, +endCell.dataset.colIndex);
+      const maxCol = Math.max(+startCell.dataset.colIndex, +endCell.dataset.colIndex);
+
+      const totalCells = (maxRow - minRow + 1) * (maxCol - minCol + 1);
+
+      if (totalCells < 2) {
+        alert("Please select at least two cells.");
+        return;
+      }
+
+      // Build new table from selected range
+      let selectedTable = '<table>';
+      for (let i = minRow - 1; i < maxRow; i++) {
+        selectedTable += '<tr>';
+        for (let j = minCol; j <= maxCol; j++) {
+          const cellValue = json[i] && json[i][j] !== undefined ? json[i][j] : '';
+          selectedTable += `<td>${cellValue}</td>`;
+        }
+        selectedTable += '</tr>';
+      }
+      selectedTable += '</table>';
+
+      // Replace table with selected content
+      document.getElementById('excel-container').innerHTML = selectedTable;
+
+      // Optional: update range info
+      const colStart = getColumnLabel(minCol);
+      const colEnd = getColumnLabel(maxCol);
+      document.getElementById('range-info').textContent = `Validated range: ${colStart}${minRow}:${colEnd}${maxRow}`;
+    });
+
       } catch (error) {
         console.error('Error loading Excel file:', error);
         excelContainer.innerHTML = '<div class="error">Error loading Excel file. Please try again.</div>';
@@ -199,7 +245,7 @@
       text_p4.className = 'p-tag';
       text_p4.textContent = "• Integration of a specific table rows."
       messageDiv.appendChild(text_p4);
-      
+
       const text_p5 = document.createElement('p');
       text_p5.className = 'p-tag';
       text_p5.textContent = "3- Press 'Validate' button to confirm your selection."
@@ -210,15 +256,15 @@
       closeBtn.textContent = 'Close';
       closeBtn.style.marginTop = "5%";
       popupDevContent.appendChild(closeBtn);
-      closeBtn.addEventListener('click', ()=>{
+      closeBtn.addEventListener('click', () => {
         document.querySelector('.popup').style.display = "none";
         document.body.classList.remove('modal-open');
       })
     });
 
-const optionsButton = document.querySelector('.options-button');
+    const optionsButton = document.querySelector('.options-button');
     const radioText = ["Option 1 : Full selected table", "Option 2 : Specific rows from selected table"];
-    optionsButton.addEventListener('click', ()=>{
+    optionsButton.addEventListener('click', () => {
       popupDevContent.innerHTML = '';
       document.querySelector('.popup').style.display = "flex";
       document.body.classList.add('modal-open');
@@ -228,7 +274,7 @@ const optionsButton = document.querySelector('.options-button');
       title.style.marginBottom = '40px';
       popupDevContent.appendChild(title);
 
-      for(let j=0; j<radioText.length; j++){
+      for (let j = 0; j < radioText.length; j++) {
         const radioDiv = document.createElement('div');
         radioDiv.className = 'radio';
         popupDevContent.appendChild(radioDiv);
@@ -236,16 +282,16 @@ const optionsButton = document.querySelector('.options-button');
         const input = document.createElement('input');
         input.type = 'radio'
         input.name = 'radio';
-        input.className = 'radio-'+j;
+        input.className = 'radio-' + j;
 
-        if(j == 0){
+        if (j == 0) {
           input.checked = true;
-        }else{
+        } else {
           input.checked = false;
         }
-        
+
         const label = document.createElement('label');
-        label.setAttribute("for", "radio-"+j);
+        label.setAttribute("for", "radio-" + j);
         label.className = 'radio-label';
         label.textContent = radioText[j];
 
@@ -259,7 +305,7 @@ const optionsButton = document.querySelector('.options-button');
       closeBtn.textContent = 'Close';
       closeBtn.style.marginTop = "20%";
       popupDevContent.appendChild(closeBtn);
-      closeBtn.addEventListener('click', ()=>{
+      closeBtn.addEventListener('click', () => {
         document.querySelector('.popup').style.display = "none";
         document.body.classList.remove('modal-open');
       })
@@ -268,7 +314,8 @@ const optionsButton = document.querySelector('.options-button');
 
     
 
-    
+
+
 
 
   </script>
