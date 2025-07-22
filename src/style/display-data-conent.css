@@ -253,3 +253,12 @@ button:focus {
     background-color: #97241c;
     color: #e8f0fe;
 }
+
+body.modal-open {
+  overflow: hidden;         /* disable scroll */
+  pointer-events: none;     /* disable clicks */
+}
+
+body.modal-open .popup {
+  pointer-events: auto;     /* allow popup interaction */
+}
