@@ -39,15 +39,16 @@ table {
 
 td {
     border: 1px solid #ccc;
-    padding: 5px;
+    padding: 3px;
     min-width: 60px;
-    height: 30px;
-    text-align: center;
+    height: 18px;
+    text-align: left;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     transition: background-color 0.2s ease;
     cursor: pointer;
+    font-size: 11px;
 }
 
 td:hover {
