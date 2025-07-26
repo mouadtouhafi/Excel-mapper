@@ -34,6 +34,10 @@
       <i class="fas fa-check"></i> Validate selection
     </button>
 
+    <button id="refreshButton" class="refresh-button">
+      <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+
     <button id="continueButton" class="continue-button">
       <i class="fas fa-arrow-right"></i> Continue
     </button>
@@ -46,8 +50,9 @@
 
   <script>
     // Selection functionality
-        let startCell = null, endCell = null;
-        let json = [];
+    let startCell = null, endCell = null;
+    let json = [];
+    let firstOriginalTableHTML = '';
     (async () => {
       const excelContainer = document.getElementById('excel-container');
       const rangeInfo = document.getElementById('range-info');
@@ -108,7 +113,7 @@
         table += '</table>';
         excelContainer.innerHTML = table;
 
-        
+
 
         function highlightSelection(start, end) {
           const cells = document.querySelectorAll('td');
@@ -138,7 +143,9 @@
           rangeInfo.textContent = `Selected range: ${colStart}${minRow}:${colEnd}${maxRow}`;
         }
 
-        // Add event listeners to table cells
+        /*
+         * Adding event listeners to table cells
+        */
         const tds = document.querySelectorAll('td');
         tds.forEach(td => {
           td.addEventListener('mousedown', () => {
@@ -163,47 +170,47 @@
 
 
         const validateButton = document.querySelector('.validate-button');
-    validateButton.addEventListener('click', () => {
-      if (!startCell || !endCell) {
-        alert("Please select at least two cells.");
-        return;
-      }
+        validateButton.addEventListener('click', () => {
+          if (!startCell || !endCell) {
+            alert("Please select at least two cells.");
+            return;
+          }
 
-      const startCoords = getCellCoords(startCell.dataset.cell);
-      const endCoords = getCellCoords(endCell.dataset.cell);
+          const startCoords = getCellCoords(startCell.dataset.cell);
+          const endCoords = getCellCoords(endCell.dataset.cell);
 
-      const minRow = Math.min(startCoords.row, endCoords.row);
-      const maxRow = Math.max(startCoords.row, endCoords.row);
-      const minCol = Math.min(+startCell.dataset.colIndex, +endCell.dataset.colIndex);
-      const maxCol = Math.max(+startCell.dataset.colIndex, +endCell.dataset.colIndex);
+          const minRow = Math.min(startCoords.row, endCoords.row);
+          const maxRow = Math.max(startCoords.row, endCoords.row);
+          const minCol = Math.min(+startCell.dataset.colIndex, +endCell.dataset.colIndex);
+          const maxCol = Math.max(+startCell.dataset.colIndex, +endCell.dataset.colIndex);
 
-      const totalCells = (maxRow - minRow + 1) * (maxCol - minCol + 1);
+          const totalCells = (maxRow - minRow + 1) * (maxCol - minCol + 1);
 
-      if (totalCells < 2) {
-        alert("Please select at least two cells.");
-        return;
-      }
+          if (totalCells < 2) {
+            alert("Please select at least two cells.");
+            return;
+          }
 
-      // Build new table from selected range
-      let selectedTable = '<table>';
-      for (let i = minRow - 1; i < maxRow; i++) {
-        selectedTable += '<tr>';
-        for (let j = minCol; j <= maxCol; j++) {
-          const cellValue = json[i] && json[i][j] !== undefined ? json[i][j] : '';
-          selectedTable += `<td>${cellValue}</td>`;
-        }
-        selectedTable += '</tr>';
-      }
-      selectedTable += '</table>';
+          // Build new table from selected range
+          let selectedTable = '<table>';
+          for (let i = minRow - 1; i < maxRow; i++) {
+            selectedTable += '<tr>';
+            for (let j = minCol; j <= maxCol; j++) {
+              const cellValue = json[i] && json[i][j] !== undefined ? json[i][j] : '';
+              selectedTable += `<td>${cellValue}</td>`;
+            }
+            selectedTable += '</tr>';
+          }
+          selectedTable += '</table>';
 
-      // Replace table with selected content
-      document.getElementById('excel-container').innerHTML = selectedTable;
+          // Replace table with selected content
+          document.getElementById('excel-container').innerHTML = selectedTable;
 
-      // Optional: update range info
-      const colStart = getColumnLabel(minCol);
-      const colEnd = getColumnLabel(maxCol);
-      document.getElementById('range-info').textContent = `Validated range: ${colStart}${minRow}:${colEnd}${maxRow}`;
-    });
+          // Optional: update range info
+          const colStart = getColumnLabel(minCol);
+          const colEnd = getColumnLabel(maxCol);
+          document.getElementById('range-info').textContent = `Validated range: ${colStart}${minRow}:${colEnd}${maxRow}`;
+        });
 
       } catch (error) {
         console.error('Error loading Excel file:', error);
@@ -312,7 +319,7 @@
     })
 
 
-    
+
 
 
 
