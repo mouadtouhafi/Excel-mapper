@@ -16,3 +16,28 @@
     padding-left: 45px;
 }
 
+/* Style the whole list */
+ul {
+  list-style-type: none; /* remove bullet points */
+  padding: 0;
+  margin: 0;
+}
+
+/* Style each list item as a "box" */
+ul li {
+  border: 1px solid #000;
+  border-radius: 8px;         /* rounded corners */
+  padding: 10px 15px;         /* inner spacing */
+  margin-bottom: 8px;         /* space between items */
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  background-color: #fff;     /* optional: clean white background */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* optional: subtle shadow */
+  transition: background-color 0.2s ease;
+  cursor: default;            /* optional: prevents text pointer */
+}
+
+/* Optional hover effect */
+ul li:hover {
+  background-color: #f2f2f2;
+}
