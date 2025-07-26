@@ -8,6 +8,10 @@ let appData = {
   finalSelectedTable: null
 };
 
+let appDataTarget = {
+  finalSelectedTableData: null
+};
+
 function createWindow() {
   mainwWindow = new BrowserWindow({
     width: 800,
@@ -66,6 +70,7 @@ ipcMain.handle('get-excel-files', () => {
   return excelBuffers;
 });
 
+/* For the source file data table*/
 ipcMain.handle('set-final-selected-table', (event, table) => {
   appData.finalSelectedTable = table;
   return true;
@@ -73,4 +78,14 @@ ipcMain.handle('set-final-selected-table', (event, table) => {
 
 ipcMain.handle('get-final-selected-table', (event) => {
   return appData.finalSelectedTable;
+});
+
+/* For the target file data table*/
+ipcMain.handle('set-final-selected-table-data', (event, table) => {
+  appDataTarget.finalSelectedTableData = table;
+  return true;
+});
+
+ipcMain.handle('get-final-selected-table-data', (event) => {
+  return appDataTarget.finalSelectedTableData;
 });
