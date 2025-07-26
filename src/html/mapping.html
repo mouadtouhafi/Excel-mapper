@@ -9,6 +9,7 @@
   <meta name="author" content="Your Name">
   <title>Excel Mapper</title>
   <link rel="stylesheet" href="../style/display-data-conent.css">
+  <link rel="stylesheet" href="../style/mapping.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -20,24 +21,24 @@
     </h1>
   </div>
 
-  <div class="container" id="colsXlxToFill">
-    <h2>Table Columns</h2>
-    <table class="container-table-1"></table>
+  <div class="table-container">
+    <div class="container" id="colsXlxToFill">
+        <h2>Table Columns</h2>
+        <ul id="dataList-1"></ul>
+      </div>
+
+      <div class="container" id="colsXlxWithData">
+        <h2>Table Columns</h2>
+        <ul id="dataList-2"></ul>
+      </div>
   </div>
 
-  <div class="container" id="colsXlxWithData">
-    <h2>Table Columns</h2>
-    <table class="container-table-2"></table>
-  </div>
+  
 
 
   <script>
-
-    const columnsToFill = document.getElementById('colsXlxToFill');
-    const containerTable = document.querySelector('.container-table-1');
-
-    const columnsToFillTarget = document.getElementById('colsXlxWithData');
-    const containerTableTarget = document.querySelector('.container-table-2')
+    const containerTable = document.getElementById('dataList-1');
+    const containerTableTarget = document.getElementById('dataList-2')
 
     window.addEventListener('DOMContentLoaded', async () => {
       try {
@@ -49,9 +50,9 @@
         for (const td of firstRow.querySelectorAll('td')) {
           const text = td.textContent;
           if (text !== "") {
-            const tableRow = document.createElement('tr');
-            tableRow.textContent = text;
-            containerTable.appendChild(tableRow);
+            const liItem = document.createElement('li');
+            liItem.textContent = text;
+            containerTable.appendChild(liItem);
           }
         }
 
@@ -63,9 +64,9 @@
         for (const td of firstRowTarget.querySelectorAll('td')) {
           const text = td.textContent;
           if (text !== "") {
-            const tableRow = document.createElement('tr');
-            tableRow.textContent = text;
-            containerTableTarget.appendChild(tableRow);
+            const liItem = document.createElement('li');
+            liItem.textContent = text;
+            containerTableTarget.appendChild(liItem);
           }
         }
 
