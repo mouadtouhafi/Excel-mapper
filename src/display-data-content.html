@@ -112,6 +112,7 @@
         });
         table += '</table>';
         excelContainer.innerHTML = table;
+        firstOriginalTableHTML = table;
 
 
 
@@ -318,6 +319,34 @@
       })
     })
 
+    const refreshButton = document.querySelector('.refresh-button');
+    refreshButton.addEventListener('click', () => {
+      document.getElementById('excel-container').innerHTML = firstOriginalTableHTML;
+      document.getElementById('range-info').textContent = "Selected range: None";
+
+      // Re-add event listeners for selection after restoring table
+      const tds = document.querySelectorAll('td');
+      tds.forEach(td => {
+        td.addEventListener('mousedown', () => {
+          startCell = td;
+          endCell = null;
+          highlightSelection(startCell, startCell);
+        });
+
+        td.addEventListener('mouseenter', (e) => {
+          if (startCell && e.buttons === 1) {
+            endCell = td;
+            highlightSelection(startCell, endCell);
+          }
+        });
+
+        td.addEventListener('mouseup', () => {
+          if (startCell && endCell) {
+            highlightSelection(startCell, endCell);
+          }
+        });
+      });
+    });
 
 
 
