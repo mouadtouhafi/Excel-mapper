@@ -16,47 +16,64 @@
 <body>
   <div class="header-container">
     <h1>Excel Data Mapper
-      <span>Data Selection From Target File</span>
+      <span>Data-Source Columns Mapping</span>
     </h1>
   </div>
-  <div class="buttons-container">
-    <!--
-    <button id="backButton" class="back-button">
-      <i class="fas fa-arrow-left"></i> Back
-    </button>
 
-    <button id="notesButton" class="notes-button">
-      <i class="fas fa-pencil-alt"></i> Notes
-    </button>
-    <button id="optionsButton" class="options-button">
-      <i class="fas fa-sliders-h"></i> Options
-    </button>
-    <button id="validateButton" class="validate-button">
-      <i class="fas fa-check"></i> Validate selection
-    </button>
-
-    <button id="refreshButton" class="refresh-button">
-      <i class="fas fa-sync-alt"></i> Refresh
-    </button>
-
-    <button id="continueButton" class="continue-button">
-      <i class="fas fa-arrow-right"></i> Continue
-    </button>
+  <div class="container" id="colsXlxToFill">
+    <h2>Table Columns</h2>
+    <table class="container-table-1"></table>
   </div>
-  -->
 
-    <div id="colsXlxToFill"></div>
-    <div id="colsXlxWithData"></div>
-    <script>
-      window.addEventListener('DOMContentLoaded', async () => {
-        try {
-          const tableData = await window.electronAPI.getFinalSelectedTable();
-          console.log("Retrieved table data:", tableData);
-        } catch (error) {
-          console.error("Error getting table data:", error);
+  <div class="container" id="colsXlxWithData">
+    <h2>Table Columns</h2>
+    <table class="container-table-2"></table>
+  </div>
+
+
+  <script>
+
+    const columnsToFill = document.getElementById('colsXlxToFill');
+    const containerTable = document.querySelector('.container-table-1');
+
+    const columnsToFillTarget = document.getElementById('colsXlxWithData');
+    const containerTableTarget = document.querySelector('.container-table-2')
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const tableData = await window.electronAPI.getFinalSelectedTable();
+        const tempTable = document.createElement('table');
+        tempTable.innerHTML = tableData;
+        const firstRow = tempTable.rows[0];
+
+        for (const td of firstRow.querySelectorAll('td')) {
+          const text = td.textContent;
+          if (text !== "") {
+            const tableRow = document.createElement('tr');
+            tableRow.textContent = text;
+            containerTable.appendChild(tableRow);
+          }
         }
-      });
-    </script>
+
+        const tableDataTarget = await window.electronAPI.getFinalSelectedTableData();
+        const tempTableTarget = document.createElement('table');
+        tempTableTarget.innerHTML = tableDataTarget;
+        const firstRowTarget = tempTableTarget.rows[0];
+
+        for (const td of firstRowTarget.querySelectorAll('td')) {
+          const text = td.textContent;
+          if (text !== "") {
+            const tableRow = document.createElement('tr');
+            tableRow.textContent = text;
+            containerTableTarget.appendChild(tableRow);
+          }
+        }
+
+      } catch (error) {
+        console.error("Error getting table data:", error);
+      }
+    });
+  </script>
 
 </body>
 

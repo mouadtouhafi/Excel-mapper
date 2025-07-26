@@ -306,6 +306,9 @@ refreshButton.addEventListener('click', () => {
 });
 
 const continueButton = document.querySelector('.continue-button');
-continueButton.addEventListener('click', () => {
+continueButton.addEventListener('click', async () => {
+    const tableDiv = document.getElementById('excel-container');
+    const tableBody = tableDiv.querySelector('table');
+    await window.electronAPI.setFinalSelectedTableData(tableBody.innerHTML);
     window.location.href = 'mapping.html';
 });
