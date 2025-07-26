@@ -161,7 +161,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = 'select-sheet-source.html';
     });
 
-    continueButton.addEventListener('click', () => {
+    continueButton.addEventListener('click', async() => {
+        await window.electronAPI.setFinalSelectedTable(tableBody.innerHTML);
         if (currentSheetData && currentSheetData.length > 0) {
             window.location.href = 'select-sheet-target.html';
         } else {
@@ -184,7 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     selectColumnsBtn.addEventListener("click", () => {
         /*
             When the popup appears, it must display the list of columns names to the user,
-            for that we read tthe first row which is equivalent to the header : "firstRow",
+            for that we read the first row which is equivalent to the header : "firstRow",
             after this we read the list of "td" elements inside that header : "columnsNames".
         */
         document.getElementById("popupModal").style.display = "flex";

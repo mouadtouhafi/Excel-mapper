@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Excel Viewer - Select and view Excel cell ranges directly in the browser.">
+  <meta name="author" content="Your Name">
+  <title>Excel Viewer</title>
+  <link rel="stylesheet" href="../style/display-data-conent.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+
+<body>
+  <div class="header-container">
+    <h1>Excel Data Mapper
+      <span>Data Selection From Target File</span>
+    </h1>
+  </div>
+  <div class="buttons-container">
+    <button id="backButton" class="back-button">
+      <i class="fas fa-arrow-left"></i> Back
+    </button>
+
+    <button id="notesButton" class="notes-button">
+      <i class="fas fa-pencil-alt"></i> Notes
+    </button>
+    <button id="optionsButton" class="options-button">
+      <i class="fas fa-sliders-h"></i> Options
+    </button>
+    <button id="validateButton" class="validate-button">
+      <i class="fas fa-check"></i> Validate selection
+    </button>
+
+    <button id="refreshButton" class="refresh-button">
+      <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+
+    <button id="continueButton" class="continue-button">
+      <i class="fas fa-arrow-right"></i> Continue
+    </button>
+  </div>
+  <div id="range-info">Selected range: None</div>
+  <div id="excel-container"></div>
+  <div class="popup">
+    <div class="popup-content"></div>
+  </div>
+  <script src="../js/handle-data-conent.js"></script>
+</body>
+
+</html>

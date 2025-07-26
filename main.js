@@ -4,6 +4,10 @@ const path = require('path');
 let mainwWindow, helloWindow
 let excelBuffer = null;
 
+let appData = {
+  finalSelectedTable: null
+};
+
 function createWindow() {
   mainwWindow = new BrowserWindow({
     width: 800,
@@ -22,7 +26,7 @@ function createWindow() {
     parent: mainwWindow
   });
 
-  mainwWindow.loadFile('./src/main-page.html');
+  mainwWindow.loadFile('./src/html/main-page.html');
   helloWindow.loadFile('./src/hello-page.html');
   mainwWindow.once("ready-to-show", mainwWindow.show)
 
@@ -60,4 +64,13 @@ ipcMain.on('save-excel-files', (event, payload) => {
 
 ipcMain.handle('get-excel-files', () => {
   return excelBuffers;
+});
+
+ipcMain.handle('set-final-selected-table', (event, table) => {
+  appData.finalSelectedTable = table;
+  return true;
+});
+
+ipcMain.handle('get-final-selected-table', (event) => {
+  return appData.finalSelectedTable;
 });
