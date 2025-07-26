@@ -57,50 +57,50 @@
 
 
     function highlightSelection(start, end) {
-          const cells = document.querySelectorAll('td');
-          cells.forEach(cell => cell.classList.remove('selected'));
+      const cells = document.querySelectorAll('td');
+      cells.forEach(cell => cell.classList.remove('selected'));
 
-          if (!start || !end) return;
+      if (!start || !end) return;
 
-          const startCoords = getCellCoords(start.dataset.cell);
-          const endCoords = getCellCoords(end.dataset.cell);
+      const startCoords = getCellCoords(start.dataset.cell);
+      const endCoords = getCellCoords(end.dataset.cell);
 
-          const minRow = Math.min(startCoords.row, endCoords.row);
-          const maxRow = Math.max(startCoords.row, endCoords.row);
+      const minRow = Math.min(startCoords.row, endCoords.row);
+      const maxRow = Math.max(startCoords.row, endCoords.row);
 
-          const minCol = Math.min(+start.dataset.colIndex, +end.dataset.colIndex);
-          const maxCol = Math.max(+start.dataset.colIndex, +end.dataset.colIndex);
+      const minCol = Math.min(+start.dataset.colIndex, +end.dataset.colIndex);
+      const maxCol = Math.max(+start.dataset.colIndex, +end.dataset.colIndex);
 
-          cells.forEach(cell => {
-            const row = parseInt(cell.dataset.row, 10);
-            const col = parseInt(cell.dataset.colIndex, 10);
-            if (row >= minRow && row <= maxRow && col >= minCol && col <= maxCol) {
-              cell.classList.add('selected');
-            }
-          });
-
-          const colStart = getColumnLabel(minCol);
-          const colEnd = getColumnLabel(maxCol);
-          rangeInfo.textContent = `Selected range: ${colStart}${minRow}:${colEnd}${maxRow}`;
+      cells.forEach(cell => {
+        const row = parseInt(cell.dataset.row, 10);
+        const col = parseInt(cell.dataset.colIndex, 10);
+        if (row >= minRow && row <= maxRow && col >= minCol && col <= maxCol) {
+          cell.classList.add('selected');
         }
-function getColumnLabel(index) {
-          let label = '';
-          while (index >= 0) {
-            label = String.fromCharCode((index % 26) + 65) + label;
-            index = Math.floor(index / 26) - 1;
-          }
-          return label;
-        }
+      });
 
-        function getCellCoords(cellAddress) {
-          const match = cellAddress.match(/^([A-Z]+)(\d+)$/);
-          return {
-            col: match[1],
-            row: parseInt(match[2], 10),
-          };
-        }
+      const colStart = getColumnLabel(minCol);
+      const colEnd = getColumnLabel(maxCol);
+      rangeInfo.textContent = `Selected range: ${colStart}${minRow}:${colEnd}${maxRow}`;
+    }
+    function getColumnLabel(index) {
+      let label = '';
+      while (index >= 0) {
+        label = String.fromCharCode((index % 26) + 65) + label;
+        index = Math.floor(index / 26) - 1;
+      }
+      return label;
+    }
 
-        let rangeInfo = null;
+    function getCellCoords(cellAddress) {
+      const match = cellAddress.match(/^([A-Z]+)(\d+)$/);
+      return {
+        col: match[1],
+        row: parseInt(match[2], 10),
+      };
+    }
+
+    let rangeInfo = null;
 
     (async () => {
       const excelContainer = document.getElementById('excel-container');
@@ -131,7 +131,7 @@ function getColumnLabel(index) {
         const sheet = workbook.Sheets[sheetName];
         json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-        
+
 
         // Build the table
         let table = '<table>';
@@ -150,7 +150,7 @@ function getColumnLabel(index) {
 
 
 
-        
+
 
         /*
          * Adding event listeners to table cells
