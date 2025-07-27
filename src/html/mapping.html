@@ -8,7 +8,7 @@
   <meta name="description" content="Excel Viewer - Select and view Excel cell ranges directly in the browser.">
   <meta name="author" content="Your Name">
   <title>Excel Mapper</title>
-<link rel="stylesheet" href="../style/display-data-conent.css">
+  <link rel="stylesheet" href="../style/display-data-conent.css">
   <link rel="stylesheet" href="../style/mapping.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -32,7 +32,7 @@
     <button id="refreshButton" class="refresh-button">
       <i class="fas fa-sync-alt"></i> Refresh
     </button>
-     <button id="validateButton" class="validate-button">
+    <button id="validateButton" class="validate-button">
       <i class="fas fa-check"></i> Validate Mapping
     </button>
   </div>
@@ -48,6 +48,26 @@
     <div class="container" id="colsXlxWithData">
       <h3>Data Table Columns</h3>
       <ul id="dataList-2"></ul>
+    </div>
+  </div>
+
+  <div class="menu-container" hidden>
+    <div class="menu">
+      <button class="menu-item">Menu 1</button>
+      <div class="content">
+        <p>Item 1.1</p>
+        <p>Item 1.2</p>
+      </div>
+      <button class="menu-item">Menu 2</button>
+      <div class="content">
+        <p>Item 2.1</p>
+        <p>Item 2.2</p>
+      </div>
+      <button class="menu-item">Menu 3</button>
+      <div class="content">
+        <p>Item 3.1</p>
+        <p>Item 3.2</p>
+      </div>
     </div>
   </div>
 
@@ -78,27 +98,28 @@
     }
 
     function drawLine(from, to, color = '#007bff') {
-      // Calculate control points for smooth curve
       const midX = (from.x + to.x) / 2;
       const controlPoint1X = from.x + (midX - from.x) * 0.8;
       const controlPoint2X = to.x - (to.x - midX) * 0.8;
 
-      // Draw smooth curved line using bezier curve
+      /* Draw smooth curved line using bezier curve */
       ctx.beginPath();
       ctx.moveTo(from.x, from.y);
       ctx.bezierCurveTo(
-        controlPoint1X, from.y,    // First control point
-        controlPoint2X, to.y,      // Second control point
-        to.x, to.y                 // End point
+        controlPoint1X, from.y,
+        controlPoint2X, to.y,   
+        to.x, to.y 
       );
       ctx.strokeStyle = color;
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      // Draw arrow at the end
-      // Calculate the angle at the end point for proper arrow direction
+      /*
+       Draw arrow at the end
+       Calculate the angle at the end point for proper arrow direction
+      */
       const dx = to.x - controlPoint2X;
-      const dy = to.y - to.y; // This will be 0 since we keep y constant
+      const dy = to.y - to.y;
       const angle = Math.atan2(dy, dx);
       const arrowLength = 10;
 
@@ -115,8 +136,8 @@
     function redrawConnections() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       connections.forEach(conn => {
-        const fromPos = getElementCenter(conn.from, true);   // source (right edge)
-        const toPos = getElementCenter(conn.to, false);      // target (left edge)
+        const fromPos = getElementCenter(conn.from, true);
+        const toPos = getElementCenter(conn.to, false);
         drawLine(fromPos, toPos);
       });
     }
@@ -156,10 +177,8 @@
           }
         }
 
-        // ✅ Add click handlers after lists are populated
         document.querySelectorAll('#dataList-1 li').forEach(li => {
           li.addEventListener('click', () => {
-            // Clear previous selection
             document.querySelectorAll('#dataList-1 li').forEach(item => {
               item.classList.remove('selected');
             });
@@ -172,25 +191,25 @@
         document.querySelectorAll('#dataList-2 li').forEach(li => {
           li.addEventListener('click', () => {
             if (selectedFrom) {
-              // Check if connection already exists
+              /* Check if connection already exists */
               const existingConnection = connections.find(conn =>
                 conn.from === selectedFrom && conn.to === li
               );
 
               if (!existingConnection) {
-                // Create new connection
-                const from = getElementCenter(selectedFrom, true);  // true = source (right edge)
-                const to = getElementCenter(li, false);             // false = target (left edge)
+                /* Create new connection */
+                const from = getElementCenter(selectedFrom, true); 
+                const to = getElementCenter(li, false);
 
                 connections.push({ from: selectedFrom, to: li });
                 drawLine(from, to);
 
-                // Mark elements as connected
+                /* Mark elements as connected */
                 selectedFrom.classList.add('connected');
                 li.classList.add('connected');
               }
 
-              // Clear selection
+              /* Clear selection */
               selectedFrom.classList.remove('selected');
               selectedFrom = null;
             }
@@ -202,25 +221,25 @@
           resizeCanvas();
         }, 100);
 
-        // Add double-click to remove connections
+        /* Adding double-click to remove the old connection */
         document.addEventListener('dblclick', (e) => {
           if (e.target.tagName === 'LI') {
-            // Remove all connections involving this element
+            /* Here we remove all connections involving this element */
             connections = connections.filter(conn =>
               conn.from !== e.target && conn.to !== e.target
             );
 
-            // Check if this element still has any connections
+            /* Check if this element still has any connections */
             const stillHasConnections = connections.some(conn =>
               conn.from === e.target || conn.to === e.target
             );
 
-            // Only remove 'connected' class if no connections remain
+            /* Only remove 'connected' class if no connections remain */
             if (!stillHasConnections) {
               e.target.classList.remove('connected');
             }
 
-            // Also check and update other elements that might have lost their last connection
+            /* Also check and update other elements that might have lost their last connection */
             document.querySelectorAll('li.connected').forEach(li => {
               const hasConnection = connections.some(conn =>
                 conn.from === li || conn.to === li
@@ -232,6 +251,36 @@
 
             redrawConnections();
           }
+        });
+
+        /* Clearing all connections when refresh button is clicked */
+        document.getElementById('refreshButton').addEventListener('click', () => {
+          connections = [];
+          document.querySelectorAll('li').forEach(li => {
+            li.classList.remove('connected', 'selected');
+          });
+
+          selectedFrom = null;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        /* Creating a map list for the selected list items when the validate button is clicked*/ 
+        document.getElementById('validateButton').addEventListener('click', () => {
+          const mappedLinks = connections.map(conn => ({
+            source: conn.from.textContent.trim(),
+            target: conn.to.textContent.trim()
+          }));
+          
+          const menuDiv = document.querySelector('.menu-container');
+          menuDiv.style.display = 'block';
+          menuDiv.scrollIntoView({
+            behavior : "smooth",
+            block : "center"
+          });
+
+
+          console.log('Current Mappings:', mappedLinks);
+           console.log('Current Mappings size:', mappedLinks.length);
         });
       } catch (error) {
         console.error("Error getting table data:", error);
