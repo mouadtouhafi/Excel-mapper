@@ -132,6 +132,7 @@ h1 em {
     margin-top: 30px;
     margin-bottom: 15px;
     gap: 0.6rem;
+    justify-content: center;
 }
 
 
