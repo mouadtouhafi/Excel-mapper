@@ -50,31 +50,12 @@
       <ul id="dataList-2"></ul>
     </div>
   </div>
-
-  <div class="menu-container" hidden>
-    <div class="menu">
-      <button class="menu-item">Menu 1</button>
-      <div class="content">
-        <p>Item 1.1</p>
-        <p>Item 1.2</p>
-      </div>
-      <button class="menu-item">Menu 2</button>
-      <div class="content">
-        <p>Item 2.1</p>
-        <p>Item 2.2</p>
-      </div>
-      <button class="menu-item">Menu 3</button>
-      <div class="content">
-        <p>Item 3.1</p>
-        <p>Item 3.2</p>
-      </div>
-    </div>
-  </div>
-
-
-
-
+  <div class="menu-container" hidden></div>
   <script>
+
+    const menuDiv = document.querySelector('.menu-container');
+
+
     const canvas = document.getElementById('linkCanvas');
     const ctx = canvas.getContext('2d');
     let connections = [];
@@ -107,8 +88,8 @@
       ctx.moveTo(from.x, from.y);
       ctx.bezierCurveTo(
         controlPoint1X, from.y,
-        controlPoint2X, to.y,   
-        to.x, to.y 
+        controlPoint2X, to.y,
+        to.x, to.y
       );
       ctx.strokeStyle = color;
       ctx.lineWidth = 3;
@@ -198,7 +179,7 @@
 
               if (!existingConnection) {
                 /* Create new connection */
-                const from = getElementCenter(selectedFrom, true); 
+                const from = getElementCenter(selectedFrom, true);
                 const to = getElementCenter(li, false);
 
                 connections.push({ from: selectedFrom, to: li });
@@ -262,25 +243,64 @@
 
           selectedFrom = null;
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          menuDiv.innerHTML = '';
         });
 
-        /* Creating a map list for the selected list items when the validate button is clicked*/ 
+        /* Creating a map list for the selected list items when the validate button is clicked*/
         document.getElementById('validateButton').addEventListener('click', () => {
+
+          menuDiv.innerHTML = '';
+
           const mappedLinks = connections.map(conn => ({
             source: conn.from.textContent.trim(),
             target: conn.to.textContent.trim()
           }));
-          
-          const menuDiv = document.querySelector('.menu-container');
-          menuDiv.style.display = 'block';
-          menuDiv.scrollIntoView({
-            behavior : "smooth",
-            block : "center"
-          });
+
+          if (mappedLinks.length > 0) {
+            menuDiv.style.display = 'block';
+            menuDiv.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+
+            for (let i = 0; i < mappedLinks.length; i++) {
+              console.log('Source:', mappedLinks[i].source);
+
+              const menuButtonBlock = document.createElement('div');
+              menuButtonBlock.className = 'menu-button-block';
+              menuDiv.appendChild(menuButtonBlock);
+
+              const button = document.createElement('button');
+              button.className = 'menu-button';
+              button.textContent = mappedLinks[i].source;
+              menuButtonBlock.appendChild(button);
+
+
+
+
+              const content = document.createElement('div');
+              content.className = 'block-content';
+              content.style.height = '200px';
+              content.style.display = 'hidden';
+              menuButtonBlock.appendChild(content);
+            }
+
+            const allButtons = document.querySelectorAll('.menu-button');
+            allButtons.forEach((item) => {
+              item.addEventListener('click', () => {
+                const content = item.nextElementSibling;
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+              });
+            });
+          }
+
+
+
 
 
           console.log('Current Mappings:', mappedLinks);
-           console.log('Current Mappings size:', mappedLinks.length);
+          console.log('Current Mappings size:', mappedLinks.length);
         });
       } catch (error) {
         console.error("Error getting table data:", error);
