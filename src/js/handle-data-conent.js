@@ -176,105 +176,93 @@ let rangeInfo = null;
     }
 })();
 
-const notesButton = document.querySelector('.notes-button');
-const popupDevContent = document.querySelector('.popup-content')
-notesButton.addEventListener('click', () => {
+const popup = document.querySelector('.popup');
+const popupDevContent = document.querySelector('.popup-content');
+
+/* Utility: Show popup with title */
+function openPopup(titleText) {
     popupDevContent.innerHTML = '';
-    document.querySelector('.popup').style.display = "flex";
+    popup.style.display = "flex";
     document.body.classList.add('modal-open');
+
     const title = document.createElement('h2');
     title.className = 'popup-title';
-    title.textContent = "Instructions";
+    title.textContent = titleText;
     popupDevContent.appendChild(title);
+}
+
+/* Utility: Add Close button to popup */
+function addCloseButton(marginTop = "5%") {
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'closeBtn';
+    closeBtn.textContent = 'Close';
+    closeBtn.style.marginTop = marginTop;
+    popupDevContent.appendChild(closeBtn);
+
+    closeBtn.addEventListener('click', () => {
+        popup.style.display = "none";
+        document.body.classList.remove('modal-open');
+    });
+}
+
+/* Notes Button Logic */
+document.querySelector('.notes-button').addEventListener('click', () => {
+    openPopup("Instructions");
 
     const messageDiv = document.createElement('div');
     messageDiv.className = "message-content";
     popupDevContent.appendChild(messageDiv);
 
-    const text_p1 = document.createElement('p');
-    text_p1.className = 'p-tag';
-    text_p1.textContent = "1- Select your table which contains data and make sure the first row of it is the table header."
-    messageDiv.appendChild(text_p1);
+    const messages = [
+        "1- Select your table which contains data and make sure the first row of it is the table header.",
+        "2- Select which option of table data integration you want to perform:",
+        "• Integration of the full table selected.",
+        "• Integration of a specific table rows.",
+        "3- Press 'Validate' button to confirm your selection."
+    ];
 
-    const text_p2 = document.createElement('p');
-    text_p2.className = 'p-tag';
-    text_p2.textContent = "2- Select which option of table data integration you want to perform:"
-    messageDiv.appendChild(text_p2);
+    messages.forEach(text => {
+        const p = document.createElement('p');
+        p.className = 'p-tag';
+        p.textContent = text;
+        messageDiv.appendChild(p);
+    });
 
-    const text_p3 = document.createElement('p');
-    text_p3.className = 'p-tag';
-    text_p3.textContent = "• Integration of the full table selected."
-    messageDiv.appendChild(text_p3);
-
-    const text_p4 = document.createElement('p');
-    text_p4.className = 'p-tag';
-    text_p4.textContent = "• Integration of a specific table rows."
-    messageDiv.appendChild(text_p4);
-
-    const text_p5 = document.createElement('p');
-    text_p5.className = 'p-tag';
-    text_p5.textContent = "3- Press 'Validate' button to confirm your selection."
-    messageDiv.appendChild(text_p5);
-
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'closeBtn';
-    closeBtn.textContent = 'Close';
-    closeBtn.style.marginTop = "5%";
-    popupDevContent.appendChild(closeBtn);
-    closeBtn.addEventListener('click', () => {
-        document.querySelector('.popup').style.display = "none";
-        document.body.classList.remove('modal-open');
-    })
+    addCloseButton("5%");
 });
 
-const optionsButton = document.querySelector('.options-button');
-const radioText = ["Option 1 : Full selected table", "Option 2 : Specific rows from selected table"];
-optionsButton.addEventListener('click', () => {
-    popupDevContent.innerHTML = '';
-    document.querySelector('.popup').style.display = "flex";
-    document.body.classList.add('modal-open');
-    const title = document.createElement('h2');
-    title.className = 'popup-title';
-    title.textContent = "Data Integration options";
-    title.style.marginBottom = '40px';
-    popupDevContent.appendChild(title);
+/* Options Button Logic */
+document.querySelector('.options-button').addEventListener('click', () => {
+    openPopup("Data Integration options");
+    popupDevContent.querySelector('.popup-title').style.marginBottom = '40px';
 
-    for (let j = 0; j < radioText.length; j++) {
+    const radioText = [
+        "Option 1 : Full selected table",
+        "Option 2 : Specific rows from selected table"
+    ];
+
+    radioText.forEach((text, index) => {
         const radioDiv = document.createElement('div');
         radioDiv.className = 'radio';
-        popupDevContent.appendChild(radioDiv);
 
         const input = document.createElement('input');
-        input.type = 'radio'
+        input.type = 'radio';
         input.name = 'radio';
-        input.className = 'radio-' + j;
-
-        if (j == 0) {
-            input.checked = true;
-        } else {
-            input.checked = false;
-        }
+        input.className = `radio-${index}`;
+        input.checked = index === 0;
 
         const label = document.createElement('label');
-        label.setAttribute("for", "radio-" + j);
+        label.setAttribute("for", `radio-${index}`);
         label.className = 'radio-label';
-        label.textContent = radioText[j];
-
+        label.textContent = text;
 
         radioDiv.appendChild(input);
         radioDiv.appendChild(label);
-    }
+        popupDevContent.appendChild(radioDiv);
+    });
 
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'closeBtn';
-    closeBtn.textContent = 'Close';
-    closeBtn.style.marginTop = "20%";
-    popupDevContent.appendChild(closeBtn);
-    closeBtn.addEventListener('click', () => {
-        document.querySelector('.popup').style.display = "none";
-        document.body.classList.remove('modal-open');
-    })
-})
+    addCloseButton("20%");
+});
 
 const refreshButton = document.querySelector('.refresh-button');
 refreshButton.addEventListener('click', () => {

@@ -8,7 +8,7 @@
   <meta name="description" content="Excel Viewer - Select and view Excel cell ranges directly in the browser.">
   <meta name="author" content="Your Name">
   <title>Excel Mapper</title>
-  <link rel="stylesheet" href="../style/display-data-conent.css">
+<link rel="stylesheet" href="../style/display-data-conent.css">
   <link rel="stylesheet" href="../style/mapping.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -23,25 +23,95 @@
 
   <div class="table-container">
     <div class="container" id="colsXlxToFill">
-        <h2>Table Columns</h2>
-        <ul id="dataList-1"></ul>
-      </div>
-
-      <div class="container" id="colsXlxWithData">
-        <h2>Table Columns</h2>
-        <ul id="dataList-2"></ul>
-      </div>
+      <h3>Table To Fill Columns</h3>
+      <ul id="dataList-1"></ul>
+    </div>
+    <div class="links-container">
+      <canvas id="linkCanvas"></canvas>
+    </div>
+    <div class="container" id="colsXlxWithData">
+      <h3>Data Table Columns</h3>
+      <ul id="dataList-2"></ul>
+    </div>
   </div>
 
-  
+
 
 
   <script>
-    const containerTable = document.getElementById('dataList-1');
-    const containerTableTarget = document.getElementById('dataList-2')
+    const canvas = document.getElementById('linkCanvas');
+    const ctx = canvas.getContext('2d');
+    let connections = [];
 
-    window.addEventListener('DOMContentLoaded', async () => {
+    function resizeCanvas() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      redrawConnections();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    function getElementCenter(el, isSource = true) {
+      const rect = el.getBoundingClientRect();
+      const canvasRect = canvas.getBoundingClientRect();
+
+      return {
+        x: isSource ? rect.right - canvasRect.left : rect.left - canvasRect.left,
+        y: rect.top + rect.height / 2 - canvasRect.top
+      };
+    }
+
+    function drawLine(from, to, color = '#007bff') {
+      // Calculate control points for smooth curve
+      const midX = (from.x + to.x) / 2;
+      const controlPoint1X = from.x + (midX - from.x) * 0.8;
+      const controlPoint2X = to.x - (to.x - midX) * 0.8;
+
+      // Draw smooth curved line using bezier curve
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.bezierCurveTo(
+        controlPoint1X, from.y,    // First control point
+        controlPoint2X, to.y,      // Second control point
+        to.x, to.y                 // End point
+      );
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // Draw arrow at the end
+      // Calculate the angle at the end point for proper arrow direction
+      const dx = to.x - controlPoint2X;
+      const dy = to.y - to.y; // This will be 0 since we keep y constant
+      const angle = Math.atan2(dy, dx);
+      const arrowLength = 10;
+
+      ctx.beginPath();
+      ctx.moveTo(to.x, to.y);
+      ctx.lineTo(to.x - arrowLength * Math.cos(angle - Math.PI / 6),
+        to.y - arrowLength * Math.sin(angle - Math.PI / 6));
+      ctx.moveTo(to.x, to.y);
+      ctx.lineTo(to.x - arrowLength * Math.cos(angle + Math.PI / 6),
+        to.y - arrowLength * Math.sin(angle + Math.PI / 6));
+      ctx.stroke();
+    }
+
+    function redrawConnections() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      connections.forEach(conn => {
+        const fromPos = getElementCenter(conn.from, true);   // source (right edge)
+        const toPos = getElementCenter(conn.to, false);      // target (left edge)
+        drawLine(fromPos, toPos);
+      });
+    }
+
+    let selectedFrom = null;
+
+    async function initLists() {
       try {
+        const containerTable = document.getElementById('dataList-1');
+        const containerTableTarget = document.getElementById('dataList-2');
+
         const tableData = await window.electronAPI.getFinalSelectedTable();
         const tempTable = document.createElement('table');
         tempTable.innerHTML = tableData;
@@ -70,10 +140,90 @@
           }
         }
 
+        // ✅ Add click handlers after lists are populated
+        document.querySelectorAll('#dataList-1 li').forEach(li => {
+          li.addEventListener('click', () => {
+            // Clear previous selection
+            document.querySelectorAll('#dataList-1 li').forEach(item => {
+              item.classList.remove('selected');
+            });
+
+            selectedFrom = li;
+            li.classList.add('selected');
+          });
+        });
+
+        document.querySelectorAll('#dataList-2 li').forEach(li => {
+          li.addEventListener('click', () => {
+            if (selectedFrom) {
+              // Check if connection already exists
+              const existingConnection = connections.find(conn =>
+                conn.from === selectedFrom && conn.to === li
+              );
+
+              if (!existingConnection) {
+                // Create new connection
+                const from = getElementCenter(selectedFrom, true);  // true = source (right edge)
+                const to = getElementCenter(li, false);             // false = target (left edge)
+
+                connections.push({ from: selectedFrom, to: li });
+                drawLine(from, to);
+
+                // Mark elements as connected
+                selectedFrom.classList.add('connected');
+                li.classList.add('connected');
+              }
+
+              // Clear selection
+              selectedFrom.classList.remove('selected');
+              selectedFrom = null;
+            }
+          });
+        });
+
+
+        setTimeout(() => {
+          resizeCanvas();
+        }, 100);
+
+        // Add double-click to remove connections
+        document.addEventListener('dblclick', (e) => {
+          if (e.target.tagName === 'LI') {
+            // Remove all connections involving this element
+            connections = connections.filter(conn =>
+              conn.from !== e.target && conn.to !== e.target
+            );
+
+            // Check if this element still has any connections
+            const stillHasConnections = connections.some(conn =>
+              conn.from === e.target || conn.to === e.target
+            );
+
+            // Only remove 'connected' class if no connections remain
+            if (!stillHasConnections) {
+              e.target.classList.remove('connected');
+            }
+
+            // Also check and update other elements that might have lost their last connection
+            document.querySelectorAll('li.connected').forEach(li => {
+              const hasConnection = connections.some(conn =>
+                conn.from === li || conn.to === li
+              );
+              if (!hasConnection) {
+                li.classList.remove('connected');
+              }
+            });
+
+            redrawConnections();
+          }
+        });
       } catch (error) {
         console.error("Error getting table data:", error);
       }
-    });
+    }
+
+    window.addEventListener('DOMContentLoaded', initLists);
+
   </script>
 
 </body>
