@@ -258,33 +258,34 @@
           }));
 
           // Group by source
-const grouped = mappedLinks.reduce((acc, curr) => {
-  if (!acc[curr.source]) {
-    acc[curr.source] = [];
-  }
-  acc[curr.source].push(curr.target);
-  return acc;
-}, {});
+          const grouped = mappedLinks.reduce((acc, curr) => {
+            if (!acc[curr.source]) {
+              acc[curr.source] = [];
+            }
+            acc[curr.source].push(curr.target);
+            return acc;
+          }, {});
 
           console.log('grouped : ',grouped);
 
-          if (mappedLinks.length > 0) {
+          if (Object.keys(grouped).length > 0) {
             menuDiv.style.display = 'block';
             menuDiv.scrollIntoView({
               behavior: "smooth",
               block: "center"
             });
 
-            for (let i = 0; i < mappedLinks.length; i++) {
-              console.log('Source:', mappedLinks[i].source);
+            const keys = Object.keys(grouped);
+            console.log('keys : ', keys);
 
+            for (let i = 0; i < keys.length; i++) {
               const menuButtonBlock = document.createElement('div');
               menuButtonBlock.className = 'menu-button-block';
               menuDiv.appendChild(menuButtonBlock);
 
               const button = document.createElement('button');
               button.className = 'menu-button';
-              button.textContent = mappedLinks[i].source;
+              button.textContent = keys[i];
               menuButtonBlock.appendChild(button);
 
 
