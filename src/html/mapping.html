@@ -257,6 +257,17 @@
             target: conn.to.textContent.trim()
           }));
 
+          // Group by source
+const grouped = mappedLinks.reduce((acc, curr) => {
+  if (!acc[curr.source]) {
+    acc[curr.source] = [];
+  }
+  acc[curr.source].push(curr.target);
+  return acc;
+}, {});
+
+          console.log('grouped : ',grouped);
+
           if (mappedLinks.length > 0) {
             menuDiv.style.display = 'block';
             menuDiv.scrollIntoView({
@@ -299,8 +310,7 @@
 
 
 
-          console.log('Current Mappings:', mappedLinks);
-          console.log('Current Mappings size:', mappedLinks.length);
+          
         });
       } catch (error) {
         console.error("Error getting table data:", error);
