@@ -288,14 +288,23 @@
               button.textContent = keys[i];
               menuButtonBlock.appendChild(button);
 
-
-
-
               const content = document.createElement('div');
               content.className = 'block-content';
               content.style.height = '200px';
               content.style.display = 'hidden';
               menuButtonBlock.appendChild(content);
+
+              const columnsToEdit = grouped[keys[i]];
+              const ul = document.createElement('ul');
+              for(let j=0; j<columnsToEdit.length; j++){
+                const li = document.createElement('li');
+                li.textContent = columnsToEdit[j],
+                ul.appendChild(li);
+                content.appendChild(ul);
+              }
+
+
+
             }
 
             const allButtons = document.querySelectorAll('.menu-button');
@@ -306,12 +315,6 @@
               });
             });
           }
-
-
-
-
-
-          
         });
       } catch (error) {
         console.error("Error getting table data:", error);
