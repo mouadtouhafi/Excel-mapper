@@ -132,3 +132,7 @@ ul li.connected {
     .menu-button:hover {
       background-color: #0056b3;
     }
+
+    .menu-button-block{
+            width: 700px;
+    }
