@@ -370,6 +370,23 @@
               tableDiv.className = 'menu-button-table-div';
               tableDiv.appendChild(table);
               content.appendChild(tableDiv);
+
+               // Create textarea element
+            const textAreaDiv = document.createElement('div');
+            const textarea = document.createElement('textarea');
+            textarea.rows = 4;
+            textarea.cols = 50;
+            textarea.placeholder = 'Custom your cell output via JavaScript code';
+            textarea.className = 'js-code-textarea';
+
+            textAreaDiv.appendChild(textarea);
+            content.appendChild(textAreaDiv);
+
+
+
+
+
+
             }
 
             const allButtons = document.querySelectorAll('.menu-button');
