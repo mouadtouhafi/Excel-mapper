@@ -136,3 +136,23 @@ ul li.connected {
     .menu-button-block{
             width: 700px;
     }
+    
+.menu-block-description-label {
+  font-size: 14px;
+  color: #333;
+}
+
+.menu-block-description-label .highlight {
+  color: white;
+  background-color: #007acc; /* Example blue */
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace; /* makes it look like code */
+}
+
+
+
+
+
+
+
