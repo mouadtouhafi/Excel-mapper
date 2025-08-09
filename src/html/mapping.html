@@ -294,6 +294,21 @@
               content.style.display = 'hidden';
               menuButtonBlock.appendChild(content);
 
+              const globalLabelDiv = document.createElement('div');
+              const globalLabel = document.createElement('label');
+              globalLabel.className = 'menu-block-label';
+              globalLabel.textContent = 'Process your data before mapping it to the target file';
+              globalLabelDiv.appendChild(globalLabel);
+              content.appendChild(globalLabelDiv);
+
+              const label1Div = document.createElement('div');
+              const label1 = document.createElement('label');
+              label1.className = 'menu-block-description-label';
+              label1.innerHTML = '➜ Use <span class="highlight">cells[i]</span> to transform each cell using a JavaScript syntax';
+              label1Div.appendChild(label1);
+              content.appendChild(label1Div);
+
+
               const columnsToEdit = grouped[keys[i]];
               const ul = document.createElement('ul');
               for(let j=0; j<columnsToEdit.length; j++){
