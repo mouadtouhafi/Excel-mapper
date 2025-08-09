@@ -150,6 +150,31 @@ ul li.connected {
   font-family: monospace; /* makes it look like code */
 }
 
+.menu-button-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.menu-button-table th,
+.menu-button-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.menu-button-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.highlight {
+  color: white;
+  background-color: #007acc;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
 
 
 
