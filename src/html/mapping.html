@@ -310,13 +310,53 @@
 
 
               const columnsToEdit = grouped[keys[i]];
-              const ul = document.createElement('ul');
-              for(let j=0; j<columnsToEdit.length; j++){
-                const li = document.createElement('li');
-                li.textContent = columnsToEdit[j],
-                ul.appendChild(li);
-                content.appendChild(ul);
-              }
+
+// Create table
+const table = document.createElement('table');
+table.className = 'menu-button-table';
+
+// Create header row
+const thead = document.createElement('thead');
+const headerRow = document.createElement('tr');
+
+['Column name', 'Argument', 'Example value'].forEach(headerText => {
+  const th = document.createElement('th');
+  th.textContent = headerText;
+  headerRow.appendChild(th);
+});
+thead.appendChild(headerRow);
+table.appendChild(thead);
+
+// Create table body
+const tbody = document.createElement('tbody');
+
+for (let j = 0; j < columnsToEdit.length; j++) {
+  const tr = document.createElement('tr');
+
+  // Column name cell
+  const tdName = document.createElement('td');
+  tdName.textContent = columnsToEdit[j];
+  tr.appendChild(tdName);
+
+  // Argument cell with cells[i] highlighted
+  const tdArg = document.createElement('td');
+  tdArg.innerHTML = `<span class="highlight">cells[${j}]</span>`;
+  tr.appendChild(tdArg);
+
+  // Empty example value cell
+  const tdExample = document.createElement('td');
+  tr.appendChild(tdExample);
+
+  tbody.appendChild(tr);
+}
+
+table.appendChild(tbody);
+
+const tableDiv = document.createElement('div');
+tableDiv.className = 'menu-button-table-div';
+tableDiv.appendChild(table);
+content.appendChild(tableDiv);
+
 
 
 
