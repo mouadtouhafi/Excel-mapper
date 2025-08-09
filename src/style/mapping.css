@@ -176,6 +176,14 @@ ul li.connected {
   font-family: monospace;
 }
 
+.js-code-textarea {
+  width: 100%;
+  padding: 6px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
 
 
 
