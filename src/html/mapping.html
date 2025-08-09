@@ -55,7 +55,6 @@
 
     const menuDiv = document.querySelector('.menu-container');
 
-
     const canvas = document.getElementById('linkCanvas');
     const ctx = canvas.getContext('2d');
     let connections = [];
@@ -266,7 +265,7 @@
             return acc;
           }, {});
 
-          console.log('grouped : ',grouped);
+          console.log('grouped : ', grouped);
 
           if (Object.keys(grouped).length > 0) {
             menuDiv.style.display = 'block';
@@ -311,55 +310,66 @@
 
               const columnsToEdit = grouped[keys[i]];
 
-// Create table
-const table = document.createElement('table');
-table.className = 'menu-button-table';
+              // Create table
+              const table = document.createElement('table');
+              table.className = 'menu-button-table';
 
-// Create header row
-const thead = document.createElement('thead');
-const headerRow = document.createElement('tr');
+              // Create header row
+              const thead = document.createElement('thead');
+              const headerRow = document.createElement('tr');
 
-['Column name', 'Argument', 'Example value'].forEach(headerText => {
-  const th = document.createElement('th');
-  th.textContent = headerText;
-  headerRow.appendChild(th);
-});
-thead.appendChild(headerRow);
-table.appendChild(thead);
+              ['Column name', 'Argument', 'Example value'].forEach(headerText => {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                headerRow.appendChild(th);
+              });
+              thead.appendChild(headerRow);
+              table.appendChild(thead);
 
-// Create table body
-const tbody = document.createElement('tbody');
+              // Create table body
+              const tbody = document.createElement('tbody');
 
-for (let j = 0; j < columnsToEdit.length; j++) {
-  const tr = document.createElement('tr');
+              for (let j = 0; j < columnsToEdit.length; j++) {
+                const tr = document.createElement('tr');
 
-  // Column name cell
-  const tdName = document.createElement('td');
-  tdName.textContent = columnsToEdit[j];
-  tr.appendChild(tdName);
+                // Column name cell
+                const tdName = document.createElement('td');
+                tdName.textContent = columnsToEdit[j];
+                tr.appendChild(tdName);
 
-  // Argument cell with cells[i] highlighted
-  const tdArg = document.createElement('td');
-  tdArg.innerHTML = `<span class="highlight">cells[${j}]</span>`;
-  tr.appendChild(tdArg);
+                // Argument cell with cells[i] highlighted
+                const tdArg = document.createElement('td');
+                tdArg.innerHTML = `<span class="highlight">cells[${j}]</span>`;
+                tr.appendChild(tdArg);
 
-  // Empty example value cell
-  const tdExample = document.createElement('td');
-  tr.appendChild(tdExample);
+                /* Third table column 'Example value' */
+                const tdExample = document.createElement('td');
+                const firstRowTarget = tempTableTarget.rows[0];
+                const secondRowTarget = tempTableTarget.rows[1];
 
-  tbody.appendChild(tr);
-}
+                let foundIndex = -1;
+                // Find the index of the matching header
+                for (let p = 0; p < firstRowTarget.cells.length; p++) {
+                  if (firstRowTarget.cells[p].textContent.trim() === columnsToEdit[j]) {
+                    foundIndex = p;
+                    break;
+                  }
+                }
 
-table.appendChild(tbody);
+                if (foundIndex !== -1) {
+                  const exampleValue = secondRowTarget.cells[foundIndex].textContent.trim();
+                   tdExample.innerHTML = exampleValue;
+                }
+                tr.appendChild(tdExample);
 
-const tableDiv = document.createElement('div');
-tableDiv.className = 'menu-button-table-div';
-tableDiv.appendChild(table);
-content.appendChild(tableDiv);
+                tbody.appendChild(tr);
+              }
+              table.appendChild(tbody);
 
-
-
-
+              const tableDiv = document.createElement('div');
+              tableDiv.className = 'menu-button-table-div';
+              tableDiv.appendChild(table);
+              content.appendChild(tableDiv);
             }
 
             const allButtons = document.querySelectorAll('.menu-button');
