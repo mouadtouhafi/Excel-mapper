@@ -415,7 +415,13 @@
                       }
                     }
                     
-                    
+                    let processedValue = "";
+                    if(userCode === ""){
+                      console.log("default value code");
+                      targetedCells.forEach(cell => {processedValue += cell.textContent});
+                    }
+                    console.log(processedValue);
+                    console.log("===========================================================");
                 }
                 
 
