@@ -1,142 +1,143 @@
 body {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 h3 {
-    font-weight: 10;
-    font-family: "Raleway", sans-serif;
+  font-weight: 10;
+  font-family: "Raleway", sans-serif;
 }
 
 .table-container {
-    display: flex;
-    flex-direction: row;
-    padding: 2rem 5rem;
-    width: 55%;
-    margin: 0 auto;
-    gap: 0.5rem;
-    justify-content: space-evenly;
-    min-height: 400px;
+  display: flex;
+  flex-direction: row;
+  padding: 2rem 5rem;
+  width: 55%;
+  margin: 0 auto;
+  gap: 0.5rem;
+  justify-content: space-evenly;
+  min-height: 400px;
 }
 
 #colsXlxToFill,
 #colsXlxWithData {
-    display: flex;
-    flex-direction: column;
-    width: 35%;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  align-items: center;
 }
 
 .links-container {
-    width: 25%;
-    position: relative;
-    min-height: 400px;
-    flex-grow: 1;
+  width: 25%;
+  position: relative;
+  min-height: 400px;
+  flex-grow: 1;
 }
 
 
 #colsXlxToFill tr,
 #colsXlxWithData tr {
-    height: 30px;
-    border: 1px solid black;
-    padding-left: 45px;
+  height: 30px;
+  border: 1px solid black;
+  padding-left: 45px;
 }
 
 /* Style the whole list */
 ul {
-    /* remove bullet points */
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    width: 90%;
+  /* remove bullet points */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 90%;
 }
 
 /* Style each list item as a "box" */
 ul li {
-    border: 1px solid #000;
-    border-radius: 8px;
-    padding: 5px 10px;
-    margin-bottom: 8px;
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    background-color: #fff;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.2s ease;
-    cursor: pointer;
-    text-align: center;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 5px 10px;
+  margin-bottom: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  background-color: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  text-align: center;
 }
 
 /* Optional hover effect */
 ul li:hover {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
 #linkCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .container {
-    z-index: 2;
+  z-index: 2;
 }
 
 ul li.selected {
-    background-color: #d0f0d0 !important;
-    border-color: #28a745;
-    border-width: 2px;
+  background-color: #d0f0d0 !important;
+  border-color: #28a745;
+  border-width: 2px;
 }
 
 ul li.connected {
-    background-color: #d1ecf1 !important;
-    border-color: #007bff;
-    border-width: 2px;
+  background-color: #d1ecf1 !important;
+  border-color: #007bff;
+  border-width: 2px;
 }
 
 
 
 .menu-container {
-      width: auto;
-    margin: 20px auto;
-    font-family: Arial, sans-serif;
-    margin-left: 5%;
-    margin-right: 5%;
-    }
+  width: auto;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  margin-left: 5%;
+  margin-right: 5%;
+}
 
 
 .block-content {
-      display: none;
-      padding: 10px;
-      background-color: #f1f1f1;
-      border-left: 3px solid #007BFF;
-    }
+  display: none;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-left: 3px solid #007BFF;
+}
 
 
-    .menu-button {
-      background-color: #007BFF;
-      color: white;
-      padding: 2px 10px;
-      cursor: pointer;
-      border: none;
-      width: 100%;
-      text-align: left;
-      outline: none;
-      margin-bottom: 2px;
-      transition: background 0.3s ease;
-    }
+.menu-button {
+  background-color: #007BFF;
+  color: white;
+  padding: 2px 10px;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  text-align: left;
+  outline: none;
+  margin-bottom: 2px;
+  transition: background 0.3s ease;
+}
 
-    .menu-button:hover {
-      background-color: #0056b3;
-    }
+.menu-button:hover {
+  background-color: #0056b3;
+}
 
-    .menu-button-block{
-            width: 700px;
-    }
-    
+.menu-button-block {
+  width: 700px;
+  margin: 0 auto;
+}
+
 .menu-block-description-label {
   font-size: 14px;
   color: #333;
@@ -144,10 +145,12 @@ ul li.connected {
 
 .menu-block-description-label .highlight {
   color: white;
-  background-color: #007acc; /* Example blue */
+  background-color: #007acc;
+  /* Example blue */
   padding: 2px 4px;
   border-radius: 3px;
-  font-family: monospace; /* makes it look like code */
+  font-family: monospace;
+  /* makes it look like code */
 }
 
 .menu-button-table {
@@ -184,8 +187,3 @@ ul li.connected {
   border: 1px solid #ccc;
   resize: vertical;
 }
-
-
-
-
-
