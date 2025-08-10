@@ -398,36 +398,36 @@
               //console.log(tempTableTarget);
 
 
-                
 
-              
+
+
               runJSCodeButton.addEventListener('click', () => {
 
                 const numberOfTrElementsInTable = tempTableTarget.querySelectorAll("tr").length;
                 const userCode = document.querySelector('.js-code-textarea').value;
-                for(let trElement = 1; trElement<numberOfTrElementsInTable; trElement++){
+                for (let trElement = 1; trElement < numberOfTrElementsInTable; trElement++) {
                   const targetedCells = [];
                   const row = tempTableTarget.querySelectorAll("tr")[trElement];
                   const cells = row.querySelectorAll("td");
-                    for(let tdIter=0; tdIter<cells.length; tdIter++){
-                      if(allIndexes.includes(tdIter)){
-                        targetedCells.push(cells[tdIter]);
-                      }
+                  for (let tdIter = 0; tdIter < cells.length; tdIter++) {
+                    if (allIndexes.includes(tdIter)) {
+                      targetedCells.push(cells[tdIter]);
                     }
-                    
-                    let processedValue = "";
-                    if(userCode === ""){
-                      console.log("default value code");
-                      targetedCells.forEach(cell => {processedValue += cell.textContent});
-                    }
-                    console.log(processedValue);
-                    console.log("===========================================================");
-                }
-                
+                  }
 
-                
-                
-                if(userCode.includes("cells[")){
+                  let processedValue = "";
+                  if (userCode === "") {
+                    console.log("default value code");
+                    targetedCells.forEach(cell => { processedValue += cell.textContent });
+                  }
+                  console.log(processedValue);
+                  console.log("===========================================================");
+                }
+
+
+
+
+                if (userCode.includes("cells[")) {
                   let isUderCodeValid = true;
                   try {
                     const transformFn = new Function("cellValue", userCode);
@@ -437,9 +437,25 @@
                   }
                 }
                 console.log(userCode);
-                
 
+
+                /* Display a value example when running the code entered by user*/
                 
+                const instanceCodeExampleDiv = document.createElement('div');
+                const instanceCodeExampleLabel1 = document.createElement('label');
+                instanceCodeExampleLabel1.className = 'instance-code-example-label-1';
+                instanceCodeExampleLabel1.textContent = 'Result after run : ';
+
+                const instanceCodeExampleLabel2 = document.createElement('label');
+                instanceCodeExampleLabel2.className = 'instance-code-example-label-2';
+                instanceCodeExampleLabel2.textContent = processedValue;
+                
+                instanceCodeExampleDiv.appendChild(instanceCodeExampleLabel1);
+                instanceCodeExampleDiv.appendChild(instanceCodeExampleLabel2);
+                content.appendChild(instanceCodeExampleDiv);
+
+
+
                 /*
                 try {
                   const transformFn = new Function("cellValue", userCode);
@@ -456,7 +472,7 @@
                 */
 
               })
-              
+
 
             }
 
