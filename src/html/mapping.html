@@ -265,7 +265,7 @@
             return acc;
           }, {});
 
-          console.log('grouped : ', grouped);
+          //console.log('grouped : ', grouped);
 
           if (Object.keys(grouped).length > 0) {
             menuDiv.style.display = 'block';
@@ -275,7 +275,7 @@
             });
 
             const keys = Object.keys(grouped);
-            console.log('keys : ', keys);
+            //console.log('keys : ', keys);
 
             for (let i = 0; i < keys.length; i++) {
               const menuButtonBlock = document.createElement('div');
@@ -284,7 +284,7 @@
 
               const button = document.createElement('button');
               button.className = 'menu-button';
-              button.textContent = keys[i];
+              button.textContent = "Target column : " + keys[i];
               menuButtonBlock.appendChild(button);
 
               const content = document.createElement('div');
@@ -329,6 +329,7 @@
               // Create table body
               const tbody = document.createElement('tbody');
 
+              const allIndexes = [];
               for (let j = 0; j < columnsToEdit.length; j++) {
                 const tr = document.createElement('tr');
 
@@ -348,17 +349,19 @@
                 const secondRowTarget = tempTableTarget.rows[1];
 
                 let foundIndex = -1;
+
                 // Find the index of the matching header
                 for (let p = 0; p < firstRowTarget.cells.length; p++) {
                   if (firstRowTarget.cells[p].textContent.trim() === columnsToEdit[j]) {
                     foundIndex = p;
+                    allIndexes.push(p);
                     break;
                   }
                 }
 
                 if (foundIndex !== -1) {
                   const exampleValue = secondRowTarget.cells[foundIndex].textContent.trim();
-                   tdExample.innerHTML = exampleValue;
+                  tdExample.innerHTML = exampleValue;
                 }
                 tr.appendChild(tdExample);
 
@@ -371,21 +374,83 @@
               tableDiv.appendChild(table);
               content.appendChild(tableDiv);
 
-               // Create textarea element
-            const textAreaDiv = document.createElement('div');
-            const textarea = document.createElement('textarea');
-            textarea.rows = 4;
-            textarea.cols = 50;
-            textarea.placeholder = 'Custom your cell output via JavaScript code';
-            textarea.className = 'js-code-textarea';
+              // Create textarea element
+              const textAreaDiv = document.createElement('div');
+              const textarea = document.createElement('textarea');
+              textarea.rows = 4;
+              textarea.cols = 50;
+              textarea.placeholder = 'Custom your cell output via JavaScript code. Default code is "cells[0] + cells[1] + cells[n] + ..."';
+              textarea.className = 'js-code-textarea';
 
-            textAreaDiv.appendChild(textarea);
-            content.appendChild(textAreaDiv);
-
-
+              textAreaDiv.appendChild(textarea);
+              content.appendChild(textAreaDiv);
 
 
+              /* Creating the buttons div*/
+              const menuButtonsDiv = document.createElement('div');
+              const runJSCodeButton = document.createElement('button');
+              runJSCodeButton.className = 'run-code-button';
+              runJSCodeButton.textContent = 'Run your code';
+              menuButtonsDiv.appendChild(runJSCodeButton);
 
+              content.appendChild(menuButtonsDiv);
+
+              //console.log(tempTableTarget);
+
+
+                
+
+              
+              runJSCodeButton.addEventListener('click', () => {
+
+                const numberOfTrElementsInTable = tempTableTarget.querySelectorAll("tr").length;
+                const userCode = document.querySelector('.js-code-textarea').value;
+                for(let trElement = 1; trElement<numberOfTrElementsInTable; trElement++){
+                  const targetedCells = [];
+                  const row = tempTableTarget.querySelectorAll("tr")[trElement];
+                  const cells = row.querySelectorAll("td");
+                    for(let tdIter=0; tdIter<cells.length; tdIter++){
+                      if(allIndexes.includes(tdIter)){
+                        targetedCells.push(cells[tdIter]);
+                      }
+                    }
+                    
+                    
+                }
+                
+
+                
+                
+                if(userCode.includes("cells[")){
+                  let isUderCodeValid = true;
+                  try {
+                    const transformFn = new Function("cellValue", userCode);
+                  } catch (error) {
+                    isUderCodeValid = false;
+                    console.log("invalide code");
+                  }
+                }
+                console.log(userCode);
+                
+
+                
+                /*
+                try {
+                  const transformFn = new Function("cellValue", userCode);
+                  // Apply the function to each selected cell
+
+
+                  selectedCells.forEach(cell => {
+                    const newValue = transformFn(cell.textContent);
+                    cell.textContent = newValue;
+                  });
+                } catch (error) {
+
+                }
+                */
+
+              })
+              
 
             }
 
