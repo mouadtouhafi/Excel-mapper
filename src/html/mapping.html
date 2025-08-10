@@ -400,9 +400,8 @@
 
 
 
-
+              let processedValues = [];
               runJSCodeButton.addEventListener('click', () => {
-                let processedValues = [];
                 const numberOfTrElementsInTable = tempTableTarget.querySelectorAll("tr").length;
                 const userCode = document.querySelector('.js-code-textarea').value;
                 for (let trElement = 1; trElement < numberOfTrElementsInTable; trElement++) {
@@ -421,11 +420,10 @@
                     targetedCells.forEach(cell => { processedValue += cell.textContent });
                   }
                   processedValues.push(processedValue);
-                  finalProcessedColumnData.set(keys[i], processedValues);
-                  console.log(processedValue);
-                  console.log("===========================================================");
                 }
-
+                finalProcessedColumnData.set(keys[i], processedValues);
+                console.log(finalProcessedColumnData);
+                console.log("===========================================================");
 
 
 
@@ -450,7 +448,7 @@
 
                 const instanceCodeExampleLabel2 = document.createElement('label');
                 instanceCodeExampleLabel2.className = 'instance-code-example-label-2';
-                instanceCodeExampleLabel2.textContent = processedValue;
+                instanceCodeExampleLabel2.textContent = processedValues[0];
                 
                 instanceCodeExampleDiv.appendChild(instanceCodeExampleLabel1);
                 instanceCodeExampleDiv.appendChild(instanceCodeExampleLabel2);
