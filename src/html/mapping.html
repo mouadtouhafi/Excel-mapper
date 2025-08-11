@@ -403,7 +403,6 @@
               runJSCodeButton.addEventListener('click', () => {
                 const processedValues = [];
                 if(finalProcessedColumnData.has(keys[i])){
-                  console.log("it exists");
                   finalProcessedColumnData.delete(keys[i]);
                 }
                 const numberOfTrElementsInTable = tempTableTarget.querySelectorAll("tr").length;
@@ -422,25 +421,32 @@
                   if (userCode === "") {
                     console.log("default value code");
                     targetedCells.forEach(cell => { processedValue += cell.textContent });
+                  }else if(userCode.includes("cells[")){
+                    let isUderCodeValid = true;
+                    let transformFn;
+                    try {
+                      transformFn = new Function("cells", `return ${userCode}`);
+                    } catch (error) {
+                      isUderCodeValid = false;
+                      console.log("invalide code");
+                    }
+                    if (isUderCodeValid) {
+                      try {
+                          const cellValues = targetedCells.map(cell => cell.textContent);
+                          /* the console prints : cellValues : Expleo,IT Engineer – Sage X3 & AQUIWEB MES,CDI */
+                          const newValue = transformFn(cellValues); // apply user code
+                          console.log(newValue);
+                        } catch (error) {
+                          console.error(`Error running code on row ${i}:`, error.message);
+                        }
+                    }
                   }
                   processedValues.push(processedValue);
                 }
                 finalProcessedColumnData.set(keys[i], processedValues);
-                console.log(finalProcessedColumnData);
+                //console.log(finalProcessedColumnData);
                 console.log("===========================================================");
 
-
-
-                if (userCode.includes("cells[")) {
-                  let isUderCodeValid = true;
-                  try {
-                    const transformFn = new Function("cellValue", userCode);
-                  } catch (error) {
-                    isUderCodeValid = false;
-                    console.log("invalide code");
-                  }
-                }
-                console.log(userCode);
 
 
                 /* Display a value example when running the code entered by user*/
@@ -459,23 +465,6 @@
                   instanceCodeExampleDiv.appendChild(instanceCodeExampleLabel2);
                   content.appendChild(instanceCodeExampleDiv);
                 }
-                
-
-                /*
-                try {
-                  const transformFn = new Function("cellValue", userCode);
-                  // Apply the function to each selected cell
-
-
-                  selectedCells.forEach(cell => {
-                    const newValue = transformFn(cell.textContent);
-                    cell.textContent = newValue;
-                  });
-                } catch (error) {
-
-                }
-                */
-
               })
 
 
