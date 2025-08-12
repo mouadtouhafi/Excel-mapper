@@ -428,13 +428,16 @@
                       try {
                           const cellValues = targetedCells.map(cell => cell.textContent);
                           /* the console prints : cellValues : Expleo,IT Engineer – Sage X3 & AQUIWEB MES,CDI */
-                          const newValue = transformFn(cellValues); // apply user code
+                          /* applying the user code */ 
+                          const newValue = transformFn(cellValues); 
                           processedValue = newValue;
                           console.log(processedValue);
                         } catch (error) {
                           console.error(`Error running code on row ${trElement}:`, error.message);
                         }
                     }
+                  }else{
+                    targetedCells.forEach(cell => { processedValue += cell.textContent });
                   }
                   processedValues.push(processedValue);
                 }
