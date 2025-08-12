@@ -376,9 +376,10 @@
               const textAreaDiv = document.createElement('div');
               const textarea = document.createElement('textarea');
               textarea.rows = 4;
-              textarea.cols = 50;
+              //textarea.cols = 50;
               textarea.placeholder = 'Custom your cell output via JavaScript code. Default code is "cells[0] + cells[1] + cells[n] + ..."';
               textarea.className = 'js-code-textarea';
+              textAreaDiv.className = 'text-area-div';
 
               textAreaDiv.appendChild(textarea);
               content.appendChild(textAreaDiv);
@@ -399,7 +400,7 @@
                   finalProcessedColumnData.delete(keys[i]);
                 }
                 const numberOfTrElementsInTable = tempTableTarget.querySelectorAll("tr").length;
-                const userCode = document.querySelector('.js-code-textarea').value;
+                const userCode = content.querySelector('.js-code-textarea').value;
                 for (let trElement = 1; trElement < numberOfTrElementsInTable; trElement++) {
                   const targetedCells = [];
                   const row = tempTableTarget.querySelectorAll("tr")[trElement];
@@ -440,13 +441,13 @@
                 }
                 finalProcessedColumnData.set(keys[i], processedValues);
 
-                console.log(processedValues);
+                console.log(finalProcessedColumnData);
                 console.log("===========================================================");
 
 
 
                 /* Display a value example when running the code entered by user*/
-                if(document.querySelectorAll('.instance-code-example-div').length == 0){
+                if(content.querySelectorAll('.instance-code-example-div').length == 0){
                   const instanceCodeExampleDiv = document.createElement('div');
                   instanceCodeExampleDiv.className = 'instance-code-example-div';
                   const instanceCodeExampleLabel1 = document.createElement('label');
@@ -462,8 +463,6 @@
                   content.appendChild(instanceCodeExampleDiv);
                 }
               })
-
-
             }
 
             const allButtons = document.querySelectorAll('.menu-button');
@@ -476,6 +475,7 @@
                   content.style.flexDirection = 'column';
                   content.style.alignItems = 'center';
                   content.style.padding = '20px';
+                  content.style.gap = '10px';
                 } else {
                   content.style.display = 'none';
                 }
