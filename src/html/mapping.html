@@ -265,8 +265,6 @@
             return acc;
           }, {});
 
-          //console.log('grouped : ', grouped);
-
           if (Object.keys(grouped).length > 0) {
             menuDiv.style.display = 'block';
             menuDiv.scrollIntoView({
@@ -395,8 +393,6 @@
 
               content.appendChild(menuButtonsDiv);
 
-              //console.log(tempTableTarget);
-
 
 
 
@@ -419,32 +415,32 @@
 
                   let processedValue = "";
                   if (userCode === "") {
-                    console.log("default value code");
                     targetedCells.forEach(cell => { processedValue += cell.textContent });
                   }else if(userCode.includes("cells[")){
-                    let isUderCodeValid = true;
+                    let isUserCodeValid = true;
                     let transformFn;
                     try {
                       transformFn = new Function("cells", `return ${userCode}`);
                     } catch (error) {
-                      isUderCodeValid = false;
-                      console.log("invalide code");
+                      isUserCodeValid = false;
                     }
-                    if (isUderCodeValid) {
+                    if (isUserCodeValid) {
                       try {
                           const cellValues = targetedCells.map(cell => cell.textContent);
                           /* the console prints : cellValues : Expleo,IT Engineer – Sage X3 & AQUIWEB MES,CDI */
                           const newValue = transformFn(cellValues); // apply user code
-                          console.log(newValue);
+                          processedValue = newValue;
+                          console.log(processedValue);
                         } catch (error) {
-                          console.error(`Error running code on row ${i}:`, error.message);
+                          console.error(`Error running code on row ${trElement}:`, error.message);
                         }
                     }
                   }
                   processedValues.push(processedValue);
                 }
                 finalProcessedColumnData.set(keys[i], processedValues);
-                //console.log(finalProcessedColumnData);
+
+                console.log(processedValues);
                 console.log("===========================================================");
 
 
