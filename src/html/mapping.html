@@ -469,6 +469,7 @@
             allButtons.forEach((item) => {
               item.addEventListener('click', () => {
                 const content = item.nextElementSibling;
+                const menuButtonBlock = item.parentElement;
                 const isHidden = content.style.display === 'none' || content.style.display === '';
                 if (isHidden) {
                   content.style.display = 'flex';
@@ -476,8 +477,10 @@
                   content.style.alignItems = 'center';
                   content.style.padding = '20px';
                   content.style.gap = '10px';
+                  menuButtonBlock.classList.add('expanded');
                 } else {
                   content.style.display = 'none';
+                  menuButtonBlock.classList.remove('expanded');
                 }
               });
             });
