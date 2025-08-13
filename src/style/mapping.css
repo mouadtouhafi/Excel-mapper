@@ -139,6 +139,23 @@ ul li.connected {
 .menu-button-block {
   width: 700px;
   margin: 0 auto;
+  transition: margin 0.3s ease;
+}
+
+.menu-button-block.expanded {
+  margin: 20px auto;
+}
+
+.menu-button-block.expanded:first-child {
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.menu-button-block.expanded:last-child {
+  margin-bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .menu-block-description-label {
