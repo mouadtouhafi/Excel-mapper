@@ -480,7 +480,12 @@
                   content.style.gap = '10px';
                   menuButtonBlock.classList.add('expanded');
 
-                 
+                  setTimeout(() => {
+                    menuButtonBlock.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center"
+                    });
+                  }, 100);
                 } else {
                   content.style.display = 'none';
                   menuButtonBlock.classList.remove('expanded');
