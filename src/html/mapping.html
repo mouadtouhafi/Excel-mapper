@@ -436,6 +436,30 @@ document.addEventListener('click', (e) => {
 });
 
 
+// Global array to store saved codes
+let savedCodesList = [];
+
+function loadSavedCodes(codesList, textarea) {
+  codesList.innerHTML = '';
+  
+  if (savedCodesList.length === 0) {
+    codesList.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No saved codes yet</div>';
+    return;
+  }
+  
+  savedCodesList.forEach((code, index) => {
+    const codeItem = document.createElement('div');
+    codeItem.className = 'saved-code-item';
+    codeItem.textContent = code.length > 50 ? code.substring(0, 50) + '...' : code;
+    
+    codeItem.addEventListener('click', () => {
+      textarea.value = code;
+      codesList.parentElement.style.display = 'none';
+    });
+    
+    codesList.appendChild(codeItem);
+  });
+}
 
               /* Creating the buttons div*/
               const menuButtonsDiv = document.createElement('div');
@@ -451,7 +475,17 @@ document.addEventListener('click', (e) => {
 
               content.appendChild(menuButtonsDiv);
 
-
+              saveJSCodeButton.addEventListener('click', () => {
+  const codeToSave = textarea.value.trim();
+  if (codeToSave && !savedCodesList.includes(codeToSave)) {
+    savedCodesList.push(codeToSave);
+    alert('Code saved successfully!');
+  } else if (savedCodesList.includes(codeToSave)) {
+    alert('This code is already saved!');
+  } else {
+    alert('Please enter some code to save!');
+  }
+});
 
               runJSCodeButton.addEventListener('click', () => {
                 const processedValues = [];
