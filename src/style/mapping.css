@@ -86,15 +86,15 @@ ul li:hover {
 }
 
 ul li.selected {
-  background-color: #d0f0d0 !important;
-  border-color: #28a745;
-  border-width: 2px;
+  background-color: #e0e14d !important;
+  border-color: #677023;
+  border-width: 1px;
 }
 
 ul li.connected {
-  background-color: #d1ecf1 !important;
-  border-color: #007bff;
-  border-width: 2px;
+  background-color: #90cd8b !important;
+  border-color: #578757;
+  border-width: 1px;
 }
 
 
@@ -115,7 +115,8 @@ ul li.connected {
   display: none;
   padding: 10px;
   background-color: #f1f1f1;
-  border-left: 3px solid #007BFF;
+  border: 3px solid #007BFF;
+  border-radius: 4px;
 }
 
 
@@ -137,7 +138,7 @@ ul li.connected {
 }
 
 .menu-button-block {
-  width: 700px;
+  width: 41.5%;
   margin: 0 auto;
   transition: margin 0.3s ease;
 }
