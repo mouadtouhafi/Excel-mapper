@@ -372,13 +372,69 @@
               const textAreaDiv = document.createElement('div');
               const textarea = document.createElement('textarea');
               textarea.rows = 4;
-              //textarea.cols = 50;
               textarea.placeholder = 'Custom your cell output via JavaScript code. Default code is "cells[0] + cells[1] + cells[n] + ..."';
               textarea.className = 'js-code-textarea';
               textAreaDiv.className = 'text-area-div';
 
+
+
+
+
+              // Create the saved codes button
+              const savedCodesButton = document.createElement('button');
+              savedCodesButton.className = 'saved-codes-button';
+              savedCodesButton.innerHTML = '<i class="fas fa-code"></i>';
+              savedCodesButton.title = 'Load saved codes';
+              savedCodesButton.type = 'button';
+
+              // Create popup for saved codes
+const savedCodesPopup = document.createElement('div');
+savedCodesPopup.className = 'saved-codes-popup';
+savedCodesPopup.style.display = 'none';
+
+const popupHeader = document.createElement('div');
+popupHeader.className = 'popup-header';
+popupHeader.innerHTML = '<span>Saved Codes</span><button class="close-popup" type="button">&times;</button>';
+
+const codesList = document.createElement('div');
+codesList.className = 'codes-list';
+
+savedCodesPopup.appendChild(popupHeader);
+savedCodesPopup.appendChild(codesList);
+
+
+
+
               textAreaDiv.appendChild(textarea);
+              textAreaDiv.appendChild(savedCodesButton);
+              textAreaDiv.appendChild(savedCodesPopup);
               content.appendChild(textAreaDiv);
+
+
+              // Add event listeners
+savedCodesButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  // Load saved codes (you'll implement this)
+  loadSavedCodes(codesList, textarea);
+  
+  // Show popup
+  savedCodesPopup.style.display = 'block';
+});
+
+// Close popup when clicking the X
+savedCodesPopup.querySelector('.close-popup').addEventListener('click', () => {
+  savedCodesPopup.style.display = 'none';
+});
+
+// Close popup when clicking outside
+document.addEventListener('click', (e) => {
+  if (!textAreaDiv.contains(e.target)) {
+    savedCodesPopup.style.display = 'none';
+  }
+});
+
 
 
               /* Creating the buttons div*/
@@ -394,6 +450,8 @@
               menuButtonsDiv.appendChild(saveJSCodeButton);
 
               content.appendChild(menuButtonsDiv);
+
+
 
               runJSCodeButton.addEventListener('click', () => {
                 const processedValues = [];
@@ -419,7 +477,7 @@
                     let isUserCodeValid = true;
                     let transformFn;
                     try {
-                      transformFn = new Function("cells", `return ${userCode}`);
+                      transformFn = new Function("cells", userCode);
                     } catch (error) {
                       isUserCodeValid = false;
                     }
