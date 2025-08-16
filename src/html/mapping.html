@@ -372,7 +372,7 @@
               const textAreaDiv = document.createElement('div');
               const textarea = document.createElement('textarea');
               textarea.rows = 4;
-              textarea.placeholder = 'Custom your cell output via JavaScript code. Default code is "cells[0] + cells[1] + cells[n] + ..."';
+              textarea.placeholder = 'Custom your cell output via JavaScript code. Default code is "return cells[0] + cells[1] + cells[n] + ..."';
               textarea.className = 'js-code-textarea';
               textAreaDiv.className = 'text-area-div';
 
@@ -388,19 +388,19 @@
               savedCodesButton.type = 'button';
 
               // Create popup for saved codes
-const savedCodesPopup = document.createElement('div');
-savedCodesPopup.className = 'saved-codes-popup';
-savedCodesPopup.style.display = 'none';
+              const savedCodesPopup = document.createElement('div');
+              savedCodesPopup.className = 'saved-codes-popup';
+              savedCodesPopup.style.display = 'none';
 
-const popupHeader = document.createElement('div');
-popupHeader.className = 'popup-header';
-popupHeader.innerHTML = '<span>Saved Codes</span><button class="close-popup" type="button">&times;</button>';
+              const popupHeader = document.createElement('div');
+              popupHeader.className = 'popup-header';
+              popupHeader.innerHTML = '<span>Saved Codes</span><button class="close-popup" type="button">&times;</button>';
 
-const codesList = document.createElement('div');
-codesList.className = 'codes-list';
+              const codesList = document.createElement('div');
+              codesList.className = 'codes-list';
 
-savedCodesPopup.appendChild(popupHeader);
-savedCodesPopup.appendChild(codesList);
+              savedCodesPopup.appendChild(popupHeader);
+              savedCodesPopup.appendChild(codesList);
 
 
 
@@ -412,54 +412,54 @@ savedCodesPopup.appendChild(codesList);
 
 
               // Add event listeners
-savedCodesButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  
-  // Load saved codes (you'll implement this)
-  loadSavedCodes(codesList, textarea);
-  
-  // Show popup
-  savedCodesPopup.style.display = 'block';
-});
+              savedCodesButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
 
-// Close popup when clicking the X
-savedCodesPopup.querySelector('.close-popup').addEventListener('click', () => {
-  savedCodesPopup.style.display = 'none';
-});
+                // Load saved codes (you'll implement this)
+                loadSavedCodes(codesList, textarea);
 
-// Close popup when clicking outside
-document.addEventListener('click', (e) => {
-  if (!textAreaDiv.contains(e.target)) {
-    savedCodesPopup.style.display = 'none';
-  }
-});
+                // Show popup
+                savedCodesPopup.style.display = 'block';
+              });
+
+              // Close popup when clicking the X
+              savedCodesPopup.querySelector('.close-popup').addEventListener('click', () => {
+                savedCodesPopup.style.display = 'none';
+              });
+
+              // Close popup when clicking outside
+              document.addEventListener('click', (e) => {
+                if (!textAreaDiv.contains(e.target)) {
+                  savedCodesPopup.style.display = 'none';
+                }
+              });
 
 
-// Global array to store saved codes
-let savedCodesList = [];
+              // Global array to store saved codes
+              let savedCodesList = [];
 
-function loadSavedCodes(codesList, textarea) {
-  codesList.innerHTML = '';
-  
-  if (savedCodesList.length === 0) {
-    codesList.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No saved codes yet</div>';
-    return;
-  }
-  
-  savedCodesList.forEach((code, index) => {
-    const codeItem = document.createElement('div');
-    codeItem.className = 'saved-code-item';
-    codeItem.textContent = code.length > 50 ? code.substring(0, 50) + '...' : code;
-    
-    codeItem.addEventListener('click', () => {
-      textarea.value = code;
-      codesList.parentElement.style.display = 'none';
-    });
-    
-    codesList.appendChild(codeItem);
-  });
-}
+              function loadSavedCodes(codesList, textarea) {
+                codesList.innerHTML = '';
+
+                if (savedCodesList.length === 0) {
+                  codesList.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No saved codes yet</div>';
+                  return;
+                }
+
+                savedCodesList.forEach((code, index) => {
+                  const codeItem = document.createElement('div');
+                  codeItem.className = 'saved-code-item';
+                  codeItem.textContent = code.length > 50 ? code.substring(0, 50) + '...' : code;
+
+                  codeItem.addEventListener('click', () => {
+                    textarea.value = code;
+                    codesList.parentElement.style.display = 'none';
+                  });
+
+                  codesList.appendChild(codeItem);
+                });
+              }
 
               /* Creating the buttons div*/
               const menuButtonsDiv = document.createElement('div');
@@ -476,20 +476,20 @@ function loadSavedCodes(codesList, textarea) {
               content.appendChild(menuButtonsDiv);
 
               saveJSCodeButton.addEventListener('click', () => {
-  const codeToSave = textarea.value.trim();
-  if (codeToSave && !savedCodesList.includes(codeToSave)) {
-    savedCodesList.push(codeToSave);
-    alert('Code saved successfully!');
-  } else if (savedCodesList.includes(codeToSave)) {
-    alert('This code is already saved!');
-  } else {
-    alert('Please enter some code to save!');
-  }
-});
+                const codeToSave = textarea.value.trim();
+                if (codeToSave && !savedCodesList.includes(codeToSave)) {
+                  savedCodesList.push(codeToSave);
+                  alert('Code saved successfully!');
+                } else if (savedCodesList.includes(codeToSave)) {
+                  alert('This code is already saved!');
+                } else {
+                  alert('Please enter some code to save!');
+                }
+              });
 
               runJSCodeButton.addEventListener('click', () => {
                 const processedValues = [];
-                if(finalProcessedColumnData.has(keys[i])){
+                if (finalProcessedColumnData.has(keys[i])) {
                   finalProcessedColumnData.delete(keys[i]);
                 }
                 const numberOfTrElementsInTable = tempTableTarget.querySelectorAll("tr").length;
@@ -507,7 +507,7 @@ function loadSavedCodes(codesList, textarea) {
                   let processedValue = "";
                   if (userCode === "") {
                     targetedCells.forEach(cell => { processedValue += cell.textContent });
-                  }else if(userCode.includes("cells[")){
+                  } else if (userCode.includes("cells[")) {
                     let isUserCodeValid = true;
                     let transformFn;
                     try {
@@ -517,17 +517,17 @@ function loadSavedCodes(codesList, textarea) {
                     }
                     if (isUserCodeValid) {
                       try {
-                          const cellValues = targetedCells.map(cell => cell.textContent);
-                          /* the console prints : cellValues : Expleo,IT Engineer – Sage X3 & AQUIWEB MES,CDI */
-                          /* applying the user code */ 
-                          const newValue = transformFn(cellValues); 
-                          processedValue = newValue;
-                          console.log(processedValue);
-                        } catch (error) {
-                          console.error(`Error running code on row ${trElement}:`, error.message);
-                        }
+                        const cellValues = targetedCells.map(cell => cell.textContent);
+                        /* the console prints : cellValues : Expleo,IT Engineer – Sage X3 & AQUIWEB MES,CDI */
+                        /* applying the user code */
+                        const newValue = transformFn(cellValues);
+                        processedValue = newValue;
+                        console.log(processedValue);
+                      } catch (error) {
+                        console.error(`Error running code on row ${trElement}:`, error.message);
+                      }
                     }
-                  }else{
+                  } else {
                     targetedCells.forEach(cell => { processedValue += cell.textContent });
                   }
                   processedValues.push(processedValue);
@@ -540,8 +540,9 @@ function loadSavedCodes(codesList, textarea) {
 
 
                 /* Display a value example when running the code entered by user*/
-                if(content.querySelectorAll('.instance-code-example-div').length == 0){
-                  const instanceCodeExampleDiv = document.createElement('div');
+                let instanceCodeExampleDiv = content.querySelector('.instance-code-example-div');
+                if (!instanceCodeExampleDiv) {
+                  instanceCodeExampleDiv = document.createElement('div');
                   instanceCodeExampleDiv.className = 'instance-code-example-div';
                   const instanceCodeExampleLabel1 = document.createElement('label');
                   instanceCodeExampleLabel1.className = 'instance-code-example-label-1';
@@ -550,10 +551,15 @@ function loadSavedCodes(codesList, textarea) {
                   const instanceCodeExampleLabel2 = document.createElement('label');
                   instanceCodeExampleLabel2.className = 'instance-code-example-label-2';
                   instanceCodeExampleLabel2.textContent = processedValues[0];
-                  
+
                   instanceCodeExampleDiv.appendChild(instanceCodeExampleLabel1);
                   instanceCodeExampleDiv.appendChild(instanceCodeExampleLabel2);
                   content.appendChild(instanceCodeExampleDiv);
+                } else {
+                  const instanceCodeExampleLabel2 = instanceCodeExampleDiv.querySelector('.instance-code-example-label-2');
+                  if (instanceCodeExampleLabel2) {
+                    instanceCodeExampleLabel2.textContent = processedValues[0];
+                  }
                 }
               })
             }
@@ -587,7 +593,7 @@ function loadSavedCodes(codesList, textarea) {
             setTimeout(() => {
               menuDiv.scrollIntoView({
                 behavior: "smooth",
-                block: "start"  // This will scroll to show the top of the menu
+                block: "start"
               });
             }, 100);
           }
@@ -601,4 +607,5 @@ function loadSavedCodes(codesList, textarea) {
 
   </script>
 </body>
+
 </html>
