@@ -167,7 +167,7 @@ ul li.connected {
 
 .menu-block-description-label .highlight {
   color: white;
-  background-color: #007acc;
+  background-color: #8ab386;
   /* Example blue */
   padding: 2px 4px;
   border-radius: 3px;
@@ -195,7 +195,7 @@ ul li.connected {
 
 .highlight {
   color: white;
-  background-color: #007acc;
+  background-color: #8ab386;
   padding: 2px 4px;
   border-radius: 3px;
   font-family: monospace;
@@ -216,4 +216,104 @@ ul li.connected {
 .block-content {
   width: 100%;
   box-sizing: border-box;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.text-area-div {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.saved-codes-button {
+  position: absolute;
+  bottom: 8px;
+  left: 5px;
+  width: 30px;
+  height: 25px;
+  background: #367540;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  z-index: 10;
+  padding-top: 4px; 
+  padding-left: 7px;
+}
+
+.saved-codes-button:hover {
+  background: #8ab386;
+}
+
+.saved-codes-popup {
+  position: absolute;
+  bottom: 35px;
+  left: 5px;
+  width: 300px;
+  max-height: 200px;
+  background: white;
+  border: 2px solid #367540;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 100;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  font-weight: bold;
+}
+
+.close-popup {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #6c757d;
+}
+
+.close-popup:hover {
+  color: #000;
+}
+
+.codes-list {
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 5px;
+}
+
+.saved-code-item {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 12px;
+  background: #f8f9fa;
+  margin-bottom: 3px;
+  border-radius: 3px;
+}
+
+.saved-code-item:hover {
+  background: #e9ecef;
+}
+
+.saved-code-item:last-child {
+  border-bottom: none;
 }
