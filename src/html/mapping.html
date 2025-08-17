@@ -399,7 +399,6 @@
               const saveIcon = document.createElement('i');
               saveIcon.className = 'fas fa-save';
               savedCodesButton.appendChild(saveIcon);
-              //savedCodesButton.textContent = 'Save code';
               menuButtonsDiv.appendChild(savedCodesButton);
 
               content.appendChild(menuButtonsDiv);
@@ -486,6 +485,25 @@
                   }
                 }
               })
+
+              /* Handling events when the save code button is clicked */
+              saveJSCodeButton.addEventListener('click', async () => {
+                const userCode = content.querySelector('.js-code-textarea').value;
+                const columnName = keys[i];
+                
+                if (userCode.trim()) {
+                  try {
+                  // Create the data object to save
+                  const codeData = userCode;
+                  
+                  // Call the Electron API to save the code
+                  const result = await window.electronAPI.saveCodeToFile(codeData);
+                } catch (error) {
+                  console.error('Error saving code:', error);
+                  alert('Error saving code. Please try again.');
+                }
+                }
+              });
             }
 
             /* 
