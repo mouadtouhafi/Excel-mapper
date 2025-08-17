@@ -59,6 +59,7 @@
     const ctx = canvas.getContext('2d');
     let connections = [];
 
+
     function resizeCanvas() {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
@@ -320,19 +321,16 @@
               thead.appendChild(headerRow);
               table.appendChild(thead);
 
-              // Create table body
+              /* Here we are going to create the table inside each menu button */
               const tbody = document.createElement('tbody');
-
               const allIndexes = [];
               for (let j = 0; j < columnsToEdit.length; j++) {
                 const tr = document.createElement('tr');
-
-                // Column name cell
                 const tdName = document.createElement('td');
                 tdName.textContent = columnsToEdit[j];
                 tr.appendChild(tdName);
 
-                // Argument cell with cells[i] highlighted
+                /* Second table column 'Argument' */
                 const tdArg = document.createElement('td');
                 tdArg.innerHTML = `<span class="highlight">cells[${j}]</span>`;
                 tr.appendChild(tdArg);
@@ -342,9 +340,8 @@
                 const firstRowTarget = tempTableTarget.rows[0];
                 const secondRowTarget = tempTableTarget.rows[1];
 
+                /* Here we are going to extract the indexes of the all columns we will edit in a menu container*/
                 let foundIndex = -1;
-
-                // Find the index of the matching header
                 for (let p = 0; p < firstRowTarget.cells.length; p++) {
                   if (firstRowTarget.cells[p].textContent.trim() === columnsToEdit[j]) {
                     foundIndex = p;
@@ -353,12 +350,12 @@
                   }
                 }
 
+                /* Here we display the first value as an example value in the table */
                 if (foundIndex !== -1) {
                   const exampleValue = secondRowTarget.cells[foundIndex].textContent.trim();
                   tdExample.innerHTML = exampleValue;
                 }
                 tr.appendChild(tdExample);
-
                 tbody.appendChild(tr);
               }
               table.appendChild(tbody);
@@ -368,7 +365,7 @@
               tableDiv.appendChild(table);
               content.appendChild(tableDiv);
 
-              // Create textarea element
+              /* Creating the textarea element */
               const textAreaDiv = document.createElement('div');
               const textarea = document.createElement('textarea');
               textarea.rows = 4;
@@ -376,90 +373,23 @@
               textarea.className = 'js-code-textarea';
               textAreaDiv.className = 'text-area-div';
 
+            
 
+              
 
+             
 
+              
 
-              // Create the saved codes button
-              const savedCodesButton = document.createElement('button');
-              savedCodesButton.className = 'saved-codes-button';
-              savedCodesButton.innerHTML = '<i class="fas fa-code"></i>';
-              savedCodesButton.title = 'Load saved codes';
-              savedCodesButton.type = 'button';
-
-              // Create popup for saved codes
-              const savedCodesPopup = document.createElement('div');
-              savedCodesPopup.className = 'saved-codes-popup';
-              savedCodesPopup.style.display = 'none';
-
-              const popupHeader = document.createElement('div');
-              popupHeader.className = 'popup-header';
-              popupHeader.innerHTML = '<span>Saved Codes</span><button class="close-popup" type="button">&times;</button>';
-
-              const codesList = document.createElement('div');
-              codesList.className = 'codes-list';
-
-              savedCodesPopup.appendChild(popupHeader);
-              savedCodesPopup.appendChild(codesList);
 
 
 
 
               textAreaDiv.appendChild(textarea);
-              textAreaDiv.appendChild(savedCodesButton);
-              textAreaDiv.appendChild(savedCodesPopup);
               content.appendChild(textAreaDiv);
 
 
-              // Add event listeners
-              savedCodesButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-
-                // Load saved codes (you'll implement this)
-                loadSavedCodes(codesList, textarea);
-
-                // Show popup
-                savedCodesPopup.style.display = 'block';
-              });
-
-              // Close popup when clicking the X
-              savedCodesPopup.querySelector('.close-popup').addEventListener('click', () => {
-                savedCodesPopup.style.display = 'none';
-              });
-
-              // Close popup when clicking outside
-              document.addEventListener('click', (e) => {
-                if (!textAreaDiv.contains(e.target)) {
-                  savedCodesPopup.style.display = 'none';
-                }
-              });
-
-
-              // Global array to store saved codes
-              let savedCodesList = [];
-
-              function loadSavedCodes(codesList, textarea) {
-                codesList.innerHTML = '';
-
-                if (savedCodesList.length === 0) {
-                  codesList.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No saved codes yet</div>';
-                  return;
-                }
-
-                savedCodesList.forEach((code, index) => {
-                  const codeItem = document.createElement('div');
-                  codeItem.className = 'saved-code-item';
-                  codeItem.textContent = code.length > 50 ? code.substring(0, 50) + '...' : code;
-
-                  codeItem.addEventListener('click', () => {
-                    textarea.value = code;
-                    codesList.parentElement.style.display = 'none';
-                  });
-
-                  codesList.appendChild(codeItem);
-                });
-              }
+            
 
               /* Creating the buttons div*/
               const menuButtonsDiv = document.createElement('div');
@@ -474,20 +404,6 @@
               menuButtonsDiv.appendChild(saveJSCodeButton);
 
               content.appendChild(menuButtonsDiv);
-
-              saveJSCodeButton.addEventListener('click', () => {
-                const codeToSave = textarea.value.trim();
-                if (codeToSave && !savedCodesList.includes(codeToSave)) {
-                  savedCodesList.push(codeToSave);
-                  alert('Code saved successfully!');
-                } else if (savedCodesList.includes(codeToSave)) {
-                  alert('This code is already saved!');
-                } else {
-                  alert('Please enter some code to save!');
-                }
-              });
-
-
 
               /* Handling events when the run button is clicked */
               runJSCodeButton.addEventListener('click', () => {
