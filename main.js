@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs').promises;
 
 let mainwWindow, helloWindow
 let excelBuffer = null;
@@ -11,6 +12,9 @@ let appData = {
 let appDataTarget = {
   finalSelectedTableData: null
 };
+
+/* Defining the file path for saved codes */
+const SAVED_CODES_FILE = path.join(app.getPath('userData'), 'saved_codes.json');
 
 function createWindow() {
   mainwWindow = new BrowserWindow({
@@ -88,4 +92,37 @@ ipcMain.handle('set-final-selected-table-data', (event, table) => {
 
 ipcMain.handle('get-final-selected-table-data', (event) => {
   return appDataTarget.finalSelectedTableData;
+});
+
+// NEW: Method to save code to file
+ipcMain.handle('saveCodeToFile', async (event, codeData) => {
+  try {
+    let existingCodes = [];
+    
+    // Check if file exists and read existing codes
+    try {
+      const fileContent = await fs.readFile(SAVED_CODES_FILE, 'utf8');
+      existingCodes = JSON.parse(fileContent);
+    } catch (error) {
+      console.log('Creating new saved codes file');
+    }
+    
+    // Add the new code data
+    existingCodes.push(codeData);
+    
+    // Write back to file
+    await fs.writeFile(SAVED_CODES_FILE, JSON.stringify(existingCodes, null, 2));
+    
+    return {
+      success: true,
+      filePath: SAVED_CODES_FILE,
+      totalSaved: existingCodes.length
+    };
+  } catch (error) {
+    console.error('Error saving code to file:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
 });
