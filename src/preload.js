@@ -31,5 +31,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   getFinalSelectedTableData: () => {
     return ipcRenderer.invoke('get-final-selected-table-data');
-  }
+  },
+
+  // NEW: Method for saving codes
+  saveCodeToFile: (codeData) => ipcRenderer.invoke('saveCodeToFile', codeData)
 });
