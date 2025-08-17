@@ -375,15 +375,6 @@
 
             
 
-              
-
-             
-
-              
-
-
-
-
 
               textAreaDiv.appendChild(textarea);
               content.appendChild(textAreaDiv);
@@ -402,6 +393,14 @@
               saveJSCodeButton.className = 'save-code-button';
               saveJSCodeButton.textContent = 'Save code';
               menuButtonsDiv.appendChild(saveJSCodeButton);
+
+              const savedCodesButton = document.createElement('button');
+              savedCodesButton.className = 'saved-codes-button';
+              const saveIcon = document.createElement('i');
+              saveIcon.className = 'fas fa-save';
+              savedCodesButton.appendChild(saveIcon);
+              //savedCodesButton.textContent = 'Save code';
+              menuButtonsDiv.appendChild(savedCodesButton);
 
               content.appendChild(menuButtonsDiv);
 
