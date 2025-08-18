@@ -51,6 +51,9 @@
     </div>
   </div>
   <div class="menu-container" hidden></div>
+  <div class="popup">
+    <div class="popup-content"></div>
+  </div>
   <script>
 
     const menuDiv = document.querySelector('.menu-container');
@@ -247,17 +250,71 @@
           menuDiv.innerHTML = '';
         });
 
+
+        const popup = document.querySelector('.popup');
+const popupDevContent = document.querySelector('.popup-content');
+
+/* Utility: Show popup with title */
+function openPopup(titleText) {
+    popupDevContent.innerHTML = '';
+    popup.style.display = "flex";
+    document.body.classList.add('modal-open');
+
+    const title = document.createElement('h2');
+    title.className = 'popup-title';
+    title.textContent = titleText;
+    popupDevContent.appendChild(title);
+}
+
+/* Utility: Add Close button to popup */
+function addCloseButton(marginTop = "5%") {
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'closeBtn';
+    closeBtn.textContent = 'Close';
+    closeBtn.style.marginTop = marginTop;
+    popupDevContent.appendChild(closeBtn);
+
+    closeBtn.addEventListener('click', () => {
+        popup.style.display = "none";
+        document.body.classList.remove('modal-open');
+    });
+}
+/* Notes Button Logic */
+document.querySelector('.notes-button').addEventListener('click', () => {
+    openPopup("Instructions");
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = "message-content";
+    popupDevContent.appendChild(messageDiv);
+
+    const messages = [
+        "1- Map your source column (column to fill) to Data columns (columns with data tou want to integrate).",
+        "2- Each source column can be linked to one or many Data columns.",
+        "3- Click the validate button to validate your mapping links.",
+        "4- A menu block buttons is created, each block contains informations about the data linked.",
+        "5- Enter your JavaScript code to customize your data.",
+        "6- Save and load your save codes for a simple experience."
+    ];
+
+    messages.forEach(text => {
+        const p = document.createElement('p');
+        p.className = 'p-tag';
+        p.textContent = text;
+        messageDiv.appendChild(p);
+    });
+
+    addCloseButton("5%");
+});
+
         /* Creating a map list for the selected list items when the validate button is clicked*/
         document.getElementById('validateButton').addEventListener('click', () => {
-
           menuDiv.innerHTML = '';
-
           const mappedLinks = connections.map(conn => ({
             source: conn.from.textContent.trim(),
             target: conn.to.textContent.trim()
           }));
 
-          // Group by source
+          /* Group by source */
           const grouped = mappedLinks.reduce((acc, curr) => {
             if (!acc[curr.source]) {
               acc[curr.source] = [];
@@ -373,14 +430,8 @@
               textarea.className = 'js-code-textarea';
               textAreaDiv.className = 'text-area-div';
 
-
-
-
               textAreaDiv.appendChild(textarea);
               content.appendChild(textAreaDiv);
-
-
-
 
               /* Creating the buttons div*/
               const menuButtonsDiv = document.createElement('div');
