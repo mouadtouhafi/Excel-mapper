@@ -165,17 +165,20 @@ button:focus {
 
 .popup {
     display: none;
-    /* hidden by default */
     position: fixed;
     z-index: 1000;
-    left: 33%;
-    top: 25%;
-    width: 34%;
-    height: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+    height: auto;
+    max-height: 80%;
     background-color: #367540;
-    /* dim background */
     border-radius: 10px;
+    overflow-y: auto;
 }
+
 
 .popup-content {
     width: 100%;
@@ -185,6 +188,7 @@ button:focus {
     position: relative;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     text-align: center;
+    background-color: #367540;
 }
 
 .popup-title {
@@ -196,6 +200,18 @@ button:focus {
     font-size: 25px;
     color: #080808;
 }
+
+@media (max-width: 768px) {
+    .popup {
+        width: 95%;
+        max-height: 90%;
+    }
+
+    .popup-title {
+        font-size: 20px;
+    }
+}
+
 
 .message-content {
     display: flex;
@@ -249,21 +265,24 @@ button:focus {
     margin: 5px 0px;
 }
 
-.options-validation-button{
+.options-validation-button {
     background-color: #e8f0fe;
     color: #000000;
 }
 
-.closeBtn{
+.closeBtn {
     background-color: #97241c;
     color: #e8f0fe;
 }
 
 body.modal-open {
-  overflow: hidden;         /* disable scroll */
-  pointer-events: none;     /* disable clicks */
+    overflow: hidden;
+    /* disable scroll */
+    pointer-events: none;
+    /* disable clicks */
 }
 
 body.modal-open .popup {
-  pointer-events: auto;     /* allow popup interaction */
+    pointer-events: auto;
+    /* allow popup interaction */
 }

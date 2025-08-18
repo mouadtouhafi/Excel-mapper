@@ -225,7 +225,7 @@ ul li.connected {
   box-sizing: border-box;
 }
 
-element.style {
+.menu-button-div {
   display: flex;
   flex-direction: row;
   gap: 0.6rem;
@@ -403,4 +403,52 @@ element.style {
 
 .codes-container::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  height: auto;
+  max-height: 80%;
+  background-color: #367540;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+.popup-content {
+  width: 100%;
+  margin: 0px;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  background-color: #367540;
+}
+
+.popup-title {
+  position: relative;
+  padding: 0;
+  margin: 10px 0px 15px 0px;
+  font-family: "Raleway", sans-serif;
+  font-weight: 300;
+  font-size: 25px;
+  color: #080808;
+}
+
+@media (max-width: 768px) {
+  .popup {
+    width: 95%;
+    max-height: 90%;
+  }
+
+  .popup-title {
+    font-size: 20px;
+  }
 }
