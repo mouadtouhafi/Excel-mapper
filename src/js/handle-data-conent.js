@@ -76,7 +76,21 @@ let rangeInfo = null;
 
         // Read the workbook
         const workbook = XLSX.read(uint8Array, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
+
+        // Get the selected sheet name from localStorage (set in the previous page)
+        const selectedSheetName = localStorage.getItem('selectedSheet');
+
+        let sheetName;
+        if (selectedSheetName && workbook.SheetNames.includes(selectedSheetName)) {
+            // Use the user's selected sheet
+            sheetName = selectedSheetName;
+            console.log(`Loading selected sheet: ${sheetName}`);
+        } else {
+            // Fallback to first sheet if no selection or sheet not found
+            sheetName = workbook.SheetNames[0];
+            console.warn(`Selected sheet "${selectedSheetName}" not found. Using first sheet: ${sheetName}`);
+        }
+
         const sheet = workbook.Sheets[sheetName];
         json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
