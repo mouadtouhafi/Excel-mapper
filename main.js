@@ -13,7 +13,7 @@ let appDataTarget = {
   finalSelectedTableData: null
 };
 
-/* Defining the file path for saved codes */
+// Define the file path for saved codes
 const SAVED_CODES_FILE = path.join(app.getPath('userData'), 'saved_codes.json');
 
 function createWindow() {
@@ -104,6 +104,7 @@ ipcMain.handle('saveCodeToFile', async (event, codeData) => {
       const fileContent = await fs.readFile(SAVED_CODES_FILE, 'utf8');
       existingCodes = JSON.parse(fileContent);
     } catch (error) {
+      // File doesn't exist or is invalid, start with empty array
       console.log('Creating new saved codes file');
     }
     
@@ -124,5 +125,28 @@ ipcMain.handle('saveCodeToFile', async (event, codeData) => {
       success: false,
       error: error.message
     };
+  }
+});
+
+// NEW: Method to load saved codes
+ipcMain.handle('loadSavedCodes', async (event) => {
+  try {
+    const fileContent = await fs.readFile(SAVED_CODES_FILE, 'utf8');
+    const codes = JSON.parse(fileContent);
+    return codes;
+  } catch (error) {
+    console.error('Error loading saved codes:', error);
+    return [];
+  }
+});
+
+// NEW: Method to clear all saved codes
+ipcMain.handle('clearAllSavedCodes', async (event) => {
+  try {
+    await fs.writeFile(SAVED_CODES_FILE, JSON.stringify([], null, 2));
+    return { success: true };
+  } catch (error) {
+    console.error('Error clearing saved codes:', error);
+    return { success: false, error: error.message };
   }
 });
