@@ -488,23 +488,234 @@
 
               /* Handling events when the save code button is clicked */
               saveJSCodeButton.addEventListener('click', async () => {
-                const userCode = content.querySelector('.js-code-textarea').value;
-                const columnName = keys[i];
-                
-                if (userCode.trim()) {
-                  try {
-                  // Create the data object to save
-                  const codeData = userCode;
-                  
-                  // Call the Electron API to save the code
-                  const result = await window.electronAPI.saveCodeToFile(codeData);
-                } catch (error) {
-                  console.error('Error saving code:', error);
-                  alert('Error saving code. Please try again.');
-                }
-                }
-              });
+  const userCode = content.querySelector('.js-code-textarea').value;
+  const columnName = keys[i];
+  
+  if (userCode.trim()) {
+    try {
+      // Create the data object to save with all necessary information
+      const codeData = {
+        code: userCode,
+        columnName: columnName,
+        timestamp: new Date().toISOString(),
+        mappedColumns: grouped[keys[i]]
+      };
+      
+      // Call the Electron API to save the code
+      const result = await window.electronAPI.saveCodeToFile(codeData);
+      
+      if (result && result.success) {
+        alert(`Code saved successfully! Total saved codes: ${result.totalSaved}`);
+      } else {
+        alert('Error saving code: ' + (result?.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error saving code:', error);
+      alert('Error saving code. Please try again.');
+    }
+  } else {
+    alert('Please enter some code before saving.');
+  }
+});
+
+              initSavedCodesButton(savedCodesButton, content.querySelector('.js-code-textarea'));
             }
+
+            // saved-codes-popup.js
+
+/* Handling events when the saved codes button is clicked - opens popup with saved codes */
+function initSavedCodesButton(savedCodesButton, textarea) {
+  savedCodesButton.addEventListener('click', async () => {
+    try {
+      // Load saved codes from file with proper error handling
+      const savedCodes = await window.electronAPI.loadSavedCodes();
+      
+      // Ensure savedCodes is an array
+      const codesArray = Array.isArray(savedCodes) ? savedCodes : [];
+      
+      if (codesArray.length === 0) {
+        alert('No saved codes found.');
+        return;
+      }
+      
+      // Show popup with saved codes
+      showSavedCodesPopup(codesArray, textarea);
+    } catch (error) {
+      console.error('Error loading saved codes:', error);
+      alert('Error loading saved codes. Please try again.');
+    }
+  });
+}
+
+// Function to show saved codes popup (similar to Windows clipboard)
+function showSavedCodesPopup(savedCodes, textarea) {
+   if (!Array.isArray(savedCodes)) {
+    console.error('savedCodes is not an array:', savedCodes);
+    alert('Error: Invalid saved codes data');
+    return;
+  }
+
+  // Remove existing popup if any
+  const existingPopup = document.getElementById('savedCodesPopup');
+  if (existingPopup) {
+    document.body.removeChild(existingPopup);
+  }
+  
+  // Create popup overlay
+  const popupOverlay = document.createElement('div');
+  popupOverlay.id = 'savedCodesPopup';
+  popupOverlay.className = 'popup-overlay';
+  
+  // Create popup content container
+  const popupContent = document.createElement('div');
+  popupContent.className = 'popup-content';
+  
+  // Create header
+  const header = document.createElement('div');
+  header.className = 'popup-header';
+  
+  const headerTitle = document.createElement('h3');
+  headerTitle.className = 'popup-title';
+  headerTitle.textContent = `Saved Codes (${savedCodes.length})`;
+  
+  const closeButton = document.createElement('button');
+  closeButton.className = 'popup-close-btn';
+  closeButton.innerHTML = '×';
+  
+  header.appendChild(headerTitle);
+  header.appendChild(closeButton);
+  
+  // Create codes list container
+  const codesContainer = document.createElement('div');
+  codesContainer.className = 'codes-container';
+  
+  // Add instruction text
+  const instruction = document.createElement('div');
+  instruction.className = 'popup-instruction';
+  instruction.innerHTML = '<i class="fas fa-info-circle"></i> Click on any code to load it into the textarea';
+  
+
+
+
+
+// Create codes list
+savedCodes.forEach((codeItem, index) => {
+  const codeDiv = document.createElement('div');
+  codeDiv.className = 'code-item';
+  
+  // Handle both old format (just string) and new format (object with metadata)
+  let displayCode, columnName, timestamp, mappedColumns;
+  
+  if (typeof codeItem === 'string') {
+    // Old format - just the code string
+    displayCode = codeItem.length > 80 ? codeItem.substring(0, 80) + '...' : codeItem;
+    columnName = 'Unknown';
+    timestamp = 'Unknown';
+    mappedColumns = [];
+  } else if (typeof codeItem === 'object' && codeItem !== null) {
+    // New format - object with metadata
+    displayCode = codeItem.code ? (codeItem.code.length > 80 ? codeItem.code.substring(0, 80) + '...' : codeItem.code) : 'No code';
+    columnName = codeItem.columnName || 'Unknown';
+    timestamp = codeItem.timestamp ? new Date(codeItem.timestamp).toLocaleDateString() + ' ' + new Date(codeItem.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Unknown';
+    mappedColumns = codeItem.mappedColumns || [];
+  } else {
+    // Invalid format
+    displayCode = 'Invalid code format';
+    columnName = 'Unknown';
+    timestamp = 'Unknown';
+    mappedColumns = [];
+  }
+    
+  codeDiv.innerHTML = `
+    <div class="code-header">
+      <strong class="code-column-name">${columnName}</strong>
+      <span class="code-timestamp">${timestamp}</span>
+    </div>
+    <div class="code-preview">
+      ${displayCode}
+    </div>
+    ${mappedColumns.length > 0 ? `<div class="code-mapping">
+      <i class="fas fa-arrow-right"></i>Maps: ${mappedColumns.join(', ')}
+    </div>` : ''}
+  `;
+    
+  // Add click to load code
+  codeDiv.addEventListener('click', () => {
+    const actualCode = typeof codeItem === 'string' ? codeItem : (codeItem.code || '');
+    textarea.value = actualCode;
+        
+    // Visual feedback
+    codeDiv.classList.add('code-selected');
+    
+    setTimeout(() => {
+      document.body.removeChild(popupOverlay);
+    }, 200);
+    
+    // Optional: Focus on textarea
+    textarea.focus();
+  });
+  
+  codesContainer.appendChild(codeDiv);
+});
+
+
+
+
+  
+  // Create footer with additional options
+  const footer = document.createElement('div');
+  footer.className = 'popup-footer';
+  
+  const clearAllButton = document.createElement('button');
+  clearAllButton.className = 'clear-all-btn';
+  clearAllButton.innerHTML = '<i class="fas fa-trash"></i> Clear All';
+  clearAllButton.addEventListener('click', async () => {
+  if (confirm('Are you sure you want to delete all saved codes? This cannot be undone.')) {
+    try {
+      const result = await window.electronAPI.clearAllSavedCodes();
+      if (result && result.success) {
+        document.body.removeChild(popupOverlay);
+        alert('All saved codes have been cleared.');
+      } else {
+        alert('Error clearing codes: ' + (result?.error || 'Unknown error'));
+      }
+    } catch (error) {
+      alert('Error clearing codes: ' + error.message);
+    }
+  }
+});
+  
+  footer.appendChild(clearAllButton);
+  
+  // Assemble popup
+  popupContent.appendChild(header);
+  popupContent.appendChild(instruction);
+  popupContent.appendChild(codesContainer);
+  popupContent.appendChild(footer);
+  popupOverlay.appendChild(popupContent);
+  
+  // Close popup events
+  closeButton.addEventListener('click', () => {
+    document.body.removeChild(popupOverlay);
+  });
+  
+  popupOverlay.addEventListener('click', (e) => {
+    if (e.target === popupOverlay) {
+      document.body.removeChild(popupOverlay);
+    }
+  });
+  
+  // Close with Escape key
+  const escapeHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(popupOverlay);
+      document.removeEventListener('keydown', escapeHandler);
+    }
+  };
+  document.addEventListener('keydown', escapeHandler);
+  
+  document.body.appendChild(popupOverlay);
+}
 
             /* 
               Handling the display of each menu button when clicked
