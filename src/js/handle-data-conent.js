@@ -63,13 +63,7 @@ let rangeInfo = null;
             return;
         }
 
-        // Use source file if available, otherwise use target file
-        let buffer;
-        if (files.target) {
-            buffer = files.target;
-        } else if (files.target) {
-            buffer = files.target;
-        }
+        let buffer = files.target;
 
         // Convert array to Uint8Array if needed
         const uint8Array = Array.isArray(buffer) ? new Uint8Array(buffer) : buffer;
