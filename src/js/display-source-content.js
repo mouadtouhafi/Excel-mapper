@@ -208,11 +208,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const label = document.createElement('label');
                 label.textContent = columnsNames[k].textContent;
 
+                /* Add event listener to update button state when checkbox changes */
+                input.addEventListener('change', updateValidateButtonState);
+
                 div.appendChild(input);
                 div.appendChild(label);
                 popupDivContent.appendChild(div);
 
-                checkboxCount++; // Count actual checkboxes
+                checkboxCount++;
             }
         }
         /*
@@ -234,6 +237,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 button_col_validation = document.createElement('button');
                 button_col_validation.id = 'col-validation-btn';
                 button_col_validation.className = 'action-button';
+                button_col_validation.disabled = true;
 
                 const labelText = document.createElement('span');
                 labelText.textContent = " Validate";
@@ -319,7 +323,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!currentSheetData || currentSheetData.length === 0) {
             return 0;
         }
-
         // Start from the last row and work backwards
         for (let rowIndex = currentSheetData.length - 1; rowIndex >= 0; rowIndex--) {
             const row = currentSheetData[rowIndex];
@@ -329,10 +332,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return rowIndex + 1; // +1 because Excel rows are 1-indexed
             }
         }
-
         return 0; // No data found
     }
 
+    /*
+        This function checks if at least one checkbox is checked,
+        if yes, the validate button is enabled
+        if no, the validate button stays at disabled state
+    */
+    function updateValidateButtonState() {
+        const button_col_validation = document.getElementById('col-validation-btn');
+        if (!button_col_validation) return;
+        const checkboxes = document.querySelectorAll('.col-item input[type="checkbox"]');
+        const hasCheckedBox = Array.from(checkboxes).some(checkbox => checkbox.checked);
+        
+        /* Enable/disable button based on checkbox state */
+        button_col_validation.disabled = !hasCheckedBox;
+    }
 
     document.getElementById("closePopupBtn").addEventListener("click", () => {
         document.getElementById("popupModal").style.display = "none";
