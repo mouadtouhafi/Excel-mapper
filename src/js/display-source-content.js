@@ -193,8 +193,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             for that we read the first row which is equivalent to the header : "firstRow",
             after this we read the list of "td" elements inside that header : "columnsNames".
         */
-
-            console.log("lastExcelRowNumber : "+lastExcelRowNumber);
         document.getElementById("popupModal").style.display = "flex";
         const firstRow = tableBody.querySelectorAll("tr")[0];
         const columnsNames = firstRow.querySelectorAll("td");
@@ -278,9 +276,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const headerRow = tableBody.querySelectorAll("tr")[0];
         const headerCells = headerRow.querySelectorAll("td");
-        for (let l = 0; l < headerCells.length; l++) {
-            console.log(headerCells[l].textContent);
-        }
 
         /*  Here, we find indexes of columns to keep  */
         const columnIndexesToKeep = [];
@@ -289,8 +284,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (selectedColumns.includes(colText)) {
                 columnIndexesToKeep.push(i);
             }
-
-            console.log(`Checking header: '${colText}'`);
         }
 
         /*  Looping through each row in the table  */
@@ -300,8 +293,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             /*  We loop **backward** to safely remove  */
             for (let i = cells.length - 1; i > 0; i--) {
-                console.log('Selected Columns:', selectedColumns);
-                console.log('Column Indexes To Keep:', columnIndexesToKeep);
                 if (!columnIndexesToKeep.includes(i)) {
                     row.removeChild(cells[i]);
                 }
