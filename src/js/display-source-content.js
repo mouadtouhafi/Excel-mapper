@@ -164,7 +164,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     continueButton.addEventListener('click', async () => {
-        await window.electronAPI.setFinalSelectedTable(tableBody.innerHTML);
+        await window.electronAPI.setFinalSelectedTable(tableBody.innerHTML);    
+        // Store in localStorage for other JS files to access
+        localStorage.setItem('lastExcelRowNumber', lastExcelRowNumber);
         if (currentSheetData && currentSheetData.length > 0) {
             window.location.href = 'select-sheet-target.html';
         } else {
