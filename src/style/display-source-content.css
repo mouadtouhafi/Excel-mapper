@@ -371,7 +371,7 @@ input[type="checkbox"]:checked::after {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    width: 100%;
+    width: 500px;
     text-align: center;
     position: relative;
     display: flex;
