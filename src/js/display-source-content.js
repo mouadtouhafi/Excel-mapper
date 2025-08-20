@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let selectedColumns = [];
 
+    let lastExcelRowNumber = 0;
+
     /*
         The 'loadSheetData' function loads the data from out Excel sheet.
         First, we get the sheet name stored in localStorage, then we convert our
@@ -95,14 +97,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             headers.push(firstRow[i] || `Column ${i + 1}`);
         }
 
-        const dataRows = currentSheetData.slice(1);
-
         /* Here, we create table rows (limit to first 1000 rows for performance) */
-        const maxRows = Math.min(dataRows.length, 1000);
+        const maxRows = Math.min(currentSheetData.length, 1000);
 
         for (let i = 0; i < maxRows; i++) {
             const tr = document.createElement('tr');
-            const row = dataRows[i] || [];
+            const row = currentSheetData[i] || [];
 
             /* At the first element of each row, we add checkbox cell */
             const checkboxTd = document.createElement('td');
@@ -124,6 +124,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             tableBody.appendChild(tr);
         }
 
+        // FIXED: Set initial last Excel row number
+        if (maxRows > 0) {
+            lastExcelRowNumber = maxRows + 1; // +1 because row 1 is header
+        }
+        
         const deleteRowBtn = document.getElementById("deleteRowButton");
         if (maxColumns > 0) {
             deleteRowBtn.hidden = false;
@@ -146,8 +151,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         /*  Show truncation message if needed  */
-        if (dataRows.length > 1000) {
-            statusText.textContent = `Showing first 1000 rows of ${dataRows.length} total rows`;
+        if (currentSheetData.length > 1000) {
+            statusText.textContent = `Showing first 1000 rows of ${currentSheetData.length} total rows`;
         }
     }
 
@@ -188,6 +193,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             for that we read the first row which is equivalent to the header : "firstRow",
             after this we read the list of "td" elements inside that header : "columnsNames".
         */
+
+            console.log("lastExcelRowNumber : "+lastExcelRowNumber);
         document.getElementById("popupModal").style.display = "flex";
         const firstRow = tableBody.querySelectorAll("tr")[0];
         const columnsNames = firstRow.querySelectorAll("td");
