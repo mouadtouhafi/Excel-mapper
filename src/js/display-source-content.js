@@ -124,11 +124,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             tableBody.appendChild(tr);
         }
 
-        // FIXED: Set initial last Excel row number
-        if (maxRows > 0) {
-            lastExcelRowNumber = maxRows + 1; // +1 because row 1 is header
-        }
-        
+        lastExcelRowNumber = findLastRowWithData() + 1;
+
         const deleteRowBtn = document.getElementById("deleteRowButton");
         if (maxColumns > 0) {
             deleteRowBtn.hidden = false;
@@ -166,7 +163,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = 'select-sheet-source.html';
     });
 
-    continueButton.addEventListener('click', async() => {
+    continueButton.addEventListener('click', async () => {
         await window.electronAPI.setFinalSelectedTable(tableBody.innerHTML);
         if (currentSheetData && currentSheetData.length > 0) {
             window.location.href = 'select-sheet-target.html';
@@ -198,6 +195,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const columnsNames = firstRow.querySelectorAll("td");
         const popupDivContent = document.querySelector(".popup-column-list");
         popupDivContent.innerHTML = "";
+        let checkboxCount = 0; // Track actual checkboxes created
         for (let k = 1; k < columnsNames.length; k++) {
             const text = columnsNames[k].textContent?.trim();
             if (text) {
@@ -210,8 +208,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 div.appendChild(input);
                 div.appendChild(label);
-
                 popupDivContent.appendChild(div);
+
+                checkboxCount++; // Count actual checkboxes
             }
         }
         /*
@@ -222,33 +221,42 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         /*
             Before creating the 'Validate' button, we need to make sure there is
-            columns to check. 'popupDivContent.children.length' returns the number of elements
+            columns to check. 'checkboxCount' returns the number of checkboxes
             inside the popupDivContent.
         */
-        const numberOfExistingCheckboxes = popupDivContent.children.length;
-        if (!button_col_validation && numberOfExistingCheckboxes > 0) {
-            const button_i_element = document.createElement('i');
-            button_i_element.className = 'fas fa-check';
+        if (checkboxCount > 0) {
+            if (!button_col_validation) {
+                const button_i_element = document.createElement('i');
+                button_i_element.className = 'fas fa-check';
 
-            button_col_validation = document.createElement('button');
-            button_col_validation.id = 'col-validation-btn';
-            button_col_validation.className = 'action-button';
+                button_col_validation = document.createElement('button');
+                button_col_validation.id = 'col-validation-btn';
+                button_col_validation.className = 'action-button';
 
-            const labelText = document.createElement('span');
-            labelText.textContent = " Validate";
+                const labelText = document.createElement('span');
+                labelText.textContent = " Validate";
 
-            button_col_validation.appendChild(button_i_element);
-            button_col_validation.appendChild(labelText);
+                button_col_validation.appendChild(button_i_element);
+                button_col_validation.appendChild(labelText);
 
-            /*
-               When the columns to keep are selected, if the validation button is clicked,
-               the columns names are saved in 'selectedColumns'.
-           */
-            button_col_validation.addEventListener('click', () => {
-                handleColumnValidation();
-            })
-            popup_content.appendChild(button_col_validation);
-        } else if (numberOfExistingCheckboxes == 0) {
+                /*
+                When the columns to keep are selected, if the validation button is clicked,
+                the columns names are saved in 'selectedColumns'.
+            */
+                button_col_validation.addEventListener('click', () => {
+                    handleColumnValidation();
+                })
+                popup_content.appendChild(button_col_validation);
+            }
+            // If button already exists, just make sure it's visible
+            if (button_col_validation) {
+                button_col_validation.style.display = 'flex';
+            }
+        } else {
+            // No checkboxes - remove/hide button and show error
+            if (button_col_validation) {
+                button_col_validation.remove(); // or button_col_validation.style.display = 'none';
+            }
             const paragraph = document.createElement('p');
             paragraph.textContent = "Your header row doesn't contain any names values. Make sure you header is compliant."
             popupDivContent.appendChild(paragraph);
@@ -305,6 +313,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById("popupModal").style.display = "none";
     }
 
+    function findLastRowWithData() {
+        if (!currentSheetData || currentSheetData.length === 0) {
+            return 0;
+        }
+
+        // Start from the last row and work backwards
+        for (let rowIndex = currentSheetData.length - 1; rowIndex >= 0; rowIndex--) {
+            const row = currentSheetData[rowIndex];
+
+            // Check if this row has any non-empty cells
+            if (row && row.some(cell => cell !== null && cell !== undefined && cell !== '')) {
+                return rowIndex + 1; // +1 because Excel rows are 1-indexed
+            }
+        }
+
+        return 0; // No data found
+    }
 
 
     document.getElementById("closePopupBtn").addEventListener("click", () => {
