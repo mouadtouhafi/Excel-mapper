@@ -368,8 +368,8 @@ body.modal-open .popup {
     height: 400px; 
     overflow-x: auto; 
     overflow-y: auto;
-    background: white;
     position: relative;
+    background-color: #f4f6f8;
 }
 
 .data-table {
@@ -588,4 +588,23 @@ input[type="checkbox"]:checked::after {
     margin-right: 185px;
     margin-top: 30px;
     justify-content: space-around;
+}
+
+.status-bar {
+    padding: 10px 24px;
+    font-size: 14px;
+    color: #000;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgb(0 0 0 / 10%);
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-item i {
+    color: #000;
 }
