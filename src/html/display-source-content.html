@@ -6,24 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel Mapper - Sheet Content</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../style/display-source-content.css">
+
+    <link rel="stylesheet" href="../style/display-data-conent.css">
 </head>
 
 <body>
     <div class="app-container">
-        <button id="backButton" class="back-button">
-            <i class="fas fa-arrow-left"></i> Back
-        </button>
 
-        <button id="continueButton" class="continue-button">
-            <i class="fas fa-arrow-right"></i> Continue to Mapping
-        </button>
 
         <main class="main-content">
-            <div class="intro-container">
-                <h2 class="intro-title">Sheet Content Preview</h2>
+            <div class="header-container">
+                <h1>Excel Data Mapper
+                    <span>Data Columns Selection From Source File</span>
+                </h1>
             </div>
-
+            <div class="buttons-container">
+                <button id="backButton" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="action-button" id="selectColumnsButton">
+                    <i class="fas fa-check"></i> Select
+                </button>
+                <button class="action-button" id="deleteRowButton" disabled hidden>
+                    <i class="fas fa-trash-alt"></i> Delete
+                </button>
+                <button class="action-button" id="refreshButton">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button id="continueButton" class="continue-button">
+                    <i class="fas fa-arrow-right"></i> Continue
+                </button>
+            </div>
             <div id="sheetInfo" class="sheet-info" style="display: none;">
                 <div class="sheet-name">
                     <i class="fas fa-file-excel"></i>
@@ -32,7 +45,8 @@
                 <div class="instructions">
                     <p class="intro-text">1- Remove unwanted rows by checking their associated checkboxes then pressing
                         Delete button, keep the table header at the top row.</p>
-                    <p class="intro-text">2- Adjust your table and press 'Select' to choose the columns you need to keep.</p>
+                    <p class="intro-text">2- Adjust your table and press 'Select' to choose the columns you need to
+                        keep.</p>
                 </div>
             </div>
 
@@ -41,20 +55,6 @@
                     <div class="table-title">
                         <i class="fas fa-table"></i>
                         Data Preview
-                    </div>
-                    <div class="table-actions">
-                        <button class="action-button" id="selectColumnsButton">
-                            <i class="fas fa-check"></i>
-                            Select
-                        </button>
-                        <button class="action-button" id="deleteRowButton" disabled hidden>
-                            <i class="fas fa-trash-alt"></i>
-                            Delete
-                        </button>
-                        <button class="action-button" id="refreshButton">
-                            <i class="fas fa-sync-alt"></i>
-                            Refresh
-                        </button>
                     </div>
                 </div>
 
@@ -100,9 +100,8 @@
             </div>
         </footer>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src = "../js/display-source-content.js"></script>
+    <script src="../js/display-source-content.js"></script>
 </body>
 
 </html>
