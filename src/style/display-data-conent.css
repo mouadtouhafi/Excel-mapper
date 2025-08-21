@@ -365,8 +365,8 @@ body.modal-open .popup {
 
 .table-wrapper {
     flex: 1;
-    height: 400px; 
-    overflow-x: auto; 
+    height: 400px;
+    overflow-x: auto;
     overflow-y: auto;
     position: relative;
     background-color: #f4f6f8;
@@ -392,8 +392,8 @@ body.modal-open .popup {
 .data-table tr:first-child {
     background-color: #bd1717;
     position: sticky;
-    top: 0; 
-    z-index: 10; 
+    top: 0;
+    z-index: 10;
 }
 
 .data-table tr:first-child td {
@@ -580,7 +580,7 @@ input[type="checkbox"]:checked::after {
     color: #fff;
 }
 
-#col-validation-btn{
+#col-validation-btn {
     display: flex;
     align-items: center;
     background-color: black;
@@ -607,4 +607,81 @@ input[type="checkbox"]:checked::after {
 
 .status-item i {
     color: #000;
+}
+
+
+
+
+
+
+/* Main page */
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: rgba(25, 35, 55, 0.85);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Change this */
+    align-items: center;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+#main-page-header h1:before {
+    width: 550px;
+}
+
+#main-page-header h1 span {
+    padding-bottom: 10px;
+}
+
+.file-card {
+    background: rgb(231 231 231 / 70%);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    border: 1px solid rgba(100, 150, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.card-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.card-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 8px;
+}
+
+.card-subtitle {
+    font-size: 16px;
+    color: #000;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.file-input-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.file-input-group {
+    flex: 1;
+    min-width: 300px;
 }
