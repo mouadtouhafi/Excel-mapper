@@ -179,7 +179,6 @@ button:focus {
     overflow-y: auto;
 }
 
-
 .popup-content {
     width: 100%;
     margin: 0px;
@@ -189,6 +188,24 @@ button:focus {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     text-align: center;
     background-color: #367540;
+}
+
+#popupModal .popup-content {
+    color: #f0f8ff;
+    width: 500px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+#popupModal .popup-content h2 {
+    font-size: 1.0em;
+    margin-bottom: 2rem;
+    color: #000;
+}
+
+#popupModal p {
+    color: #000;
 }
 
 .popup-title {
@@ -453,4 +470,122 @@ input[type="checkbox"]:checked::after {
     font-size: 20px;
     margin-bottom: 10px;
     color: #000;
+}
+
+.popup-modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-column-list {
+    --_clr-primary: #000;
+    --_clr-hover: #fff;
+    --_clr-checked: #fff;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.popup-column-list>div {
+    --_clr-current: var(--_clr-primary);
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 150px;
+    min-width: 145px;
+}
+
+.popup-column-list>div+div {
+    margin-block-start: 0.5rem;
+}
+
+.popup-column-list label {
+    cursor: pointer;
+    color: var(--_clr-current);
+    transition: color 150ms ease-in-out;
+    max-height: 20px;
+    max-width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+/* styled checkbox */
+.popup-column-list input[type="checkbox"] {
+    appearance: none;
+    outline: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    aspect-ratio: 1;
+    padding: 0.25rem;
+    background: transparent;
+    border: 1px solid var(--_clr-current);
+    border-radius: 2px;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+}
+
+.popup-column-list input[type="checkbox"]::after {
+    content: "\2714";
+    opacity: 0;
+    transition: opacity 150ms ease-in-out;
+    color: var(--_clr-checked);
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.popup-column-list label:hover,
+.popup-column-list input[type="checkbox"]:focus-visible,
+.popup-column-list input[type="checkbox"]:focus-visible+label,
+.popup-column-list input[type="checkbox"]:hover,
+.popup-column-list input[type="checkbox"]:hover+label {
+    --_clr-current: var(--_clr-hover);
+}
+
+.popup-column-list input[type="checkbox"]:focus-visible::after,
+.popup-column-list input[type="checkbox"]:hover::after {
+    opacity: 0.5;
+    color: var(--_clr-hover);
+}
+
+.popup-column-list input[type="checkbox"]:checked+label:not(:hover),
+.popup-column-list input[type="checkbox"]:checked:not(:hover) {
+    --_clr-current: var(--_clr-checked);
+}
+
+.popup-column-list input[type="checkbox"]:checked::after {
+    opacity: 1;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    color: #000000;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+#col-validation-btn{
+    display: flex;
+    align-items: center;
+    background-color: black;
+    margin-left: 185px;
+    margin-right: 185px;
+    margin-top: 30px;
+    justify-content: space-around;
 }
