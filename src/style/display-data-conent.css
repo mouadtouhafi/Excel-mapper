@@ -611,17 +611,11 @@ input[type="checkbox"]:checked::after {
 
 
 
-
-
-
 /* Main page */
-
 .app-container {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background: rgba(25, 35, 55, 0.85);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
     overflow: hidden;
 }
 
@@ -651,7 +645,7 @@ input[type="checkbox"]:checked::after {
     margin: 0 auto;
     width: 100%;
     border: 1px solid rgba(100, 150, 255, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
 }
 
@@ -684,4 +678,73 @@ input[type="checkbox"]:checked::after {
 .file-input-group {
     flex: 1;
     min-width: 300px;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #000;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-label i {
+    color: #000;
+}
+
+.file-input-container {
+    position: relative;
+    height: 50px;
+}
+
+.file-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.file-input-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f0f8ff;
+    border:1px solid #000;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.file-input-display i {
+    font-size: 20px;
+    color: #3e3e3e;
+    margin-right: 12px;
+}
+
+.file-input-text {
+    color: #3e3e3e;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-name {
+    color: #000000;
+    font-weight: 500;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 16px;
 }
