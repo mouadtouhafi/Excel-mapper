@@ -6,18 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel Mapper - Desktop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../style/style.css">
+    <!-- <link rel="stylesheet" href="../style/style.css"> -->
+    <link rel="stylesheet" href="../style/display-data-conent.css">
 
 </head>
 
 <body>
     <div class="app-container">
         <main class="main-content">
-            <div class="intro-container">
-                <h2 class="intro-title">Excel Data Mapping Tool</h2>
-                <p class="intro-text">Seamlessly transfer and align data between Excel files. Upload your source and
-                    target files, map columns, and transform your data with precision.</p>
+            <div class="header-container" id="main-page-header">
+                <h1>Excel Data Mapping Tool
+                    <span>Seamlessly transfer and align data between Excel files.</span>
+                </h1>
             </div>
+            
 
             <div class="file-card">
                 <div class="card-header">
@@ -65,18 +67,19 @@
                     </button>
                 </div>
             </div>
+            <footer class="status-bar">
+                <div class="status-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Ready to map your Excel data</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-database"></i>
+                    <span>Secure local processing - no data leaves your computer</span>
+                </div>
+            </footer>
         </main>
 
-        <footer class="status-bar">
-            <div class="status-item">
-                <i class="fas fa-info-circle"></i>
-                <span>Ready to map your Excel data</span>
-            </div>
-            <div class="status-item">
-                <i class="fas fa-database"></i>
-                <span>Secure local processing - no data leaves your computer</span>
-            </div>
-        </footer>
+        
     </div>
 
     <script>
@@ -125,7 +128,7 @@
             startButton.addEventListener('click', function () {
                 if (!startButton.disabled) {
                     // Visual feedback
-                    startButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                    startButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>  Loading...';
                     startButton.disabled = true;
 
                     const sourceFile = sourceInput.files[0];
