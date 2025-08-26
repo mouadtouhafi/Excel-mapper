@@ -1,0 +1,33 @@
+#excel-container {
+    overflow-x: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#excel-container table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    user-select: none;
+}
+
+#excel-container table td {
+    border: 1px solid #ccc;
+    padding: 3px;
+    min-width: 60px;
+    height: 10px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+#excel-container table td:hover {
+    background-color: #f0f8ff;
+}
