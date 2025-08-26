@@ -1,0 +1,24 @@
+button {
+    background-color: #367540;
+    border-radius: 4px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 200;
+    line-height: 1.5;
+    margin: 0;
+    outline: none;
+    overflow: hidden;
+    padding: 8px 12px;
+    position: relative;
+    text-align: center;
+}
+
+button:hover,
+button:focus {
+    opacity: .75;
+}
