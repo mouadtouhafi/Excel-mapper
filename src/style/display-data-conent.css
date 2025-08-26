@@ -336,7 +336,7 @@ body.modal-open .popup {
 }
 
 .table-container {
-    margin: 20px 25px;
+    margin: 20px 0px;
     border-radius: 16px;
     padding: 10px 30px 10px 30px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -344,6 +344,7 @@ body.modal-open .popup {
     display: flex;
     flex-direction: column;
     padding-bottom: 25px;
+    max-width: 100%;
 }
 
 .table-header {
@@ -395,9 +396,6 @@ body.modal-open .popup {
 
 .data-table tr:first-child {
     background-color: #bd1717 !important;
-    position: sticky;
-    top: 0;
-    z-index: 10;
     border: 1px solid black;
 }
 
@@ -710,6 +708,7 @@ input[type="checkbox"]:checked::after {
 }
 
 .input-label i {
+
     color: #000;
 }
 
