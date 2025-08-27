@@ -1,0 +1,20 @@
+.status-bar {
+    padding: 10px 8px;
+    font-size: 14px;
+    color: #000;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #898181;
+    margin: 0px auto;
+    width: 93%;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-item i {
+    color: #000000;
+}
