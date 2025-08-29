@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel Mapper - Desktop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- <link rel="stylesheet" href="../style/style.css"> -->
     <link rel="stylesheet" href="../style/display-data-conent.css">
-
+    <link rel="stylesheet" href="../style/title-block.css">
+    <link rel="stylesheet" href="../style/cards.css">
+    <link rel="stylesheet" href="../style/buttons.css">
+    <link rel="stylesheet" href="../style/inputs.css">
+    <link rel="stylesheet" href="../style/footer.css">
 </head>
 
 <body>
@@ -16,17 +19,14 @@
         <main class="main-content">
             <div class="header-container" id="main-page-header">
                 <h1>Excel Data Mapping Tool
-                    <span>Seamlessly transfer and align data between Excel files.</span>
+                    <span>Seamlessly transfer and align data between Excel files</span>
                 </h1>
             </div>
-            
-
             <div class="file-card">
                 <div class="card-header">
                     <h3 class="card-title">Start Mapping Process</h3>
                     <p class="card-subtitle">Select your source and target Excel files to begin the mapping process</p>
                 </div>
-
                 <div class="file-input-row">
                     <div class="file-input-group">
                         <label class="input-label" for="sourceFile">
@@ -43,7 +43,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="file-input-group">
                         <label class="input-label" for="targetFile">
                             <i class="fas fa-file-import"></i> Target File
@@ -60,7 +59,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="button-container">
                     <button id="startButton" class="start-button" disabled>
                         <i class="fas fa-play-circle"></i> Start Mapping
@@ -78,10 +76,7 @@
                 </div>
             </footer>
         </main>
-
-        
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sourceInput = document.getElementById('sourceFile');
