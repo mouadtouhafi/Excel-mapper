@@ -9,7 +9,9 @@
   <meta name="author" content="Your Name">
   <title>Excel Mapper</title>
   <link rel="stylesheet" href="../style/display-data-conent.css">
+  <link rel="stylesheet" href="../style/title-block.css">
   <link rel="stylesheet" href="../style/mapping.css">
+  <link rel="stylesheet" href="../style/buttons.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -50,13 +52,20 @@
       <ul id="dataList-2"></ul>
     </div>
   </div>
+
   <div class="menu-container" hidden></div>
+  <div class="action-button-container" id="actionButtonContainer" style="display: none;">
+    <button class="action-button" id="processDataButton">
+      <i class="fas fa-cogs"></i> Process All Data
+    </button>
+  </div>
   <div class="popup">
     <div class="popup-content"></div>
   </div>
   <script>
 
     const menuDiv = document.querySelector('.menu-container');
+    const actionButtonContainer = document.getElementById('actionButtonContainer');
 
     const canvas = document.getElementById('linkCanvas');
     const ctx = canvas.getContext('2d');
@@ -248,63 +257,78 @@
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           menuDiv.innerHTML = '';
+
+          actionButtonContainer.style.display = 'none'; // Add this line
+        });
+
+        document.getElementById('processDataButton').addEventListener('click', () => {
+          // Add your custom functionality here
+          alert('Process All Data button clicked!');
+
+          // Example: You could process all the mapped data here
+          console.log('Processing all mapped connections:', connections);
+
+          // You can add more functionality like:
+          // - Export processed data
+          // - Apply all transformations
+          // - Generate final output
         });
 
 
         const popup = document.querySelector('.popup');
-const popupDevContent = document.querySelector('.popup-content');
+        const popupDevContent = document.querySelector('.popup-content');
 
-/* Utility: Show popup with title */
-function openPopup(titleText) {
-    popupDevContent.innerHTML = '';
-    popup.style.display = "flex";
-    document.body.classList.add('modal-open');
+        /* Utility: Show popup with title */
+        function openPopup(titleText) {
+          popupDevContent.innerHTML = '';
+          popup.style.display = "flex";
+          document.body.classList.add('modal-open');
 
-    const title = document.createElement('h2');
-    title.className = 'popup-title';
-    title.textContent = titleText;
-    popupDevContent.appendChild(title);
-}
+          const title = document.createElement('h2');
+          title.className = 'popup-title';
+          title.textContent = titleText;
+          popupDevContent.appendChild(title);
+        }
 
-/* Utility: Add Close button to popup */
-function addCloseButton(marginTop = "5%") {
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'closeBtn';
-    closeBtn.textContent = 'Close';
-    closeBtn.style.marginTop = marginTop;
-    popupDevContent.appendChild(closeBtn);
+        /* Utility: Add Close button to popup */
+        function addCloseButton(marginTop = "5%") {
+          const closeBtn = document.createElement('button');
+          closeBtn.className = 'closeBtn';
+          closeBtn.textContent = 'Close';
+          closeBtn.style.marginTop = marginTop;
+          popupDevContent.appendChild(closeBtn);
 
-    closeBtn.addEventListener('click', () => {
-        popup.style.display = "none";
-        document.body.classList.remove('modal-open');
-    });
-}
-/* Notes Button Logic */
-document.querySelector('.notes-button').addEventListener('click', () => {
-    openPopup("Instructions");
+          closeBtn.addEventListener('click', () => {
+            popup.style.display = "none";
+            document.body.classList.remove('modal-open');
+          });
+        }
+        /* Notes Button Logic */
+        document.querySelector('.notes-button').addEventListener('click', () => {
+          openPopup("Instructions");
 
-    const messageDiv = document.createElement('div');
-    messageDiv.className = "message-content";
-    popupDevContent.appendChild(messageDiv);
+          const messageDiv = document.createElement('div');
+          messageDiv.className = "message-content";
+          popupDevContent.appendChild(messageDiv);
 
-    const messages = [
-        "1- Map your source column (column to fill) to Data columns (columns with data tou want to integrate).",
-        "2- Each source column can be linked to one or many Data columns.",
-        "3- Click the validate button to validate your mapping links.",
-        "4- A menu block buttons is created, each block contains informations about the data linked.",
-        "5- Enter your JavaScript code to customize your data.",
-        "6- Save and load your save codes for a simple experience."
-    ];
+          const messages = [
+            "1- Map your source column (column to fill) to Data columns (columns with data tou want to integrate).",
+            "2- Each source column can be linked to one or many Data columns.",
+            "3- Click the validate button to validate your mapping links.",
+            "4- A menu block buttons is created, each block contains informations about the data linked.",
+            "5- Enter your JavaScript code to customize your data.",
+            "6- Save and load your save codes for a simple experience."
+          ];
 
-    messages.forEach(text => {
-        const p = document.createElement('p');
-        p.className = 'p-tag';
-        p.textContent = text;
-        messageDiv.appendChild(p);
-    });
+          messages.forEach(text => {
+            const p = document.createElement('p');
+            p.className = 'p-tag';
+            p.textContent = text;
+            messageDiv.appendChild(p);
+          });
 
-    addCloseButton("5%");
-});
+          addCloseButton("5%");
+        });
 
         /* Creating a map list for the selected list items when the validate button is clicked*/
         document.getElementById('validateButton').addEventListener('click', () => {
@@ -325,6 +349,7 @@ document.querySelector('.notes-button').addEventListener('click', () => {
 
           if (Object.keys(grouped).length > 0) {
             menuDiv.style.display = 'block';
+            actionButtonContainer.style.display = 'block'; // Add this line
 
             const keys = Object.keys(grouped);
             const finalProcessedColumnData = new Map();
