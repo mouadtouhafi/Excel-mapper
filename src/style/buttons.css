@@ -22,3 +22,7 @@ button:hover,
 button:focus {
     opacity: .75;
 }
+
+button i {
+  margin-right: 5px;
+}
