@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let lastExcelRowNumber = 0;
 
+    let headerRowOriginalIndex = 1; // Track which original Excel row is currently the header
+
     /*
         The 'loadSheetData' function loads the data from out Excel sheet.
         First, we get the sheet name stored in localStorage, then we convert our
@@ -75,6 +77,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function displayDataTable() {
+
+
+        // ADD THIS DEBUG CODE:
+    console.log('Total rows in currentSheetData:', currentSheetData.length);
+    console.log('First 5 rows:', currentSheetData.slice(0, 5));
+    console.log('First row data:', currentSheetData[0]);
+
+    
         if (!currentSheetData || currentSheetData.length === 0) {
             showEmptyState();
             return;
@@ -104,6 +114,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const tr = document.createElement('tr');
             const row = currentSheetData[i] || [];
 
+            tr.setAttribute('data-original-excel-index', i);
+
+
             /* At the first element of each row, we add checkbox cell */
             const checkboxTd = document.createElement('td');
             const checkbox = document.createElement('input');
@@ -126,6 +139,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         lastExcelRowNumber = findLastRowWithData() + 1;
 
+        // ADD THESE LINES:
+        headerRowOriginalIndex = 0;
+        console.log('Initial header row original Excel index:', headerRowOriginalIndex);
+
+        // Initialize header row index - first row (index 0) is initially the header
+        headerRowOriginalIndex = 0;
+        console.log('Initial header row original Excel index:', headerRowOriginalIndex);
+
         const deleteRowBtn = document.getElementById("deleteRowButton");
         if (maxColumns > 0) {
             deleteRowBtn.hidden = false;
@@ -144,6 +165,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                         row.remove();
                     }
                 });
+
+                // ADD THIS: Update header index after deletion
+                const remainingRows = tableBody.querySelectorAll("tr");
+                if (remainingRows.length > 0) {
+                    const newHeaderOriginalIndex = parseInt(remainingRows[0].getAttribute('data-original-excel-index'));
+                    if (!isNaN(newHeaderOriginalIndex)) {
+                        headerRowOriginalIndex = newHeaderOriginalIndex;
+                        console.log('New header row original Excel index after deletion:', headerRowOriginalIndex);
+                    }
+                } else {
+                    console.log('No rows remaining after deletion');
+                    headerRowOriginalIndex = -1;
+                }
             })
         }
 
@@ -164,9 +198,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     continueButton.addEventListener('click', async () => {
-        await window.electronAPI.setFinalSelectedTable(tableBody.innerHTML);    
+        await window.electronAPI.setFinalSelectedTable(tableBody.innerHTML);
         // Store in localStorage for other JS files to access
         localStorage.setItem('lastExcelRowNumber', lastExcelRowNumber);
+        localStorage.setItem('headerRowOriginalIndex', headerRowOriginalIndex); // ADD THIS LINE
+
+        console.log('Storing header row original Excel index:', headerRowOriginalIndex); // ADD THIS LINE
+
         if (currentSheetData && currentSheetData.length > 0) {
             window.location.href = 'select-sheet-target.html';
         } else {
@@ -345,7 +383,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!button_col_validation) return;
         const checkboxes = document.querySelectorAll('.col-item input[type="checkbox"]');
         const hasCheckedBox = Array.from(checkboxes).some(checkbox => checkbox.checked);
-        
+
         /* Enable/disable button based on checkbox state */
         button_col_validation.disabled = !hasCheckedBox;
     }
