@@ -1,9 +1,6 @@
-// Selection functionality
 let startCell = null, endCell = null;
 let json = [];
 let firstOriginalTableHTML = '';
-
-
 
 function highlightSelection(start, end) {
     const cells = document.querySelectorAll('td');
@@ -32,6 +29,7 @@ function highlightSelection(start, end) {
     const colEnd = getColumnLabel(maxCol);
     rangeInfo.textContent = `Selected range: ${colStart}${minRow}:${colEnd}${maxRow}`;
 }
+
 function getColumnLabel(index) {
     let label = '';
     while (index >= 0) {
@@ -65,22 +63,22 @@ let rangeInfo = null;
 
         let buffer = files.target;
 
-        // Convert array to Uint8Array if needed
+        /* Convert array to Uint8Array if needed */
         const uint8Array = Array.isArray(buffer) ? new Uint8Array(buffer) : buffer;
 
-        // Read the workbook
+        /* Read the workbook */
         const workbook = XLSX.read(uint8Array, { type: 'array' });
 
-        // Get the selected sheet name from localStorage (set in the previous page)
+        /* Get the selected sheet name from localStorage (set in the previous page) */
         const selectedSheetName = localStorage.getItem('selectedSheet');
 
         let sheetName;
         if (selectedSheetName && workbook.SheetNames.includes(selectedSheetName)) {
-            // Use the user's selected sheet
+            /* Use the user's selected sheet */
             sheetName = selectedSheetName;
             console.log(`Loading selected sheet: ${sheetName}`);
         } else {
-            // Fallback to first sheet if no selection or sheet not found
+            /* Fallback to first sheet if no selection or sheet not found */
             sheetName = workbook.SheetNames[0];
             console.warn(`Selected sheet "${selectedSheetName}" not found. Using first sheet: ${sheetName}`);
         }
@@ -90,7 +88,7 @@ let rangeInfo = null;
 
 
 
-        // Build the table
+        /*  Build the table */
         let table = '<table>';
         json.forEach((row, rowIndex) => {
             table += '<tr>';
@@ -157,7 +155,7 @@ let rangeInfo = null;
                 return;
             }
 
-            // Build new table from selected range
+            /* Build new table from selected range */
             let selectedTable = '<table>';
             for (let i = minRow - 1; i < maxRow; i++) {
                 selectedTable += '<tr>';
@@ -169,10 +167,10 @@ let rangeInfo = null;
             }
             selectedTable += '</table>';
 
-            // Replace table with selected content
+            /* Replace table with selected content */
             document.getElementById('excel-container').innerHTML = selectedTable;
 
-            // Optional: update range info
+            /* Optional: update range info */
             const colStart = getColumnLabel(minCol);
             const colEnd = getColumnLabel(maxCol);
             document.getElementById('range-info').textContent = `Validated range: ${colStart}${minRow}:${colEnd}${maxRow}`;
@@ -223,9 +221,7 @@ document.querySelector('.notes-button').addEventListener('click', () => {
 
     const messages = [
         "1- Select your table which contains data and make sure the first row of it is the table header.",
-        "2- Select which option of table data integration you want to perform:",
-        "• Integration of the full table selected.",
-        "• Integration of a specific table rows.",
+        "2- The first line in the table will be considered as table header.",
         "3- Press 'Validate' button to confirm your selection."
     ];
 
@@ -239,45 +235,12 @@ document.querySelector('.notes-button').addEventListener('click', () => {
     addCloseButton("5%");
 });
 
-/* Options Button Logic */
-document.querySelector('.options-button').addEventListener('click', () => {
-    openPopup("Data Integration options");
-    popupDevContent.querySelector('.popup-title').style.marginBottom = '40px';
-
-    const radioText = [
-        "Option 1 : Full selected table",
-        "Option 2 : Specific rows from selected table"
-    ];
-
-    radioText.forEach((text, index) => {
-        const radioDiv = document.createElement('div');
-        radioDiv.className = 'radio';
-
-        const input = document.createElement('input');
-        input.type = 'radio';
-        input.name = 'radio';
-        input.className = `radio-${index}`;
-        input.checked = index === 0;
-
-        const label = document.createElement('label');
-        label.setAttribute("for", `radio-${index}`);
-        label.className = 'radio-label';
-        label.textContent = text;
-
-        radioDiv.appendChild(input);
-        radioDiv.appendChild(label);
-        popupDevContent.appendChild(radioDiv);
-    });
-
-    addCloseButton("20%");
-});
-
 const refreshButton = document.querySelector('.refresh-button');
 refreshButton.addEventListener('click', () => {
     document.getElementById('excel-container').innerHTML = firstOriginalTableHTML;
     document.getElementById('range-info').textContent = "Selected range: None";
 
-    // Re-add event listeners for selection after restoring table
+    /* Re-add event listeners for selection after restoring table */
     const tds = document.querySelectorAll('td');
     tds.forEach(td => {
         td.addEventListener('mousedown', () => {
