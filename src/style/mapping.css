@@ -16,7 +16,31 @@ h3 {
   margin: 0 auto;
   gap: 0.5rem;
   justify-content: space-evenly;
-  min-height: 400px;
+  align-items: flex-start;
+  max-height: 70vh;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+/* Scrollbar styling for table-container */
+.table-container::-webkit-scrollbar {
+  width: 12px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 6px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 6px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 #colsXlxToFill,
@@ -27,12 +51,16 @@ h3 {
   align-items: center;
 }
 
-.links-container {
-  width: 25%;
-  position: relative;
-  min-height: 400px;
-  flex-grow: 1;
-}
+ .links-container {
+      width: 25%;
+      position: relative;
+      /* REMOVED: min-height: 400px */
+      /* ADDED: Dynamic height calculation */
+      min-height: 100%;
+      flex-grow: 1;
+      /* ADDED: Ensure it matches the tallest column */
+      align-self: stretch;
+    }
 
 
 #colsXlxToFill tr,
