@@ -18,9 +18,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let selectedColumns = [];
 
+    /* This variable is to detect the index of the last row in the original excel file */
     let lastExcelRowNumber = 0;
 
-    let headerRowOriginalIndex = 1; // Track which original Excel row is currently the header
+    /* This variable is to detect the index of the selected header in the original excel file */
+    let headerRowOriginalIndex = 1; 
 
     /*
         The 'loadSheetData' function loads the data from out Excel sheet.
@@ -82,7 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Count empty rows that XLSX skipped
+        /* Count empty rows that XLSX skipped */
         const emptyRowsAtTop = countEmptyRowsAtTop();
 
         loadingState.style.display = 'none';
@@ -109,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const tr = document.createElement('tr');
             const row = currentSheetData[i] || [];
 
-            // Store 1-based original Excel index accounting for skipped empty rows
+            /* Here we store 1-based original Excel index accounting for skipped empty rows */
             tr.setAttribute('data-original-excel-index', emptyRowsAtTop + i + 1);
 
 
@@ -135,8 +137,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         lastExcelRowNumber = findLastRowWithData() + 1;
 
-        // Set initial header index accounting for skipped empty rows
-        headerRowOriginalIndex = emptyRowsAtTop + 1; // +1 for 1-based indexing
+        /* Set initial header index accounting for skipped empty rows */
+        headerRowOriginalIndex = emptyRowsAtTop + 1;
         console.log('Initial header row original Excel index:', headerRowOriginalIndex);
 
 
@@ -160,7 +162,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 });
 
-                // ADD THIS: Update header index after deletion
                 const remainingRows = tableBody.querySelectorAll("tr");
                 if (remainingRows.length > 0) {
                     const newHeaderOriginalIndex = parseInt(remainingRows[0].getAttribute('data-original-excel-index'));
@@ -193,12 +194,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     continueButton.addEventListener('click', async () => {
         await window.electronAPI.setFinalSelectedTable(tableBody.innerHTML);
-        // Store in localStorage for other JS files to access
+        /* Store in localStorage for other JS files to access */
         localStorage.setItem('lastExcelRowNumber', lastExcelRowNumber);
-        localStorage.setItem('headerRowOriginalIndex', headerRowOriginalIndex); // ADD THIS LINE
+        localStorage.setItem('headerRowOriginalIndex', headerRowOriginalIndex);
 
-        console.log('Storing header row original Excel index:', headerRowOriginalIndex); // ADD THIS LINE
-
+        console.log('Storing header row original Excel index:', headerRowOriginalIndex);
         if (currentSheetData && currentSheetData.length > 0) {
             window.location.href = 'select-sheet-target.html';
         } else {
@@ -213,7 +213,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         sheetInfo.style.display = 'none';
 
         headerRowOriginalIndex = 1;
-
         countEmptyRowsAtTop();
 
         setTimeout(() => {
@@ -221,23 +220,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 500);
     });
 
-
-
+    /* 
+        Here we calculate the number of empty rows at the top first of the excel table 
+        We stop the calculation when we find the first row with data.
+    */
     function countEmptyRowsAtTop() {
         if (!currentWorkbook || !currentSheetName) {
             return 0;
         }
-
         const worksheet = currentWorkbook.Sheets[currentSheetName];
-
-        // Get the actual range of the worksheet
         const range = XLSX.utils.decode_range(worksheet['!ref'] || 'A1:A1');
         const startRow = range.s.r; // First row with any data in the sheet
-
-        // If sheet starts from row 3 (0-based), it means rows 0,1,2 were empty
-        console.log('First row with data in Excel (0-based):', startRow);
-        console.log('Empty rows at top:', startRow);
-
         return startRow;
     }
 
@@ -255,7 +248,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const columnsNames = firstRow.querySelectorAll("td");
         const popupDivContent = document.querySelector(".popup-column-list");
         popupDivContent.innerHTML = "";
-        let checkboxCount = 0; // Track actual checkboxes created
+        let checkboxCount = 0;
         for (let k = 1; k < columnsNames.length; k++) {
             const text = columnsNames[k].textContent?.trim();
             if (text) {
@@ -306,20 +299,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 /*
                 When the columns to keep are selected, if the validation button is clicked,
                 the columns names are saved in 'selectedColumns'.
-            */
+                */
                 button_col_validation.addEventListener('click', () => {
                     handleColumnValidation();
                 })
                 popup_content.appendChild(button_col_validation);
             }
-            // If button already exists, just make sure it's visible
+            /* If button already exists, just make sure it's visible */
             if (button_col_validation) {
                 button_col_validation.style.display = 'flex';
             }
         } else {
-            // No checkboxes - remove/hide button and show error
             if (button_col_validation) {
-                button_col_validation.remove(); // or button_col_validation.style.display = 'none';
+                button_col_validation.remove();
             }
             const paragraph = document.createElement('p');
             paragraph.textContent = "Your header row doesn't contain any names values. Make sure you header is compliant."
@@ -331,7 +323,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         When the columns to keep are selected, if the validation button is clicked,
         the columns names are saved in 'selectedColumns'.
     */
-
     function handleColumnValidation() {
         selectedColumns = [];
         const list_selected_col_divs = document.querySelectorAll('.col-item');
@@ -377,20 +368,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById("popupModal").style.display = "none";
     }
 
+    /* This function finds the last row in a worksheet that contains actual data */
     function findLastRowWithData() {
         if (!currentSheetData || currentSheetData.length === 0) {
             return 0;
         }
-        // Start from the last row and work backwards
+        /* We start from the last row and work backwards */
         for (let rowIndex = currentSheetData.length - 1; rowIndex >= 0; rowIndex--) {
             const row = currentSheetData[rowIndex];
-
-            // Check if this row has any non-empty cells
+            /* Check if this row has any non-empty cells */
             if (row && row.some(cell => cell !== null && cell !== undefined && cell !== '')) {
                 return rowIndex + 1; // +1 because Excel rows are 1-indexed
             }
         }
-        return 0; // No data found
+        /* If no data found */
+        return 0; 
     }
 
     /*
