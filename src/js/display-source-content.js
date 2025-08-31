@@ -77,18 +77,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function displayDataTable() {
-
-
-        // ADD THIS DEBUG CODE:
-    console.log('Total rows in currentSheetData:', currentSheetData.length);
-    console.log('First 5 rows:', currentSheetData.slice(0, 5));
-    console.log('First row data:', currentSheetData[0]);
-
-    
         if (!currentSheetData || currentSheetData.length === 0) {
             showEmptyState();
             return;
         }
+
+        // Count empty rows that XLSX skipped
+        const emptyRowsAtTop = countEmptyRowsAtTop();
 
         loadingState.style.display = 'none';
         emptyState.style.display = 'none';
@@ -114,7 +109,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const tr = document.createElement('tr');
             const row = currentSheetData[i] || [];
 
-            tr.setAttribute('data-original-excel-index', i);
+            // Store 1-based original Excel index accounting for skipped empty rows
+            tr.setAttribute('data-original-excel-index', emptyRowsAtTop + i + 1);
 
 
             /* At the first element of each row, we add checkbox cell */
@@ -139,13 +135,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         lastExcelRowNumber = findLastRowWithData() + 1;
 
-        // ADD THESE LINES:
-        headerRowOriginalIndex = 0;
+        // Set initial header index accounting for skipped empty rows
+        headerRowOriginalIndex = emptyRowsAtTop + 1; // +1 for 1-based indexing
         console.log('Initial header row original Excel index:', headerRowOriginalIndex);
 
-        // Initialize header row index - first row (index 0) is initially the header
-        headerRowOriginalIndex = 0;
-        console.log('Initial header row original Excel index:', headerRowOriginalIndex);
+
 
         const deleteRowBtn = document.getElementById("deleteRowButton");
         if (maxColumns > 0) {
@@ -218,10 +212,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         tableWrapper.style.display = 'none';
         sheetInfo.style.display = 'none';
 
+        headerRowOriginalIndex = 1;
+
+        countEmptyRowsAtTop();
+
         setTimeout(() => {
             loadSheetData();
         }, 500);
     });
+
+
+
+    function countEmptyRowsAtTop() {
+        if (!currentWorkbook || !currentSheetName) {
+            return 0;
+        }
+
+        const worksheet = currentWorkbook.Sheets[currentSheetName];
+
+        // Get the actual range of the worksheet
+        const range = XLSX.utils.decode_range(worksheet['!ref'] || 'A1:A1');
+        const startRow = range.s.r; // First row with any data in the sheet
+
+        // If sheet starts from row 3 (0-based), it means rows 0,1,2 were empty
+        console.log('First row with data in Excel (0-based):', startRow);
+        console.log('Empty rows at top:', startRow);
+
+        return startRow;
+    }
+
+
 
     const selectColumnsBtn = document.getElementById("selectColumnsButton");
     selectColumnsBtn.addEventListener("click", () => {
