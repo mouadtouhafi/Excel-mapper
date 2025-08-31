@@ -18,6 +18,7 @@
 </head>
 
 <body>
+  <main class="main-content">
   <div class="header-container">
     <h1>Excel Data Mapper
       <span>Data-Source Columns Mapping</span>
@@ -56,8 +57,8 @@
 
   <div class="menu-container" hidden></div>
   <div class="action-button-container" id="actionButtonContainer" style="display: none;">
-    <button class="action-button" id="processDataButton">
-      <i class="fas fa-cogs"></i> Process All Data
+    <button class="action-button" id="processDataButton"> 
+      <i class="fas fa-cogs"></i> Action
     </button>
   </div>
   <div class="popup">
@@ -73,6 +74,7 @@
       <span>Secure local processing - no data leaves your computer</span>
     </div>
   </footer>
+  </main>
   <script>
 
     const menuDiv = document.querySelector('.menu-container');
@@ -82,15 +84,67 @@
     const ctx = canvas.getContext('2d');
     let connections = [];
 
+let resizeTimeout;
+     // FIXED: Enhanced resize function with debouncing
+function resizeCanvas() {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    const leftContainer = document.getElementById('colsXlxToFill');
+    const rightContainer = document.getElementById('colsXlxWithData');
+    const leftList = document.getElementById('dataList-1');
+    const rightList = document.getElementById('dataList-2');
+    const linksContainer = document.querySelector('.links-container');
+    
+    // Calculate the total content height including scrollable areas
+    const leftContentHeight = leftList.scrollHeight + 60; // +60 for h3 and padding
+    const rightContentHeight = rightList.scrollHeight + 60; // +60 for h3 and padding
+    
+    // Use the larger of the two content heights, with a minimum
+    const maxHeight = Math.max(leftContentHeight, rightContentHeight, 600);
+    
+    console.log(`Left content: ${leftContentHeight}, Right content: ${rightContentHeight}, Canvas height: ${maxHeight}`);
+    
+    // Set the links container height to match the full content
+    linksContainer.style.height = maxHeight + 'px';
+    
+    // Set canvas dimensions
+    const containerRect = linksContainer.getBoundingClientRect();
+    canvas.width = containerRect.width;
+    canvas.height = maxHeight;
+    canvas.style.height = maxHeight + 'px';
+    
+    redrawConnections();
+  }, 150);
+}
 
-    function resizeCanvas() {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      redrawConnections();
-    }
+// Add this function to force resize when items are added
+function forceResizeAfterContentChange() {
+  setTimeout(() => {
+    console.log('Forcing resize after content change...');
+    resizeCanvas();
+  }, 200); // Give time for DOM to update
+  
+  setTimeout(() => {
+    console.log('Second resize call...');
+    resizeCanvas();
+  }, 500); // Second call to ensure it worked
+}
+
+    // FIXED: Enhanced resize observer for better responsiveness
+    function setupResizeObserver() {
+  if (window.ResizeObserver) {
+    const resizeObserver = new ResizeObserver(() => {
+      resizeCanvas();
+    });
+    
+    // Observe both column containers for height changes
+    resizeObserver.observe(document.getElementById('colsXlxToFill'));
+    resizeObserver.observe(document.getElementById('colsXlxWithData'));
+  }
+}
+
 
     window.addEventListener('resize', resizeCanvas);
-
     function getElementCenter(el, isSource = true) {
       const rect = el.getBoundingClientRect();
       const canvasRect = canvas.getBoundingClientRect();
@@ -150,6 +204,9 @@
 
     async function initLists() {
       try {
+
+        const finalProcessedColumnData = new Map();
+
         const containerTable = document.getElementById('dataList-1');
         const containerTableTarget = document.getElementById('dataList-2');
 
@@ -166,6 +223,7 @@
             containerTable.appendChild(liItem);
           }
         }
+        
 
         const tableDataTarget = await window.electronAPI.getFinalSelectedTableData();
         const tempTableTarget = document.createElement('table');
@@ -180,6 +238,8 @@
             containerTableTarget.appendChild(liItem);
           }
         }
+
+        forceResizeAfterContentChange();
 
         document.querySelectorAll('#dataList-1 li').forEach(li => {
           li.addEventListener('click', () => {
@@ -206,11 +266,16 @@
                 const to = getElementCenter(li, false);
 
                 connections.push({ from: selectedFrom, to: li });
-                drawLine(from, to);
+                //drawLine(from, to);
+
+                forceResizeAfterContentChange();
 
                 /* Mark elements as connected */
                 selectedFrom.classList.add('connected');
                 li.classList.add('connected');
+
+                // ADD THIS LINE:
+setTimeout(() => { resizeCanvas(); }, 50);
               }
 
               /* Clear selection */
@@ -272,18 +337,98 @@
           actionButtonContainer.style.display = 'none'; // Add this line
         });
 
-        document.getElementById('processDataButton').addEventListener('click', () => {
-          // Add your custom functionality here
-          alert('Process All Data button clicked!');
-
-          // Example: You could process all the mapped data here
-          console.log('Processing all mapped connections:', connections);
-
-          // You can add more functionality like:
-          // - Export processed data
-          // - Apply all transformations
-          // - Generate final output
-        });
+document.getElementById('processDataButton').addEventListener('click', async () => {
+  // Check if finalProcessedColumnData has any data
+  if (finalProcessedColumnData && finalProcessedColumnData.size > 0) {
+    // Get the header row index and last row number from localStorage
+    const headerRowOriginalIndex = localStorage.getItem('headerRowOriginalIndex');
+    const lastExcelRowNumber = localStorage.getItem('lastExcelRowNumber');
+    
+    if (!headerRowOriginalIndex || !lastExcelRowNumber) {
+      console.error('Required data not found in localStorage');
+      alert('Error: Missing Excel file information. Please reload the data.');
+      return;
+    }
+    
+    try {
+      // Get the Excel file data
+      const files = await window.electronAPI.getBothExcelFiles();
+      const byteArray = files.source;
+      const uint8Array = new Uint8Array(byteArray);
+      const workbook = XLSX.read(uint8Array, { type: 'array' });
+      
+      // Get the selected sheet
+      const selectedSheet = localStorage.getItem('selectedSheet');
+      const worksheet = workbook.Sheets[selectedSheet];
+      
+      // Get the header row from the first table (table to fill)
+      const tempTable = document.createElement('table');
+      const tableData = await window.electronAPI.getFinalSelectedTable();
+      tempTable.innerHTML = tableData;
+      const headerRow = tempTable.rows[0];
+      
+      // Create array of header column names for easy searching
+      const headerColumns = [];
+      for (const td of headerRow.querySelectorAll('td')) {
+        headerColumns.push(td.textContent.trim());
+      }
+      
+      // Create map with column names as keys and their indexes as values
+      const columnIndexMap = new Map();
+      
+      finalProcessedColumnData.forEach((values, columnName) => {
+        const columnIndex = headerColumns.indexOf(columnName);
+        if (columnIndex !== -1) {
+          columnIndexMap.set(columnName, columnIndex);
+        }
+      });
+      
+      console.log('Column Index Map:', columnIndexMap);
+      
+      // Insert data into Excel worksheet using XLSX utilities
+      const startRow = parseInt(headerRowOriginalIndex) + 1; // +1 to skip header (0-based for XLSX utils)
+      
+      finalProcessedColumnData.forEach((values, columnName) => {
+        const columnIndex = columnIndexMap.get(columnName);
+        if (columnIndex !== undefined) {
+          
+          // Create a 2D array for this column's data
+          const columnData = values.map(value => [value]);
+          
+          // Use XLSX utility to safely add data
+          XLSX.utils.sheet_add_aoa(worksheet, columnData, {
+            origin: { r: startRow, c: columnIndex }
+          });
+          
+          console.log(`Inserted ${values.length} values into column ${columnIndex} (${columnName})`);
+        }
+      });
+      
+      // Write the workbook
+      const modifiedBuffer = XLSX.write(workbook, { 
+        bookType: 'xlsx', 
+        type: 'array'
+      });
+      
+      // Send back to Electron to save the file
+      const result = await window.electronAPI.saveModifiedExcelFile(modifiedBuffer);
+      
+      if (result && result.success) {
+        alert(`Data successfully inserted into Excel file!\nSaved to: ${result.filePath}`);
+      } else {
+        alert('Error saving file: ' + (result?.reason || result?.error || 'Unknown error'));
+      }
+      
+    } catch (error) {
+      console.error('Error inserting data:', error);
+      alert('Error inserting data into Excel file. Check console for details.');
+    }
+    
+  } else {
+    console.log('No processed data found in finalProcessedColumnData');
+    alert('No processed data found. Please run your code for at least one column mapping first.');
+  }
+});
 
 
         const popup = document.querySelector('.popup');
@@ -341,6 +486,12 @@
           addCloseButton("5%");
         });
 
+        const backButton = document.getElementById('backButton');
+        // ✅ Back button
+            backButton.addEventListener('click', () => {
+                window.location.href = 'select-sheet-target.html';
+            });
+
         /* Creating a map list for the selected list items when the validate button is clicked*/
         document.getElementById('validateButton').addEventListener('click', () => {
           menuDiv.innerHTML = '';
@@ -363,8 +514,7 @@
             actionButtonContainer.style.display = 'block'; // Add this line
 
             const keys = Object.keys(grouped);
-            const finalProcessedColumnData = new Map();
-
+            finalProcessedColumnData.clear();
             for (let i = 0; i < keys.length; i++) {
               const menuButtonBlock = document.createElement('div');
               menuButtonBlock.className = 'menu-button-block';
@@ -533,7 +683,7 @@
                         /* applying the user code */
                         const newValue = transformFn(cellValues);
                         processedValue = newValue;
-                        console.log(processedValue);
+                        //console.log(processedValue);
                       } catch (error) {
                         console.error(`Error running code on row ${trElement}:`, error.message);
                       }
@@ -545,8 +695,8 @@
                 }
                 finalProcessedColumnData.set(keys[i], processedValues);
 
-                console.log(finalProcessedColumnData);
-                console.log("===========================================================");
+                //console.log(finalProcessedColumnData);
+                //console.log("===========================================================");
 
 
 
@@ -830,7 +980,10 @@
       }
     }
 
-    window.addEventListener('DOMContentLoaded', initLists);
+    window.addEventListener('DOMContentLoaded', () => {
+  setupResizeObserver();
+  initLists();
+});
 
   </script>
 </body>
