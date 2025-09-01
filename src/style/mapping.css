@@ -6,6 +6,7 @@ body {
 h3 {
   font-weight: 10;
   font-family: "Raleway", sans-serif;
+  margin-bottom: 10px;
 }
 
 .table-container {
@@ -18,6 +19,7 @@ h3 {
   justify-content: space-evenly;
   align-items: flex-start;
   max-height: 70vh;
+  min-height: 40vh;
   overflow-y: auto;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -51,17 +53,13 @@ h3 {
   align-items: center;
 }
 
- .links-container {
-      width: 25%;
-      position: relative;
-      /* REMOVED: min-height: 400px */
-      /* ADDED: Dynamic height calculation */
-      min-height: 100%;
-      flex-grow: 1;
-      /* ADDED: Ensure it matches the tallest column */
-      align-self: stretch;
-    }
-
+.links-container {
+  width: 25%;
+  position: relative;
+  min-height: 100%;
+  flex-grow: 1;
+  align-self: stretch;
+}
 
 #colsXlxToFill tr,
 #colsXlxWithData tr {
@@ -70,16 +68,13 @@ h3 {
   padding-left: 45px;
 }
 
-/* Style the whole list */
 ul {
-  /* remove bullet points */
   list-style-type: none;
   padding: 0;
   margin: 0;
   width: 90%;
 }
 
-/* Style each list item as a "box" */
 ul li {
   border: 1px solid #000;
   border-radius: 8px;
@@ -94,7 +89,6 @@ ul li {
   text-align: center;
 }
 
-/* Optional hover effect */
 ul li:hover {
   background-color: #f2f2f2;
 }
@@ -136,7 +130,6 @@ ul li.connected {
   margin-right: 5%;
 }
 
-
 .block-content {
   display: none;
   padding: 10px;
@@ -144,7 +137,6 @@ ul li.connected {
   border: 3px solid #367540;
   border-radius: 4px;
 }
-
 
 .menu-button {
   background-color: #367540;
@@ -194,11 +186,9 @@ ul li.connected {
 .menu-block-description-label .highlight {
   color: white;
   background-color: #8ab386;
-  /* Example blue */
   padding: 2px 4px;
   border-radius: 3px;
   font-family: monospace;
-  /* makes it look like code */
 }
 
 .menu-button-table {
@@ -274,7 +264,7 @@ ul li.connected {
   backdrop-filter: blur(2px);
 }
 
-.popup-content {
+.js-popup-content {
   background: #ffffff;
   border-radius: 12px;
   width: 600px;
@@ -284,6 +274,9 @@ ul li.connected {
   border: 1px solid #e0e0e0;
   overflow: hidden;
   animation: popupAppear 0.2s ease-out;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .popup-header {
@@ -346,7 +339,7 @@ ul li.connected {
 }
 
 .code-item:hover {
-  background-color: #e0e14d;
+  background-color: #8ab386;
 }
 
 .code-item:last-child {
@@ -468,6 +461,11 @@ ul li.connected {
   font-weight: 300;
   font-size: 25px;
   color: #080808;
+}
+
+.closeBtn{
+    background-color: #97241c;
+    color: #e8f0fe;
 }
 
 @media (max-width: 768px) {
