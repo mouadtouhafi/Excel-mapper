@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         /* Here we get file from Electron main process (via preload.js) */
         const files = await window.electronAPI.getBothExcelFiles();
-        const byteArray = files.source;
+        const byteArray = files.target;
+
 
         if (!byteArray || byteArray.length === 0) {
             statusText.textContent = 'No source file found. Please go back and select a file.';
@@ -28,7 +29,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             option.textContent = sheetName;
             sheetsSelect.appendChild(option);
         });
+
         statusText.textContent = `Found ${sheetNames.length} sheet(s). Select one to continue.`;
+
     } catch (error) {
         console.error('Error loading sheets:', error);
         statusText.textContent = 'Error loading sheets from file.';
@@ -38,7 +41,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     /* Here we handle the sheet selection */
     sheetsSelect.addEventListener('change', () => {
         const selectedSheet = sheetsSelect.value;
+
         validateButton.disabled = !selectedSheet;
+
         if (selectedSheet) {
             validateButton.classList.add('pulse');
             statusText.textContent = `Selected sheet: ${selectedSheet}`;
@@ -56,13 +61,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             validateButton.disabled = true;
             localStorage.setItem('selectedSheet', selectedSheet);
             setTimeout(() => {
-                window.location.href = 'display-source-content.html';
+                window.location.href = 'display-data-content.html';
             }, 1000);
         }
     });
 
     /* Handling the back button click */
     backButton.addEventListener('click', () => {
-        window.location.href = 'main-page.html';
+        window.location.href = 'display-source-content.html';
     });
 });

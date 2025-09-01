@@ -264,6 +264,11 @@ refreshButton.addEventListener('click', () => {
     });
 });
 
+const backButton = document.getElementById('backButton');
+backButton.addEventListener('click', () => {
+    window.location.href = 'select-sheet-target.html';
+});
+
 const continueButton = document.querySelector('.continue-button');
 continueButton.addEventListener('click', async () => {
     const tableDiv = document.getElementById('excel-container');

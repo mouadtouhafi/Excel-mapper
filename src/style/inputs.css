@@ -84,3 +84,37 @@
     color: #e6f7ff;
     padding: 8px;
 }
+
+input[type="checkbox"] {
+    appearance: none;
+    outline: none;
+    width: 1rem;
+    height: 1rem;
+    aspect-ratio: 1;
+    padding: 0.25rem;
+    background: transparent;
+    border: 1px solid #000;
+    border-radius: 2px;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="checkbox"]::after {
+    content: "✓";
+    color: #000;
+    font-size: 0.85rem;
+    font-weight: 900;
+    font-family: sans-serif;
+    opacity: 0;
+    transition: opacity 150ms ease-in-out;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+input[type="checkbox"]:checked::after {
+    opacity: 1;
+}

@@ -16,40 +16,40 @@
 }
 
 .table-container::-webkit-scrollbar {
-    width: 12px;
+  width: 12px;
 }
 
 .table-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 6px;
+  background: #f1f1f1;
+  border-radius: 6px;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 6px;
+  background: #888;
+  border-radius: 6px;
 }
 
 .table-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
+  background: #555;
 }
 
 #colsXlxToFill tr,
 #colsXlxWithData tr {
-    height: 30px;
-    border: 1px solid black;
-    padding-left: 45px;
+  height: 30px;
+  border: 1px solid black;
+  padding-left: 45px;
 }
 
 #colsXlxToFill,
 #colsXlxWithData {
-    display: flex;
-    flex-direction: column;
-    width: 35%;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  align-items: center;
 }
 
 .container {
-    z-index: 2;
+  z-index: 2;
 }
 
 .container h3 {
@@ -96,11 +96,11 @@ ul li.connected {
 }
 
 .links-container {
-    width: 25%;
-    position: relative;
-    min-height: 100%;
-    flex-grow: 1;
-    align-self: stretch;
+  width: 25%;
+  position: relative;
+  min-height: 100%;
+  flex-grow: 1;
+  align-self: stretch;
 }
 
 #linkCanvas {

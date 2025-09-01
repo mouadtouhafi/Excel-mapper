@@ -188,6 +188,22 @@ body.modal-open .popup {
     color: #fff;
 }
 
+.message-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.message-content p {
+    font-family: "Raleway", sans-serif;
+    font-weight: 300;
+    font-size: 13px;
+    color: #e3dede;
+    text-align: left;
+    margin: 8px;
+}
+
 @media (max-width: 768px) {
     .popup {
         width: 95%;
