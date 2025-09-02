@@ -33,8 +33,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return ipcRenderer.invoke('get-final-selected-table-data');
   },
 
-  // NEW: Methods for saving/loading codes
+  /* Methods for saving/loading codes */
   saveCodeToFile: (codeData) => ipcRenderer.invoke('saveCodeToFile', codeData),
   loadSavedCodes: () => ipcRenderer.invoke('loadSavedCodes'),
-  clearAllSavedCodes: () => ipcRenderer.invoke('clearAllSavedCodes')
+  clearAllSavedCodes: () => ipcRenderer.invoke('clearAllSavedCodes'),
+
+  /* Method for saving new modified Excel file */
+  saveNewExcelFile: (buffer) => ipcRenderer.invoke('save-new-excel-file', buffer)
 });
