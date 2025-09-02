@@ -13,7 +13,7 @@ let appDataTarget = {
   finalSelectedTableData: null
 };
 
-// Define the file path for saved codes
+/* Define the file path for saved codes */
 const SAVED_CODES_FILE = path.join(app.getPath('userData'), 'saved_codes.json');
 
 function createWindow() {
@@ -35,7 +35,6 @@ function createWindow() {
   });
 
   mainwWindow.loadFile('./src/html/main-page.html');
-  helloWindow.loadFile('./src/hello-page.html');
   mainwWindow.once("ready-to-show", mainwWindow.show)
 
   /*Here when the windows are close, all the parameters related will be deleted from RAM (garbage collector)*/
@@ -54,14 +53,10 @@ app.on('window-all-closed', () => {
 });
 
 app.on('before-quit', () => {
-
 })
 
-
 let excelBuffers = { source: null, target: null };
-
 ipcMain.on('save-excel-files', (event, payload) => {
-  // payload: { source: Buffer, target: Buffer }
   excelBuffers.source = payload.source;
   excelBuffers.target = payload.target;
   console.log('Excel files saved:', {
@@ -94,26 +89,25 @@ ipcMain.handle('get-final-selected-table-data', (event) => {
   return appDataTarget.finalSelectedTableData;
 });
 
-// NEW: Method to save code to file
+/* Method to save code to file */
 ipcMain.handle('saveCodeToFile', async (event, codeData) => {
   try {
     let existingCodes = [];
-    
-    // Check if file exists and read existing codes
+
+    /* Check if file exists and read existing codes */
     try {
       const fileContent = await fs.readFile(SAVED_CODES_FILE, 'utf8');
       existingCodes = JSON.parse(fileContent);
     } catch (error) {
-      // File doesn't exist or is invalid, start with empty array
+      /* File doesn't exist or is invalid, start with empty array */
       console.log('Creating new saved codes file');
     }
-    
-    // Add the new code data
+
+    /* Add the new code data */
     existingCodes.push(codeData);
-    
-    // Write back to file
+
+    /* Write back to file */
     await fs.writeFile(SAVED_CODES_FILE, JSON.stringify(existingCodes, null, 2));
-    
     return {
       success: true,
       filePath: SAVED_CODES_FILE,
@@ -128,7 +122,31 @@ ipcMain.handle('saveCodeToFile', async (event, codeData) => {
   }
 });
 
-// NEW: Method to load saved codes
+/* Method to save new Excel file */
+ipcMain.handle('save-new-excel-file', async (event, buffer) => {
+  try {
+    const { dialog } = require('electron');
+
+    const { filePath } = await dialog.showSaveDialog(mainwWindow, {
+      title: 'Save New Excel File',
+      defaultPath: 'output-mapping.xlsx',
+      filters: [
+        { name: 'Excel Files', extensions: ['xlsx'] }
+      ]
+    });
+
+    if (filePath) {
+      await fs.writeFile(filePath, Buffer.from(buffer));
+      return { success: true, filePath };
+    }
+
+    return { success: false, reason: 'Save cancelled' };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+});
+
+/* NEW: Method to load saved codes */
 ipcMain.handle('loadSavedCodes', async (event) => {
   try {
     const fileContent = await fs.readFile(SAVED_CODES_FILE, 'utf8');
@@ -140,7 +158,7 @@ ipcMain.handle('loadSavedCodes', async (event) => {
   }
 });
 
-// NEW: Method to clear all saved codes
+/* Method to clear all saved codes */
 ipcMain.handle('clearAllSavedCodes', async (event) => {
   try {
     await fs.writeFile(SAVED_CODES_FILE, JSON.stringify([], null, 2));
