@@ -84,6 +84,13 @@ ipcMain.on('save-excel-files', (event, payload) => {
   });
 });
 
+
+/*
+  This block manages user-selected table data. 
+  The handlers allow the renderer to set and get a final selected table for both source and target files. 
+  The data is stored in memory (appData and appDataTarget) and is accessible throughout the app without 
+  saving it to disk.
+*/
 ipcMain.handle('get-excel-files', () => {
   return excelBuffers;
 });
