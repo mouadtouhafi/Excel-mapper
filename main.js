@@ -23,7 +23,13 @@ let appDataTarget = {
 /* Define the file path for saved codes */
 const SAVED_CODES_FILE = path.join(app.getPath('userData'), 'saved_codes.json');
 
-
+/*
+  This function builds one window: the main app window (mainwWindow, 800×600). 
+  The preload.js file is loaded for secure communication, with contextIsolation: true and nodeIntegration: false 
+  for security. 
+  The main page HTML is loaded into mainwWindow and only shown when ready. 
+  When windows are closed, their references are set to null to free memory for garbage collection.
+*/
 function createWindow() {
   mainwWindow = new BrowserWindow({
     width: 800,
@@ -36,21 +42,12 @@ function createWindow() {
     show: false,
   });
 
-  helloWindow = new BrowserWindow({
-    width: 300,
-    height: 200,
-    parent: mainwWindow
-  });
-
   mainwWindow.loadFile('./src/html/main-page.html');
   mainwWindow.once("ready-to-show", mainwWindow.show)
 
   /*Here when the windows are close, all the parameters related will be deleted from RAM (garbage collector)*/
   mainwWindow.on('closed', () => {
     mainwWindow = null
-  })
-  helloWindow.on('closed', () => {
-    helloWindow = null
   })
 }
 
