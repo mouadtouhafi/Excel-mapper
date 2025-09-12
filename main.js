@@ -51,8 +51,14 @@ function createWindow() {
   })
 }
 
-app.whenReady().then(createWindow);
 
+/*
+ Here, the app creates windows only after Electron is fully initialized (whenReady). 
+ On non-macOS platforms, closing all windows quits the app. 
+ On macOS, apps usually stay open until explicitly quit, so the condition handles that. 
+ The before-quit event is defined for cleanup logic, but is currently empty. 
+*/
+app.whenReady().then(createWindow);
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
