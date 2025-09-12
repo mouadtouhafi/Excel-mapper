@@ -66,6 +66,14 @@ app.on('window-all-closed', () => {
 app.on('before-quit', () => {
 })
 
+
+/* 
+  This section sets up in-memory storage for Excel files. 
+  When the renderer sends data with save-excel-files, the buffers are saved in excelBuffers 
+  and their sizes logged. 
+  The get-excel-files handler lets the renderer retrieve these buffers later. 
+  This avoids writing temporary files to disk unless explicitly requested.
+*/
 let excelBuffers = { source: null, target: null };
 ipcMain.on('save-excel-files', (event, payload) => {
   excelBuffers.source = payload.source;
