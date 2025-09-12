@@ -1,3 +1,10 @@
+/*
+  This part imports Electron modules (app, BrowserWindow, ipcMain) and Node.js modules (path and fs with promises). 
+  It declares global variables for managing the main and child windows, Excel buffers, and data objects for 
+  storing selected tables. 
+  Finally, it defines the path for a JSON file (saved_codes.json) in the app’s user data folder to persist codes.
+*/
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs').promises;
@@ -15,6 +22,7 @@ let appDataTarget = {
 
 /* Define the file path for saved codes */
 const SAVED_CODES_FILE = path.join(app.getPath('userData'), 'saved_codes.json');
+
 
 function createWindow() {
   mainwWindow = new BrowserWindow({
