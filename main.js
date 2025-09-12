@@ -115,7 +115,15 @@ ipcMain.handle('get-final-selected-table-data', (event) => {
   return appDataTarget.finalSelectedTableData;
 });
 
-/* Method to save code to file */
+
+
+/*
+  This method saves code snippets persistently in a JSON file. 
+  It tries to read the existing file and parse it into an array. 
+  If the file doesn’t exist, it initializes an empty one. The new codeData is pushed into the array, 
+  then written back to disk with indentation for readability. 
+  The handler returns metadata about the save operation, including how many codes are now stored.  
+*/
 ipcMain.handle('saveCodeToFile', async (event, codeData) => {
   try {
     let existingCodes = [];
