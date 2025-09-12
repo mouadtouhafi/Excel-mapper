@@ -156,7 +156,12 @@ ipcMain.handle('saveCodeToFile', async (event, codeData) => {
   }
 });
 
-/* Method to save new Excel file */
+/* 
+  This handler lets the user save a processed Excel buffer as a new .xlsx file. 
+  It uses dialog.showSaveDialog to open a "Save As" prompt. If the user selects a location, 
+  it writes the buffer to disk; otherwise, it reports that saving was canceled. 
+  Errors (e.g., permission issues) are caught and returned.
+*/
 ipcMain.handle('save-new-excel-file', async (event, buffer) => {
   try {
     const { dialog } = require('electron');
