@@ -185,7 +185,14 @@ ipcMain.handle('save-new-excel-file', async (event, buffer) => {
   }
 });
 
-/* NEW: Method to load saved codes */
+/* 
+  This part manages the persistence of saved codes. 
+  loadSavedCodes reads the JSON file and returns the array of codes, or an empty array if the file 
+  doesn’t exist or fails to parse. 
+  clearAllSavedCodes resets the file by overwriting it with an empty array, 
+  effectively deleting all stored codes. 
+  These functions let the renderer reload old codes or reset storage completely.
+*/
 ipcMain.handle('loadSavedCodes', async (event) => {
   try {
     const fileContent = await fs.readFile(SAVED_CODES_FILE, 'utf8');
@@ -196,8 +203,6 @@ ipcMain.handle('loadSavedCodes', async (event) => {
     return [];
   }
 });
-
-/* Method to clear all saved codes */
 ipcMain.handle('clearAllSavedCodes', async (event) => {
   try {
     await fs.writeFile(SAVED_CODES_FILE, JSON.stringify([], null, 2));
