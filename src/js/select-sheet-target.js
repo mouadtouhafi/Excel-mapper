@@ -66,7 +66,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    /* Handling the back button click */
+    /* 
+        This part is simple: when the back button is clicked, it redirects us back to the 
+        display-source-content.html page. 
+        This allows us to go back and select a different source file if needed. 
+    */
     backButton.addEventListener('click', () => {
         window.location.href = 'display-source-content.html';
     });
