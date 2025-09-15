@@ -38,7 +38,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    /* Here we handle the sheet selection */
+    /* 
+        This listens for when we select a sheet from the dropdown menu. 
+        If a sheet is selected, the validate button is enabled and gets a "pulse" effect to highlight it. 
+        The status text also updates to show which sheet was chosen. 
+        If the selection is cleared, the button is disabled, the pulse is removed, 
+        and the status tells us to pick a sheet. 
+    */
     sheetsSelect.addEventListener('change', () => {
         const selectedSheet = sheetsSelect.value;
 
