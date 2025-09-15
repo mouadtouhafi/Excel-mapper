@@ -21,11 +21,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        /*  
+            Here, the byte array is converted into a Uint8Array so the XLSX library can read it. 
+            The Excel file is then parsed into a workbook object, and all available sheet names 
+            are extracted into sheetNames.
+        */
         const uint8Array = new Uint8Array(byteArray);
         const workbook = XLSX.read(uint8Array, { type: 'array' });
         const sheetNames = workbook.SheetNames;
 
-        /* In this part we populate the dropdown menu */
+        /* 
+            This resets the dropdown menu and adds a default "Select a sheet..." option. 
+            Then it loops through each sheet name from the workbook, creates a new <option> element, 
+            and appends it to the dropdown, allowing us to pick which sheet they want.
+        */
         sheetsSelect.innerHTML = '<option value="">Select a sheet...</option>';
         sheetNames.forEach(sheetName => {
             const option = document.createElement('option');
