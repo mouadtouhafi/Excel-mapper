@@ -7,7 +7,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         statusText.textContent = 'Loading sheets from file...';
 
-        /* Here we get file from Electron main process (via preload.js) */
+        /*
+            This part requests the Excel file from Electron’s main process via the preload API 
+            (electronAPI.getBothExcelFiles()). 
+            The file content is retrieved as a byte array (files.target).
+        */
         const files = await window.electronAPI.getBothExcelFiles();
         const byteArray = files.target;
 
