@@ -93,7 +93,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-  
+    /* 
+        Finally, this adds a click listener to the back button. 
+        When pressed, it simply redirects the user to the main page (main-page.html). 
+        This allows the user to return to the previous interface to change files or perform 
+        other actions without breaking the workflow.
+    */
     backButton.addEventListener('click', () => {
         window.location.href = 'main-page.html';
     });
