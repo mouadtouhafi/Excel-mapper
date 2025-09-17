@@ -31,6 +31,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const workbook = XLSX.read(uint8Array, { type: 'array' });
         const sheetNames = workbook.SheetNames;
 
+        /* 
+            After reading the sheet names, this part populates the dropdown menu dynamically. 
+            It first sets a default placeholder option, then loops through all sheet names to 
+            create <option> elements, which are appended to the dropdown. 
+            The statusText is updated to inform the user how many sheets were found. 
+            The try...catch block ensures that if an error occurs during file reading or 
+            sheet extraction, it is logged to the console and the user sees an error message in the interface.
+        */
         sheetsSelect.innerHTML = '<option value="">Select a sheet...</option>';
         sheetNames.forEach(sheetName => {
             const option = document.createElement('option');
