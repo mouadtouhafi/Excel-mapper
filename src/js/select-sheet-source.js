@@ -73,7 +73,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-
+    /* 
+        When the validate button is clicked, this code first ensures it’s enabled. 
+        It updates the button to show a spinning loader to indicate processing and disables 
+        it to prevent multiple clicks. 
+        The selected sheet name is saved in localStorage for use on the next page. 
+        After a 1-second delay (using setTimeout), the page redirects to display-source-content.html 
+        to display the content of the selected sheet.
+    */
     validateButton.addEventListener('click', () => {
         if (!validateButton.disabled) {
             const selectedSheet = sheetsSelect.value;
