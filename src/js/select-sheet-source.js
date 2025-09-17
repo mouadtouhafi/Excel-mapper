@@ -53,6 +53,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    /* 
+        This code listens for changes in the dropdown. 
+        When the user selects a sheet, it enables the validate button and adds a visual 
+        cue (pulse class) to indicate readiness. 
+        If no sheet is selected, the button is disabled and the status instructs the user to select one. 
+        This ensures the user cannot proceed without picking a sheet and provides immediate visual 
+        feedback about their selection.
+    */
     sheetsSelect.addEventListener('change', () => {
         const selectedSheet = sheetsSelect.value;
         validateButton.disabled = !selectedSheet;
