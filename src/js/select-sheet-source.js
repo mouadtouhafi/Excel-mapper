@@ -5,6 +5,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     const statusText = document.getElementById('statusText');
 
     try {
+
+        /*
+            This section attempts to load Excel files from the Electron main process using a custom 
+            API (window.electronAPI.getBothExcelFiles). 
+            It first updates the statusText to inform the user. 
+            Then it checks if a valid file exists. 
+            If not, it updates the status and stops execution. 
+            If a file is found, the raw byte array is converted into a Uint8Array suitable for XLSX.read(), 
+            which reads the Excel file into a workbook object. 
+            The SheetNames property is extracted to get a list of all sheets in the Excel file.    
+        */
         statusText.textContent = 'Loading sheets from file...';
 
         /* Here we get file from Electron main process (via preload.js) */
@@ -20,7 +31,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const workbook = XLSX.read(uint8Array, { type: 'array' });
         const sheetNames = workbook.SheetNames;
 
-        /* In this part we populate the dropdown menu */
         sheetsSelect.innerHTML = '<option value="">Select a sheet...</option>';
         sheetNames.forEach(sheetName => {
             const option = document.createElement('option');
@@ -35,7 +45,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    /* Here we handle the sheet selection */
     sheetsSelect.addEventListener('change', () => {
         const selectedSheet = sheetsSelect.value;
         validateButton.disabled = !selectedSheet;
@@ -48,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    /* Handling the validate button click */
+
     validateButton.addEventListener('click', () => {
         if (!validateButton.disabled) {
             const selectedSheet = sheetsSelect.value;
@@ -61,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    /* Handling the back button click */
+  
     backButton.addEventListener('click', () => {
         window.location.href = 'main-page.html';
     });
