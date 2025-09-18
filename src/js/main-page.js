@@ -25,7 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /* Handle file input changes */
+    /* H
+        When the user selects or removes a source file, this listener updates the page to show 
+        the file name and hide the placeholder text. 
+        If no file is selected, it restores the placeholder. 
+        After any change, it calls updateButtonState to ensure the start button’s status is correct.
+    */
     sourceInput.addEventListener('change', function () {
         if (this.files.length) {
             sourceFileName.textContent = this.files[0].name;
