@@ -42,6 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateButtonState();
     });
 
+    /*
+        This works exactly like the source file listener but for the target file input. 
+        It updates the file display and ensures the start button is enabled only if both files are selected.
+    */
     targetInput.addEventListener('change', function () {
         if (this.files.length) {
             targetFileName.textContent = this.files[0].name;
