@@ -1,3 +1,7 @@
+/*
+    This ensures the script runs only after the entire HTML document has been fully loaded. 
+    It prevents errors from trying to access elements that don’t exist yet in the DOM.
+*/
 document.addEventListener('DOMContentLoaded', () => {
     const sourceInput = document.getElementById('sourceFile');
     const targetInput = document.getElementById('targetFile');
