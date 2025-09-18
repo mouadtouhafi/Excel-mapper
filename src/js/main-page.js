@@ -11,7 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const sourceFileName = document.getElementById('sourceFileName');
     const targetFileName = document.getElementById('targetFileName');
 
-    /* Update button state based on file selection */
+    /* 
+        This function enables or disables the start button based on whether both files have been selected. 
+        If both files are present, the button is enabled and given a visual "pulse" effect to attract attention. 
+        If not, the button is disabled and the effect is removed. 
+    */
     function updateButtonState() {
         startButton.disabled = !(sourceInput.files.length && targetInput.files.length);
         if (!startButton.disabled) {
