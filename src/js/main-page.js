@@ -112,6 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* Initial button state */
+    /* 
+        Finally, this sets the correct initial state of the start button when the page 
+        first loads, based on whether any files are already selected 
+        (useful if the browser retains file input state).
+    */
     updateButtonState();
 });
