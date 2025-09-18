@@ -57,6 +57,21 @@ document.addEventListener('DOMContentLoaded', () => {
         updateButtonState();
     });
 
+
+    /*
+        This block handles what happens when the user clicks the start button. 
+        First, it checks if the button is enabled (to avoid accidental clicks). 
+        It then provides immediate visual feedback by showing a loading spinner and disables the 
+        button to prevent multiple clicks. The code retrieves the selected source and target files
+        and prepares two FileReader objects to read them asynchronously as binary data. 
+        Each FileReader converts its file into an array of bytes once loaded. 
+        A counter tracks when both files are ready. 
+        As soon as both files finish reading, their data is sent to the Electron main process 
+        via window.electronAPI.sendExcelFiles, and the user is redirected to the next page for 
+        further processing. 
+        Essentially, this event orchestrates file reading, UI feedback, and data transfer all in 
+        one seamless flow.
+    */
     startButton.addEventListener('click', function () {
         if (!startButton.disabled) {
             /* Visual feedback */
