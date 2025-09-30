@@ -99,6 +99,18 @@ function setupResizeObserver() {
 }
 
 
+/*
+    This snippet adds two related pieces of functionality. 
+    First, it attaches the resizeCanvas function to the window’s resize event, 
+    ensuring the canvas and its connections are recalculated whenever the browser window is resized. 
+    Second, it defines a helper function getElementCenter(el, isSource = true) that computes the 
+    exact coordinates of the vertical center point of a given DOM element relative to the canvas. 
+    It does so by comparing the element’s bounding rectangle with the canvas’s bounding rectangle. 
+    If the element is a “source” (on the left), it takes the element’s right edge as the x-coordinate; 
+    otherwise (for a “target” on the right), it uses the left edge. 
+    The y-coordinate is always the element’s vertical midpoint. This function is particularly useful 
+    for drawing lines between paired elements on the two sides of the canvas.
+*/
 window.addEventListener('resize', resizeCanvas);
 function getElementCenter(el, isSource = true) {
     const rect = el.getBoundingClientRect();
