@@ -52,7 +52,17 @@ function resizeCanvas() {
     }, 150);
 }
 
-/* function to force resize when items are added */
+/* 
+    The forceResizeAfterContentChange() function is designed to handle situations where the page content 
+    changes (for example, when items are added to or removed from the lists), and the canvas needs to be 
+    resized accordingly. 
+    Instead of relying on a single resize call, it schedules two delayed executions of resizeCanvas(): 
+    the first after 200 milliseconds and the second after 500 milliseconds. 
+    This staggered approach accounts for cases where the DOM or scrollable content might not finish 
+    updating immediately, ensuring that the canvas size and the redrawn connections are properly synchronized 
+    with the final layout. 
+    The console logs help track when each resize attempt is triggered.
+*/
 function forceResizeAfterContentChange() {
     setTimeout(() => {
         console.log('Forcing resize after content change...');
