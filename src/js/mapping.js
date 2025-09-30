@@ -7,6 +7,20 @@ let connections = [];
 
 let resizeTimeout;
 
+
+/*
+    This resizeCanvas() function ensures that a canvas element and its container dynamically adjust 
+    to the size of two side-by-side lists so that visual connections between their items remain accurate. 
+    When triggered (typically on window resize or content change), it first clears any pending resize 
+    operation and waits 150 ms before running to avoid excessive recalculations. 
+    It then measures the total scrollable height of both the left and right lists (dataList-1 and dataList-2), 
+    adds a margin of 60 pixels to each, and picks the larger value (with a minimum of 600) as the required 
+    canvas height. 
+    This value is applied to both the .links-container and the canvas, while the canvas width is set 
+    based on the container’s bounding box. 
+    Finally, it calls redrawConnections(), which presumably redraws the linking lines or graphics 
+    so they stay properly aligned after the resize.
+*/
 function resizeCanvas() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
