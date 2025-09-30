@@ -75,7 +75,17 @@ function forceResizeAfterContentChange() {
     }, 500);
 }
 
-/* Enhanced resize observer for better responsiveness */
+/* 
+    The setupResizeObserver() function sets up an automatic way to detect layout changes and keep the canvas 
+    in sync. 
+    It first checks if the browser supports the ResizeObserver API. 
+    If available, it creates a new observer that calls resizeCanvas() whenever the observed elements change size. 
+    In this case, it watches the two column containers (colsXlxToFill and colsXlxWithData), 
+    which likely hold the lists on either side of the canvas. 
+    This ensures that whenever these containers grow or shrink (for example, when content is added, 
+    removed, or resized), the canvas will automatically adjust its dimensions and redraw connections 
+    without requiring manual intervention. 
+*/
 function setupResizeObserver() {
     if (window.ResizeObserver) {
         const resizeObserver = new ResizeObserver(() => {
