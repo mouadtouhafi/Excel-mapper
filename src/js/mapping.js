@@ -486,6 +486,7 @@ async function initLists() {
                 /* Send to Electron to save the new file */
                 const result = await window.electronAPI.saveNewExcelFile(newBuffer);
 
+                /* Alerts the user about success or failure, including details like file path and columns. */
                 if (result && result.success) {
                     alert(`New Excel file created successfully!\nSaved to: ${result.filePath}\nSheet name: "output mapping"\n\nColumns: ${allSourceColumns.length}\nMapped columns: ${finalProcessedColumnData.size}\nUnmapped columns filled with: N/A`);
                 } else {
