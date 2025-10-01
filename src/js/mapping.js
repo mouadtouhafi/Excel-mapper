@@ -439,6 +439,9 @@ async function initLists() {
                     }
                 }
 
+                /*
+                    Prevents processing if there is no data, showing a warning alert.
+                */
                 if (maxRows === 0) {
                     alert('No data rows found. Please ensure your data is loaded properly.');
                     return;
