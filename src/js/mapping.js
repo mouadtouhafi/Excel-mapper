@@ -366,7 +366,17 @@ async function initLists() {
             }
         });
 
-        /* Clearing all connections when refresh button is clicked */
+        /* 
+            This code sets up a click event listener on a button with the ID refreshButton to reset 
+            the entire interface. 
+            When clicked, it clears the connections array, effectively removing all stored links between elements. 
+            It then iterates over all <li> items and removes the "connected" and "selected" classes, 
+            visually resetting the lists. 
+            The selectedFrom variable is also set to null to clear any active selection. 
+            The canvas is cleared using ctx.clearRect() so that all previously drawn lines disappear, 
+            and additional UI elements, such as menuDiv content and the actionButtonContainer, are cleared or 
+            hidden to fully reset the state of the application.
+        */
         document.getElementById('refreshButton').addEventListener('click', () => {
             connections = [];
             document.querySelectorAll('li').forEach(li => {
