@@ -322,7 +322,19 @@ async function initLists() {
             resizeCanvas();
         }, 100);
 
-        /* Adding double-click to remove the old connection */
+        /* 
+            This code listens for a double-click (dblclick) event on the entire document, 
+            and if the target of the double-click is a list item (<li>), 
+            it removes all connections involving that element. 
+            It does this by filtering the connections array, keeping only those connections where the 
+            clicked element is not the source or the target. 
+            Afterward, it checks if the element still participates in any connection; if not, 
+            it removes the "connected" CSS class to visually update its state. To keep the UI consistent, 
+            it also loops through all other elements that are marked as "connected" and verifies if they 
+            still belong to at least one connection—if not, their "connected" class is also removed. 
+            Finally, it calls redrawConnections() to clear and redraw the canvas, ensuring the visual 
+            representation of the connections matches the updated data.
+        */
         document.addEventListener('dblclick', (e) => {
             if (e.target.tagName === 'LI') {
                 /* Here we remove all connections involving this element */
