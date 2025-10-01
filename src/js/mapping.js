@@ -241,6 +241,16 @@ async function initLists() {
             }
         }
 
+
+        /*
+            Finally, the function forceResizeAfterContentChange() is called, which likely adjusts the layout after 
+            new content has been added. 
+            Then, event listeners are attached to each <li> item in #dataList-1. 
+            When a user clicks an item, all existing selections are cleared by removing the "selected" class, 
+            the clicked item is stored in selectedFrom to track which source element is active, 
+            and the "selected" class is added to visually highlight the chosen item. 
+            This makes the first list interactive and ensures only one item can be selected at a time.
+        */
         forceResizeAfterContentChange();
         document.querySelectorAll('#dataList-1 li').forEach(li => {
             li.addEventListener('click', () => {
