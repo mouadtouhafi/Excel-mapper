@@ -201,6 +201,15 @@ async function initLists() {
         tempTable.innerHTML = tableData;
         const firstRow = tempTable.rows[0];
 
+
+        /*
+            Here, the script fetches the HTML of a table from the Electron backend using getFinalSelectedTable(). 
+            It then inserts this HTML into a temporary <table> element so it can easily access its rows and cells.
+            From the first row, it loops through each <td> cell, extracts its text content, 
+            and if the text is not empty, creates a new <li> element. 
+            Each <li> is then added to the #dataList-1 container, converting the first row of the table 
+            into a list of items.
+        */
         for (const td of firstRow.querySelectorAll('td')) {
             const text = td.textContent;
             if (text !== "") {
