@@ -219,6 +219,14 @@ async function initLists() {
             }
         }
 
+
+        /*
+            This part mirrors the process used for the source table, but instead fetches target table 
+            data from getFinalSelectedTableData(). 
+            A temporary table is created to parse the HTML, and the script loops through the first row’s cells. 
+            Each non-empty value is turned into an <li> element and appended to the #dataList-2 container, 
+            resulting in a displayed list of target items.
+        */
         const tableDataTarget = await window.electronAPI.getFinalSelectedTableData();
         const tempTableTarget = document.createElement('table');
         tempTableTarget.innerHTML = tableDataTarget;
