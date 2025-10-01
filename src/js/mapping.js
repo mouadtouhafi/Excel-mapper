@@ -168,6 +168,17 @@ function drawLine(from, to, color = '#578757') {
     ctx.stroke();
 }
 
+/*
+    The redrawConnections() function is responsible for refreshing and re-drawing all the curved 
+    connections on the canvas. 
+    It first clears the entire canvas using ctx.clearRect() so that old lines don’t overlap with new ones. 
+    Then, it loops through the list of saved connections (connections), where each connection has a 
+    from and to element. For each connection, it calculates the center coordinates of the source and 
+    target elements using getElementCenter(). 
+    Finally, it calls drawLine() with these positions to render the curved line and arrow between them, 
+    effectively redrawing all connections in their updated positions 
+    (for example, after resizing or moving elements).
+*/
 function redrawConnections() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     connections.forEach(conn => {
