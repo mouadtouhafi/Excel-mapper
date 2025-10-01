@@ -389,6 +389,16 @@ async function initLists() {
             actionButtonContainer.style.display = 'none';
         });
 
+
+        /*
+            This code is an event handler for a button (processDataButton) that generates a new Excel 
+            file from data displayed in a web interface. 
+            It collects column names, maps the processed data to these columns (filling missing data with N/A), 
+            creates a new Excel workbook, writes the data into a worksheet, and then sends it to an Electron 
+            backend to save the file. 
+            The code also includes checks to ensure that source columns and data rows exist before 
+            creating the Excel file.
+        */
         document.getElementById('processDataButton').addEventListener('click', async () => {
             try {
                 /* Creating a new workbook */
