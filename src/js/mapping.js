@@ -121,6 +121,17 @@ function getElementCenter(el, isSource = true) {
     };
 }
 
+
+/*
+    This function drawLine(from, to, color) draws a smooth, curved connection between two points 
+    on a canvas and adds an arrow at the endpoint to indicate direction. 
+    It first calculates the midpoint between the starting and ending points and uses that to 
+    determine two control points for a Bézier curve, ensuring the line bends smoothly instead of being straight. 
+    The curve is then drawn with a customizable color (defaulting to green #578757) and a fixed line width. 
+    After drawing the curve, the function calculates the angle at the end of the line so the arrow points 
+    in the correct direction. Finally, it draws two short lines forming the arrowhead at the destination point, 
+    making the curve look like a directed connection from the from point to the to point.
+*/
 function drawLine(from, to, color = '#578757') {
     const midX = (from.x + to.x) / 2;
     const controlPoint1X = from.x + (midX - from.x) * 0.8;
