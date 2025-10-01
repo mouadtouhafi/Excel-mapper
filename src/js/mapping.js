@@ -309,7 +309,15 @@ async function initLists() {
             });
         });
 
-
+        /*
+            This line uses setTimeout to delay the execution of resizeCanvas() by 100 milliseconds. 
+            The purpose of the delay is to ensure that any DOM updates or layout changes 
+            (such as adding new connections or resizing elements) are fully applied before the canvas is redrawn. 
+            Without this short wait, the canvas might be updated too early, 
+            leading to misaligned or incomplete drawings. 
+            Essentially, it guarantees that the canvas resizes and redraws at the right moment after 
+            the UI has stabilized.
+        */
         setTimeout(() => {
             resizeCanvas();
         }, 100);
