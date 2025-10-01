@@ -410,6 +410,10 @@ async function initLists() {
                     allSourceColumns.push(li.textContent.trim());
                 });
 
+                /*
+                    Ensures there are columns to process.
+                    Stops execution and shows an alert if no columns exist.
+                */
                 if (allSourceColumns.length === 0) {
                     alert('No source columns found. Please ensure your data is loaded properly.');
                     return;
