@@ -263,6 +263,21 @@ async function initLists() {
             });
         });
 
+
+        /*
+            This code adds click event listeners to all items in the target list (#dataList-2) 
+            so that when a user clicks on one, it first checks if a source item (selectedFrom) is 
+            currently selected. 
+            If so, it looks through the existing connections array to ensure that the link between the 
+            chosen source and target does not already exist. 
+            If the connection is new, it calculates the center positions of both elements using 
+            getElementCenter(), stores the relationship in the connections array, and calls 
+            forceResizeAfterContentChange() to adjust the layout. Both the source and target items are 
+            then marked with a "connected" class to visually indicate their link, and the canvas is 
+            redrawn after a short delay to display the connection line. 
+            Finally, the "selected" class is removed from the source item, and selectedFrom is reset to null, 
+            ensuring that only one connection can be made per selection.
+        */
         document.querySelectorAll('#dataList-2 li').forEach(li => {
             li.addEventListener('click', () => {
                 if (selectedFrom) {
