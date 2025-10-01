@@ -493,6 +493,7 @@ async function initLists() {
                     alert('Error creating new file: ' + (result?.reason || result?.error || 'Unknown error'));
                 }
 
+                /* Handles any unexpected exceptions during processing, logging them to the console and notifying the user. */
             } catch (error) {
                 console.error('Error creating new Excel file:', error);
                 alert('Error creating new Excel file. Check console for details.');
