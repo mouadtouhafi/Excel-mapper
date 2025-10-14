@@ -52,6 +52,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
   */
   getBothExcelFiles: () => ipcRenderer.invoke('get-excel-files'),
 
+  /*
+    These two functions manage the selected table from the source Excel file.
+    - setFinalSelectedTable(table) sends the selected table to the main process.
+    - getFinalSelectedTable() retrieves it back from the main process.
+    This ensures that data can persist even if the renderer reloads, and keeps the main process in sync with the UI.
+  */
   /* For the source file data table*/
   setFinalSelectedTable: (table) => {
     return ipcRenderer.invoke('set-final-selected-table', table);
