@@ -22,6 +22,13 @@ let sharedDataTarget = {
   finalSelectedTableData: null
 };
 
+/*
+  This line uses contextBridge to expose a custom object electronAPI in the renderer’s window object. 
+  This allows your frontend code (HTML/JS) to safely call backend functions without directly 
+  using Node.js modules. 
+  Everything inside this object (sendExcelFiles, getBothExcelFiles, etc.) becomes available in the 
+  renderer as window.electronAPI.
+*/
 contextBridge.exposeInMainWorld('electronAPI', {
   sendExcelFiles: (sourceBuffer, targetBuffer) => {
     ipcRenderer.send('save-excel-files', {
