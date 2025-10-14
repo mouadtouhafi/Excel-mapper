@@ -1,3 +1,11 @@
+/*
+  Here, we are importing two important modules from Electron:
+  - contextBridge: This module allows you to safely expose APIs from the main process to the renderer process 
+    (the web page). 
+  It prevents direct access to Node.js APIs from untrusted web content, which improves security.
+  - ipcRenderer: This is the renderer process side of Electron’s inter-process communication (IPC). 
+    It allows your frontend JavaScript to send and receive messages from the main process.
+*/
 const { contextBridge, ipcRenderer } = require('electron');
 
 let sharedData = {
