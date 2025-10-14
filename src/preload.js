@@ -44,6 +44,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
       target: targetBuffer
     });
   },
+
+  /*
+    This function retrieves Excel files from the main process using ipcRenderer.invoke.
+    - Unlike .send, invoke returns a promise, so you can await it in the renderer.
+    - 'get-excel-files' is the channel name; the main process must handle it and return the Excel data.
+  */
   getBothExcelFiles: () => ipcRenderer.invoke('get-excel-files'),
 
   /* For the source file data table*/
