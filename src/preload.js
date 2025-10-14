@@ -79,7 +79,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return ipcRenderer.invoke('get-final-selected-table-data');
   },
 
-  /* Methods for saving/loading codes */
+  /* 
+    These three functions handle saving, loading, and clearing code snippets in your application:
+    - saveCodeToFile(codeData): Sends code data to the main process to be saved on disk.
+    - loadSavedCodes(): Retrieves previously saved code snippets.
+    - clearAllSavedCodes(): Deletes all saved codes.
+    All of them use invoke because they expect a response from the main process.
+  */
   saveCodeToFile: (codeData) => ipcRenderer.invoke('saveCodeToFile', codeData),
   loadSavedCodes: () => ipcRenderer.invoke('loadSavedCodes'),
   clearAllSavedCodes: () => ipcRenderer.invoke('clearAllSavedCodes'),
