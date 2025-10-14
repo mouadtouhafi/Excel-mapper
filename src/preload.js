@@ -90,6 +90,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   loadSavedCodes: () => ipcRenderer.invoke('loadSavedCodes'),
   clearAllSavedCodes: () => ipcRenderer.invoke('clearAllSavedCodes'),
 
-  /* Method for saving new modified Excel file */
+  /* 
+    This function allows the renderer to send a modified Excel file buffer to the main process 
+    to be saved as a new file.
+    buffer contains the Excel data.
+    Using invoke ensures that the renderer can know when the save is complete or if it fails.
+  */
   saveNewExcelFile: (buffer) => ipcRenderer.invoke('save-new-excel-file', buffer)
 });
