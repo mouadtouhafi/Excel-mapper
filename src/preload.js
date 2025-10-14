@@ -30,6 +30,14 @@ let sharedDataTarget = {
   renderer as window.electronAPI.
 */
 contextBridge.exposeInMainWorld('electronAPI', {
+
+  /*
+    This is a function that allows the frontend to send two Excel files (source and target) to the main process.
+    - sourceBuffer and targetBuffer are likely the raw data of Excel files.
+    - ipcRenderer.send sends a fire-and-forget message to the main process with the channel 
+      'save-excel-files' and an object containing both files.
+    This is useful for saving the files or processing them in the backend.
+  */
   sendExcelFiles: (sourceBuffer, targetBuffer) => {
     ipcRenderer.send('save-excel-files', {
       source: sourceBuffer,
