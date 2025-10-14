@@ -8,6 +8,12 @@
 */
 const { contextBridge, ipcRenderer } = require('electron');
 
+/*
+  These are simple JavaScript objects used to temporarily store data in the renderer process.
+  - sharedData is intended to store the selected table from the source Excel file.
+  - sharedDataTarget is intended to store the selected table from the target Excel file.
+  Initially, both are set to null because no table is selected yet.
+*/
 let sharedData = {
   finalSelectedTable: null
 };
