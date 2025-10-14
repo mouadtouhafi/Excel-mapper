@@ -66,6 +66,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return ipcRenderer.invoke('get-final-selected-table');
   },
 
+
+  /*
+    These are similar to the source table functions but for the target Excel file. 
+    We can store and retrieve the selected target table in the main process.
+  */
   /* For the target file data table*/
   setFinalSelectedTableData: (table) => {
     return ipcRenderer.invoke('set-final-selected-table-data', table);
